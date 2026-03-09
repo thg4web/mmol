@@ -1,0 +1,79 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main          # deploy whenever main is updated
+  workflow_dispatch:  # allow manual trigger from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Assemble only the files that should be public ──────────────────────
+      - name: Build deployment folder
+        run: |
+          mkdir -p _site/images
+          mkdir -p _site/fonts
+          mkdir -p _site/charts
+
+          # Core pages
+          cp index.html          _site/index.html
+          cp faq.html            _site/faq.html
+          cp mm-shared.css       _site/mm-shared.css
+
+          # Fonts (if present — downloaded separately)
+          if [ -d fonts ]; then
+            cp -r fonts/. _site/fonts/
+          fi
+
+          # Object images and attribution text files (if present)
+          if [ -d images ]; then
+            cp images/*.jpg   _site/images/ 2>/dev/null || true
+            cp images/*.txt   _site/images/ 2>/dev/null || true
+          fi
+
+          # Pre-generated finder charts (future feature)
+          if [ -d charts ]; then
+            cp -r charts/. _site/charts/
+          fi
+
+          # Per-object full record pages (future feature)
+          if [ -d objects ]; then
+            mkdir -p _site/objects
+            cp -r objects/. _site/objects/
+          fi
+
+      # ── The following are intentionally NOT copied to _site ────────────────
+      #   docs/                  internal developer documentation
+      #   cheatsheet.html        internal reference — moved to docs/
+	#   css-cheaqtsheet.md.    internal reference — moved to docs/
+      #   README.md              GitHub repo page only, not the website
+      #   .gitignore             repo config only
+      #   .github/               this workflow, not a web asset
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resources — Messier Marathon Observer's Log</title>
+<style>
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Share Tech Mono"; src: url("fonts/ShareTechMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
+</style>
+<link rel="stylesheet" href="mm-shared.css">
+<style>
+
+/* ════════ PAGE HEADINGS ════════ */
+.res-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: .14em;
+  color: var(--text-head);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .3s;
+}
+.res-intro {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--text-meta);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 660px;
+  transition: color .3s;
+}
+
+/* ════════ SECTION TITLE ════════ */
+/* mirrors .section-title in mm-shared.css */
+.res-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 36px 0 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  transition: color .3s, border-color .3s;
+}
+
+/* ════════ RESOURCE CARDS ════════ */
+.res-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+.res-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color .3s;
+}
+.res-item:last-child { border-bottom: none; }
+
+.res-item-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-bottom: 6px;
+}
+.res-name {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.res-name a {
+  color: var(--text-sub);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border2);
+  padding-bottom: 1px;
+  transition: color .2s, border-color .2s;
+}
+.res-name a:hover {
+  color: var(--text-data);
+  border-bottom-color: var(--red-dim);
+}
+.res-url {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+  transition: color .3s;
+}
+.res-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-meta);
+  max-width: 720px;
+  transition: color .3s;
+}
+.res-desc strong { color: var(--text-sub); font-weight: 600; }
+
+/* ════════ THIS SITE CALLOUT ════════ */
+.res-this-site {
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  padding: 14px 18px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  transition: all .3s;
+  margin: 18px 0;
+}
+.res-this-site .res-name {
+  font-size: 11px;
+}
+.res-this-site-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--red-dim);
+  border: 1px solid var(--border2);
+  padding: 2px 8px;
+  transition: color .3s, border-color .3s;
+}
+.res-this-site .res-desc {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+
+/* ════════ FEATURED VIDEO ════════ */
+.res-video-block {
+  margin-top: 36px;
+  padding: 20px 22px 18px;
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  max-width: 640px;
+  transition: all .3s;
+}
+.res-video-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: .30em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  transition: color .3s, border-color .3s;
+}
+.res-video-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.res-video-title a {
+  color: var(--text-sub);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border2);
+  padding-bottom: 1px;
+  transition: color .2s, border-color .2s;
+}
+.res-video-title a:hover { color: var(--text-data); border-bottom-color: var(--red-dim); }
+.res-video-desc {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text-meta);
+  transition: color .3s;
+}
+.res-video-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  margin-top: 10px;
+  transition: color .3s;
+}
+
+/* ════════ FOOTER ════════ */
+.page-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border2);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: border-color .3s;
+}
+@media (max-width: 700px) { .page-footer { flex-direction: column; align-items: flex-start; } }
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div class="header-left">
+      <div class="site-title"><a href="index.html">Messier Marathon Observer's Log</a></div>
+      <div class="page-subtitle">Resources</div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" title="Toggle day/night mode">
+      <span class="theme-icon moon">🌙</span>
+      <div class="toggle-pill"></div>
+      <span class="theme-icon sun">☀</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <h1 class="res-heading">Resources</h1>
+  <p class="res-intro">The best external sites for the Messier catalog, organized by purpose — from authoritative historical databases and high-resolution imagery through to marathon planning tools and field logbooks.</p>
+
+
+  <!-- ══════════════════════════════════
+       PRIMARY DATABASES
+  ═══════════════════════════════════ -->
+  <div class="res-section-title">Primary Databases &amp; Historical Research</div>
+
+  <ul class="res-list">
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="http://www.messier.seds.org/" target="_blank" rel="noopener">SEDS Messier Database</a></span>
+        <span class="res-url">messier.seds.org</span>
+      </div>
+      <p class="res-desc">Widely considered the gold standard for Messier information. Contains exhaustive historical notes, discovery dates, and technical data for every object. Also hosts the primary hub for Messier Marathon planning and results.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/" target="_blank" rel="noopener">NASA Hubble Messier Catalog</a></span>
+        <span class="res-url">science.nasa.gov</span>
+      </div>
+      <p class="res-desc">A visually stunning collection featuring Hubble high-resolution imagery of nearly all 110 objects. Offers a unique perspective by showing what these "fuzzy patches" look like from Earth's orbit, far above the blurring effects of the atmosphere.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://en.wikipedia.org/wiki/Messier_object" target="_blank" rel="noopener">Wikipedia: List of Messier Objects</a></span>
+        <span class="res-url">en.wikipedia.org</span>
+      </div>
+      <p class="res-desc">An excellent quick-reference table including magnitudes, distances, and coordinates for all 110 objects. Particularly useful for comparing object types — globular clusters vs. spiral galaxies — at a glance.</p>
+    </li>
+
+  </ul>
+
+
+  <!-- ══════════════════════════════════
+       OBSERVING GUIDES
+  ═══════════════════════════════════ -->
+  <div class="res-section-title">Observing Guides &amp; Planning Tools</div>
+
+  <ul class="res-list">
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://www.astroleague.org/messier-observing-program/" target="_blank" rel="noopener">AL Messier Observing Program</a></span>
+        <span class="res-url">astroleague.org</span>
+      </div>
+      <p class="res-desc">The official Astronomical League certification site. Provides specific rules for visual observation and is the gateway for earning your Messier Club certificate and pin. Required reading before submitting your log.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://www.deepskywatch.com/messier-dso-sketches.html" target="_blank" rel="noopener">Deep Sky Watch — Messier Sketches</a></span>
+        <span class="res-url">deepskywatch.com</span>
+      </div>
+      <p class="res-desc">Essential for visual observers. Rather than glossy long-exposure photographs, this site features <strong>realistic hand-drawn sketches</strong> that accurately represent what you will actually see through various telescope apertures — invaluable when writing your AL description.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://astropixels.com/messier/messiergallery.html" target="_blank" rel="noopener">AstroPixels Messier Gallery</a></span>
+        <span class="res-url">astropixels.com</span>
+      </div>
+      <p class="res-desc">Created by Fred Espenak, this gallery provides a very consistent photographic record of the entire catalog. Each image includes technical details about the equipment used, making it a useful benchmark for astrophotographers and a reference for visual observers.</p>
+    </li>
+
+  </ul>
+
+
+  <!-- ══════════════════════════════════
+       MARATHON SPECIFICS
+  ═══════════════════════════════════ -->
+  <div class="res-section-title">🏃 Messier Marathon Specifics</div>
+
+  <ul class="res-list">
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://starwalk.space/en/news/messier-marathon-planner" target="_blank" rel="noopener">Star Walk — 2026 Marathon Planner</a></span>
+        <span class="res-url">starwalk.space</span>
+      </div>
+      <p class="res-desc">A highly practical guide updated for the 2026 season. Includes a suggested search order — crucial for catching objects before they set — and tips for securing the difficult early-evening targets like M74 and M77 in the west just after dusk.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="http://calgary.rasc.ca/messier.htm" target="_blank" rel="noopener">Larry McNish's Marathon Planner</a></span>
+        <span class="res-url">calgary.rasc.ca</span>
+      </div>
+      <p class="res-desc">A sophisticated interactive tool that generates a customised search list based on your specific latitude, longitude, and date. A favourite among experienced marathoners who want a scientifically optimised nightly schedule.</p>
+    </li>
+
+  </ul>
+
+
+  <!-- ══════════════════════════════════
+       LOGBOOKS & FIELD REFERENCE
+  ═══════════════════════════════════ -->
+  <div class="res-section-title">Logbooks &amp; Field Reference</div>
+
+  <!-- This site — highlighted callout -->
+  <div class="res-this-site">
+    <span class="res-name">Messier Marathon Observer's Log</span>
+    <span class="res-this-site-badge">This Site</span>
+    <p class="res-desc">Browser-based observation log supporting both casual Messier checklists and full AL Messier Club certificate records. Night-vision mode, per-object AL record forms, session setup, CSV/JSON export, and one-click PDF report generation.</p>
+  </div>
+
+  <ul class="res-list">
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://uol.de/f/5/inst/physik/ag/astro/Objektkatalog_Messier.pdf" target="_blank" rel="noopener">The Ultimate Messier Object Log</a></span>
+        <span class="res-url">uol.de · PDF</span>
+      </div>
+      <p class="res-desc">A comprehensive, printable logbook designed for use in the field. Includes space for sketches and observation notes, pre-sorted by season and constellation to help organise your sessions systematically over multiple nights.</p>
+    </li>
+
+    <li class="res-item">
+      <div class="res-item-header">
+        <span class="res-name"><a href="https://www.deepskycorner.ch/messier/messier.php" target="_blank" rel="noopener">Deep Sky Corner</a></span>
+        <span class="res-url">deepskycorner.ch</span>
+      </div>
+      <p class="res-desc">A beautifully organised site — available in multiple languages — offering finder charts, descriptions, and detailed illustrations of how each object appears through the eyepiece. Particularly useful for European observers and anyone who prefers metric references.</p>
+    </li>
+
+  </ul>
+
+
+  <!-- ══════════════════════════════════
+       FEATURED VIDEO
+  ═══════════════════════════════════ -->
+  <div class="res-video-block">
+    <div class="res-video-label">Featured Video</div>
+    <div class="res-video-title">
+      <a href="https://www.youtube.com/watch?v=ZI3FraMTARc" target="_blank" rel="noopener">Hubble's Messier Catalog</a>
+    </div>
+    <p class="res-video-desc">A visual tour of the Messier objects through the lens of the Hubble Space Telescope, offering a perspective on these deep-sky wonders that no backyard instrument can match. Useful context before writing your eyepiece descriptions.</p>
+    <div class="res-video-meta">youtube.com · NASA Goddard</div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-note">
+      Messier Marathon Observer's Log — supporting the Astronomical League Messier Observing Program.
+    </div>
+    <div class="footer-sig">
+      <a href="index.html" class="nav-link">← Back to Log</a> &nbsp;·&nbsp;
+      <a href="faq.html" class="nav-link">FAQ</a> &nbsp;·&nbsp;
+      <a href="docs/user-guide.html" class="nav-link">User Guide</a>
+    </div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+// ── Theme persistence ──────────────────────────────────────────
+const root   = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+const saved  = localStorage.getItem('mm_theme');
+if (saved) root.setAttribute('data-theme', saved);
+toggle.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('mm_theme', next);
+});
+</script>
+</body>
+</html>

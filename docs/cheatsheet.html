@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Cheat Sheet — Messier Marathon Observer's Log</title>
+<style>
+@font-face { font-family: "Cinzel"; src: url("../fonts/Cinzel-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("../fonts/Cinzel-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("../fonts/Cinzel-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Share Tech Mono"; src: url("../fonts/ShareTechMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
+</style>
+<link rel="stylesheet" href="../mm-shared.css">
+<style>
+
+/* ═══════════════════════════════
+   CHEAT SHEET – PAGE-SPECIFIC
+   ═══════════════════════════════ */
+
+/* ── Code blocks ── */
+code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11.5px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text-data);
+  padding: 1px 6px;
+  transition: background .3s, border-color .3s, color .3s;
+}
+pre {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text-data);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.75;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 10px 0 18px;
+  transition: background .3s, border-color .3s, color .3s;
+}
+pre .cm  { color: var(--text-dim);  }  /* comment */
+pre .pr  { color: var(--red-mid);   }  /* property */
+pre .va  { color: var(--text-sub);  }  /* css var name */
+pre .vv  { color: var(--text-data); }  /* value */
+pre .cl  { color: var(--red-bright);}  /* class selector */
+pre .at  { color: var(--con-color); }  /* attribute */
+pre .kw  { color: var(--text-meta); }  /* keyword / tag */
+
+/* ── Prose ── */
+.cs-intro {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--text-meta);
+  line-height: 1.75;
+  margin-bottom: 36px;
+  max-width: 660px;
+  transition: color .3s;
+}
+.cs-body p {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  color: var(--text-meta);
+  line-height: 1.75;
+  margin-bottom: 10px;
+  transition: color .3s;
+}
+.cs-body p:last-child { margin-bottom: 0; }
+.cs-body a { color: var(--text-sub); text-underline-offset: 3px; }
+.cs-body a:hover { color: var(--text-data); }
+
+/* ── Var table ── */
+.var-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11.5px;
+}
+.var-table th {
+  font-family: 'Cinzel', serif;
+  font-size: 8.5px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border2);
+  background: var(--bg2);
+  position: static;
+  z-index: auto;
+  white-space: nowrap;
+  transition: color .3s, background .3s, border-color .3s;
+}
+.var-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  transition: border-color .3s;
+}
+.var-table tr:last-child td { border-bottom: none; }
+.var-table tr:nth-child(even) td { background: var(--bg-row-alt); }
+.var-name  { color: var(--text-sub); }
+.var-val   { color: var(--text-meta); font-size: 10.5px; }
+.var-desc  { font-family: 'Crimson Pro', serif; font-style: italic; color: var(--text-dim); font-size: 12.5px; }
+.swatch-cell { width: 20px; }
+.swatch {
+  width: 16px; height: 16px; border-radius: 3px;
+  border: 1px solid var(--border3);
+  display: inline-block; vertical-align: middle;
+}
+
+/* ── Class pills ── */
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+.pill {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10.5px;
+  color: var(--text-sub);
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  padding: 4px 10px;
+  letter-spacing: .06em;
+  transition: background .3s, border-color .3s, color .3s;
+}
+
+/* ── Live demo row ── */
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 18px;
+  padding: 14px 18px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  transition: background .3s, border-color .3s;
+}
+.demo-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin: 10px 0 18px;
+  padding: 14px 18px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  transition: background .3s, border-color .3s;
+}
+.demo-badge-item {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+.demo-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Callout boxes ── */
+.callout {
+  border-left: 2px solid var(--border3);
+  padding: 10px 14px;
+  margin: 12px 0 18px;
+  background: var(--bg2);
+  font-family: 'Crimson Pro', serif;
+  font-size: 13.5px;
+  color: var(--text-meta);
+  line-height: 1.65;
+  transition: all .3s;
+}
+.callout.note { border-color: var(--red-mid); }
+.callout strong { color: var(--text-sub); }
+
+/* ── TOC ── */
+.toc {
+  margin: 0 0 36px;
+  padding: 16px 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  transition: background .3s, border-color .3s;
+}
+.toc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 24px;
+}
+@media (max-width: 540px) { .toc ol { grid-template-columns: 1fr; } }
+.toc li {
+  counter-increment: toc;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero) "  ";
+  color: var(--text-dim);
+}
+.toc a {
+  color: var(--text-sub);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border3);
+  transition: color .15s;
+}
+.toc a:hover { color: var(--text-data); }
+
+/* ── Page heading ── */
+.cs-h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: .12em;
+  color: var(--text-head);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .3s;
+}
+[data-theme="dark"] .cs-h1 {
+  text-shadow: 0 0 40px rgba(255,70,40,.25);
+}
+
+</style>
+</head>
+<body>
+<div class="wrapper-prose">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div>
+      <div class="site-title"><a href="index.html">Messier Marathon Observer's Log</a></div>
+      <div class="page-subtitle">CSS Cheat Sheet — mm-shared.css</div>
+    </div>
+    <div class="theme-toggle-wrap">
+      <span class="theme-icon moon">🌙</span>
+      <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
+      <span class="theme-icon sun">☀</span>
+    </div>
+  </header>
+
+  <h1 class="cs-h1">CSS Cheat Sheet</h1>
+  <p class="cs-intro">
+    Reference for <code>mm-shared.css</code> — the design-system stylesheet shared across all pages.
+    Every new page on this site should link this file, then add only page-specific styles in its own <code>&lt;style&gt;</code> block.
+  </p>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#linking">Linking the stylesheet</a></li>
+      <li><a href="#themes">Theme system</a></li>
+      <li><a href="#color-vars">Colour variables</a></li>
+      <li><a href="#layout">Layout classes</a></li>
+      <li><a href="#toggle">Theme toggle</a></li>
+      <li><a href="#header-main">Main page header</a></li>
+      <li><a href="#header-prose">Prose page header</a></li>
+      <li><a href="#footer">Footer</a></li>
+      <li><a href="#section-title">Section title</a></li>
+      <li><a href="#legend">Legend</a></li>
+      <li><a href="#badges">Type badge colours</a></li>
+      <li><a href="#nav-link">Nav link</a></li>
+    </ol>
+  </div>
+
+  <div class="cs-body">
+
+    <!-- ══ 1. LINKING ══ -->
+    <div class="section-title" id="linking">1 · Linking the Stylesheet</div>
+
+    <p>Place both the Google Fonts import and the stylesheet link in <code>&lt;head&gt;</code>, before any page-specific <code>&lt;style&gt;</code> block. The fonts must load before the CSS or the Cinzel headings will flash unstyled.</p>
+
+<pre><span class="kw">&lt;link</span> <span class="at">href</span>=<span class="vv">"https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&amp;family=Share+Tech+Mono&amp;family=Crimson+Pro:ital,wght@0,300;0,400;1,300&amp;display=swap"</span>
+      <span class="at">rel</span>=<span class="vv">"stylesheet"</span><span class="kw">&gt;</span>
+<span class="kw">&lt;link</span> <span class="at">rel</span>=<span class="vv">"stylesheet"</span> <span class="at">href</span>=<span class="vv">"mm-shared.css"</span><span class="kw">&gt;</span></pre>
+
+    <p>Then open a <code>&lt;style&gt;</code> tag for anything specific to that page. Never duplicate variables or base resets — they're already in the shared file.</p>
+
+    <div class="callout note">
+      <strong>File location:</strong> <code>mm-shared.css</code> sits alongside <code>index.html</code>. All pages are in the same directory, so the relative path is always just <code>mm-shared.css</code>.
+    </div>
+
+
+    <!-- ══ 2. THEMES ══ -->
+    <div class="section-title" id="themes">2 · Theme System</div>
+
+    <p>The two themes are driven by a <code>data-theme</code> attribute on <code>&lt;html&gt;</code>. Set it in the opening tag so the correct theme loads before paint:</p>
+
+<pre><span class="kw">&lt;html</span> <span class="at">lang</span>=<span class="vv">"en"</span> <span class="at">data-theme</span>=<span class="vv">"dark"</span><span class="kw">&gt;</span></pre>
+
+    <p>The toggle JavaScript reads and writes <code>localStorage</code> key <code>mm_theme</code>, then updates the attribute. Paste this script block at the bottom of every page's <code>&lt;body&gt;</code>:</p>
+
+<pre><span class="kw">&lt;script&gt;</span>
+<span class="cm">// ── Restore saved theme before first paint ──────────────────</span>
+<span class="cm">// (ideally inline this in &lt;head&gt; to eliminate any flash)</span>
+<span class="pr">const</span> <span class="va">saved</span> = localStorage.<span class="vv">getItem</span>(<span class="vv">'mm_theme'</span>);
+<span class="pr">if</span> (saved) document.documentElement.setAttribute(<span class="vv">'data-theme'</span>, saved);
+
+<span class="cm">// ── Wire toggle pill ─────────────────────────────────────────</span>
+<span class="pr">const</span> <span class="va">pill</span> = document.<span class="vv">getElementById</span>(<span class="vv">'themeToggle'</span>);
+<span class="pr">const</span> <span class="va">label</span> = document.<span class="vv">getElementById</span>(<span class="vv">'toggleLabel'</span>); <span class="cm">// optional</span>
+
+<span class="pr">function</span> <span class="vv">applyTheme</span>(t) {
+  document.documentElement.setAttribute(<span class="vv">'data-theme'</span>, t);
+  localStorage.<span class="vv">setItem</span>(<span class="vv">'mm_theme'</span>, t);
+  <span class="pr">if</span> (label) label.textContent = t === <span class="vv">'dark'</span> ? <span class="vv">'Night'</span> : <span class="vv">'Day'</span>;
+}
+
+pill.<span class="vv">addEventListener</span>(<span class="vv">'click'</span>, () => {
+  <span class="pr">const</span> <span class="va">next</span> = document.documentElement.getAttribute(<span class="vv">'data-theme'</span>) === <span class="vv">'dark'</span>
+    ? <span class="vv">'light'</span> : <span class="vv">'dark'</span>;
+  <span class="vv">applyTheme</span>(next);
+});
+pill.<span class="vv">addEventListener</span>(<span class="vv">'keydown'</span>, e => {
+  <span class="pr">if</span> (e.key === <span class="vv">'Enter'</span> || e.key === <span class="vv">' '</span>) pill.<span class="vv">click</span>();
+});
+<span class="kw">&lt;/script&gt;</span></pre>
+
+    <div class="callout">
+      The <code>toggleLabel</code> span is optional — only <code>index.html</code> uses it. On prose pages with no label span, the null check prevents errors.
+    </div>
+
+
+    <!-- ══ 3. COLOUR VARIABLES ══ -->
+    <div class="section-title" id="color-vars">3 · Colour Variables</div>
+
+    <p>All colours are CSS custom properties. Never hardcode hex values in page-specific styles — always reference a variable so the theme swap works automatically.</p>
+
+    <table class="var-table">
+      <thead><tr><th>Variable</th><th>Dark</th><th>Light</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td class="var-name">--bg</td><td class="var-val"><span class="swatch" style="background:#030305"></span> #030305</td><td class="var-val"><span class="swatch" style="background:#f4ece0;border-color:#c0aa90"></span> #f4ece0</td><td class="var-desc">Page background</td></tr>
+        <tr><td class="var-name">--bg2</td><td class="var-val"><span class="swatch" style="background:#07070d"></span> #07070d</td><td class="var-val"><span class="swatch" style="background:#faf4ea;border-color:#c0aa90"></span> #faf4ea</td><td class="var-desc">Cards, table bg, modals</td></tr>
+        <tr><td class="var-name">--bg3</td><td class="var-val"><span class="swatch" style="background:#0c0b14"></span> #0c0b14</td><td class="var-val"><span class="swatch" style="background:#efe5d2;border-color:#c0aa90"></span> #efe5d2</td><td class="var-desc">Table head, sidebar, code bg</td></tr>
+        <tr><td class="var-name">--bg-row-alt</td><td class="var-val"><span class="swatch" style="background:#0a0912"></span> #0a0912</td><td class="var-val"><span class="swatch" style="background:#f6f0e2;border-color:#c0aa90"></span> #f6f0e2</td><td class="var-desc">Alternating table rows</td></tr>
+        <tr><td class="var-name">--red-bright</td><td class="var-val"><span class="swatch" style="background:#ff4f38"></span> #ff4f38</td><td class="var-val"><span class="swatch" style="background:#b82a16"></span> #b82a16</td><td class="var-desc">Headings, accents, checked items</td></tr>
+        <tr><td class="var-name">--red-mid</td><td class="var-val"><span class="swatch" style="background:#c03328"></span> #c03328</td><td class="var-val"><span class="swatch" style="background:#921e0e"></span> #921e0e</td><td class="var-desc">Toggle pill, focus borders</td></tr>
+        <tr><td class="var-name">--red-dim</td><td class="var-val"><span class="swatch" style="background:#8a2a1c"></span> #8a2a1c</td><td class="var-val"><span class="swatch" style="background:#781808"></span> #781808</td><td class="var-desc">Progress fill start, strikethrough</td></tr>
+        <tr><td class="var-name">--red-faint</td><td class="var-val"><span class="swatch" style="background:#3c1210"></span> #3c1210</td><td class="var-val"><span class="swatch" style="background:#f4dbd4;border-color:#c0aa90"></span> #f4dbd4</td><td class="var-desc">Toggle bg, filter active bg</td></tr>
+        <tr><td class="var-name">--text-head</td><td class="var-val"><span class="swatch" style="background:#ff4f38"></span></td><td class="var-val"><span class="swatch" style="background:#8b1a0a"></span></td><td class="var-desc">h1, site title</td></tr>
+        <tr><td class="var-name">--text-data</td><td class="var-val"><span class="swatch" style="background:#e87060"></span></td><td class="var-val"><span class="swatch" style="background:#180e04"></span></td><td class="var-desc">Body text, table data cells</td></tr>
+        <tr><td class="var-name">--text-sub</td><td class="var-val"><span class="swatch" style="background:#c03830"></span></td><td class="var-val"><span class="swatch" style="background:#7a3020"></span></td><td class="var-desc">Subheadings, FAQ questions, links</td></tr>
+        <tr><td class="var-name">--text-meta</td><td class="var-val"><span class="swatch" style="background:#904030"></span></td><td class="var-val"><span class="swatch" style="background:#9a4030"></span></td><td class="var-desc">Body copy (Crimson Pro), footer notes</td></tr>
+        <tr><td class="var-name">--text-dim</td><td class="var-val"><span class="swatch" style="background:#4a1e18"></span></td><td class="var-val"><span class="swatch" style="background:#b87060"></span></td><td class="var-desc">Secondary labels, section titles</td></tr>
+        <tr><td class="var-name">--m-color</td><td class="var-val"><span class="swatch" style="background:#ff5540"></span></td><td class="var-val"><span class="swatch" style="background:#9b2012"></span></td><td class="var-desc">M# column in table</td></tr>
+        <tr><td class="var-name">--con-color</td><td class="var-val"><span class="swatch" style="background:#ff6048"></span></td><td class="var-val"><span class="swatch" style="background:#7a4010"></span></td><td class="var-desc">Constellation column in table</td></tr>
+        <tr><td class="var-name">--border</td><td class="var-val"><span class="swatch" style="background:#251512"></span></td><td class="var-val"><span class="swatch" style="background:#d6c4ae"></span></td><td class="var-desc">Faintest borders (table row dividers)</td></tr>
+        <tr><td class="var-name">--border2</td><td class="var-val"><span class="swatch" style="background:#3e1f18"></span></td><td class="var-val"><span class="swatch" style="background:#c0aa90"></span></td><td class="var-desc">Standard borders (cards, headers)</td></tr>
+        <tr><td class="var-name">--border3</td><td class="var-val"><span class="swatch" style="background:#5a2820"></span></td><td class="var-val"><span class="swatch" style="background:#a08870"></span></td><td class="var-desc">Stronger borders (header rule, active states)</td></tr>
+        <tr><td class="var-name">--header-line</td><td class="var-val"><span class="swatch" style="background:#5a2820"></span></td><td class="var-val"><span class="swatch" style="background:#b08868"></span></td><td class="var-desc">Gradient rule under main header</td></tr>
+        <tr><td class="var-name">--starfield</td><td class="var-val">rgba(255,90,60,.38)</td><td class="var-val">rgba(80,30,10,.10)</td><td class="var-desc">Star texture dots in body::before</td></tr>
+        <tr><td class="var-name">--filter-active-bg</td><td class="var-val"><span class="swatch" style="background:#3c1210"></span></td><td class="var-val"><span class="swatch" style="background:#f4dbd4;border-color:#c0aa90"></span></td><td class="var-desc">Active filter btn bg, checked checkbox bg</td></tr>
+        <tr><td class="var-name">--row-hover</td><td class="var-val">rgba(200,50,30,.09)</td><td class="var-val">rgba(155,32,18,.07)</td><td class="var-desc">Table row hover background</td></tr>
+      </tbody>
+    </table>
+
+
+    <!-- ══ 4. LAYOUT ══ -->
+    <div class="section-title" id="layout">4 · Layout Classes</div>
+
+    <p>Two wrapper classes control page width and padding. Use <code>.wrapper</code> for data-heavy pages, <code>.wrapper-prose</code> for text pages.</p>
+
+<pre><span class="cm">/* Wide layout – index.html (table + lightbox) */</span>
+<span class="cl">.wrapper</span>        { max-width: <span class="vv">1200px</span>; padding: <span class="vv">32px 24px 60px</span>; }
+
+<span class="cm">/* Narrow layout – faq.html, cheatsheet.html */</span>
+<span class="cl">.wrapper-prose</span>  { max-width: <span class="vv">820px</span>;  padding: <span class="vv">32px 20px 60px</span>; }</pre>
+
+    <p>Both are <code>position: relative; z-index: 1</code> to sit above the fixed starfield layer on <code>body::before</code>.</p>
+
+    <div class="callout">
+      The starfield is generated automatically on every page via <code>body::before</code> — you don't need to add anything. On light theme it is very subtle; on dark theme it is the faint red-dot constellation effect.
+    </div>
+
+
+    <!-- ══ 5. TOGGLE ══ -->
+    <div class="section-title" id="toggle">5 · Theme Toggle</div>
+
+    <p>Two variants exist — <strong>full size</strong> (index.html, absolutely positioned top-right of wrapper) and <strong>inline</strong> (prose pages, inside <code>.page-header</code>). Both use the same pill element; only the wrapper class differs.</p>
+
+<pre><span class="cm">&lt;!-- Full-size toggle (index.html) --&gt;</span>
+<span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"theme-toggle-wrap"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"theme-icon moon"</span><span class="kw">&gt;</span>🌙<span class="kw">&lt;/span&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"toggle-pill"</span> <span class="at">id</span>=<span class="vv">"themeToggle"</span>
+       <span class="at">role</span>=<span class="vv">"button"</span> <span class="at">tabindex</span>=<span class="vv">"0"</span><span class="kw">&gt;&lt;/div&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"theme-icon sun"</span><span class="kw">&gt;</span>☀<span class="kw">&lt;/span&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"toggle-label"</span> <span class="at">id</span>=<span class="vv">"toggleLabel"</span><span class="kw">&gt;</span>Night<span class="kw">&lt;/span&gt;</span>  <span class="cm">&lt;!-- optional --&gt;</span>
+<span class="kw">&lt;/div&gt;</span></pre>
+
+<pre><span class="cm">&lt;!-- Inline toggle (faq.html, cheatsheet.html – inside .page-header) --&gt;</span>
+<span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"theme-toggle-wrap"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"theme-icon moon"</span><span class="kw">&gt;</span>🌙<span class="kw">&lt;/span&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"toggle-pill"</span> <span class="at">id</span>=<span class="vv">"themeToggle"</span>
+       <span class="at">role</span>=<span class="vv">"button"</span> <span class="at">tabindex</span>=<span class="vv">"0"</span><span class="kw">&gt;&lt;/div&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"theme-icon sun"</span><span class="kw">&gt;</span>☀<span class="kw">&lt;/span&gt;</span>
+<span class="kw">&lt;/div&gt;</span></pre>
+
+    <div class="demo-row">
+      <span class="theme-icon moon" style="font-size:14px">🌙</span>
+      <div class="toggle-pill" style="pointer-events:none"></div>
+      <span class="theme-icon sun" style="font-size:14px">☀</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin-left:10px;">↑ live preview (reflects current theme)</span>
+    </div>
+
+
+    <!-- ══ 6. MAIN HEADER ══ -->
+    <div class="section-title" id="header-main">6 · Main Page Header (index.html)</div>
+
+    <p>The centred hero header used on the observation log. Contains the eyebrow line, <code>h1</code>, subtitle, horizontal rule, and progress bar. Only needed on the main page.</p>
+
+<pre><span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"header"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"header-eyebrow"</span><span class="kw">&gt;</span>Astronomical League · Messier Observing Program<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;h1&gt;</span>Messier Marathon<span class="kw">&lt;/h1&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"subtitle"</span><span class="kw">&gt;</span>Observer's Log<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"header-rule"</span><span class="kw">&gt;&lt;/span&gt;</span>
+  <span class="cm">&lt;!-- progress bar markup goes here --&gt;</span>
+<span class="kw">&lt;/div&gt;</span></pre>
+
+    <div class="callout">
+      The <code>h1</code> glow shadow is applied automatically on dark theme via <code>[data-theme="dark"] h1</code> — no extra class needed.
+    </div>
+
+
+    <!-- ══ 7. PROSE HEADER ══ -->
+    <div class="section-title" id="header-prose">7 · Prose Page Header (faq, cheat sheet…)</div>
+
+    <p>Two-column flex bar used at the top of secondary pages. Left side holds the site title (link back to index) and current page subtitle. Right side holds the toggle.</p>
+
+<pre><span class="kw">&lt;header</span> <span class="at">class</span>=<span class="vv">"page-header"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div&gt;</span>
+    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"site-title"</span><span class="kw">&gt;&lt;a</span> <span class="at">href</span>=<span class="vv">"index.html"</span><span class="kw">&gt;</span>Messier Marathon Observer's Log<span class="kw">&lt;/a&gt;&lt;/div&gt;</span>
+    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"page-subtitle"</span><span class="kw">&gt;</span>Page Title Here<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+  <span class="cm">&lt;!-- theme-toggle-wrap goes here --&gt;</span>
+<span class="kw">&lt;/header&gt;</span></pre>
+
+
+    <!-- ══ 8. FOOTER ══ -->
+    <div class="section-title" id="footer">8 · Footer</div>
+
+    <p>Flex row, space-between. Left: italic note in Crimson Pro. Right: small-caps signature block. Add a <code>.nav-link</code> inside the sig block to link to related pages.</p>
+
+<pre><span class="kw">&lt;footer</span> <span class="at">class</span>=<span class="vv">"footer"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"footer-note"</span><span class="kw">&gt;</span>Italic note in Crimson Pro.<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"footer-sig"</span><span class="kw">&gt;</span>
+    Page Name<span class="kw">&lt;br&gt;</span>Subtitle
+    <span class="kw">&lt;br&gt;&lt;a</span> <span class="at">href</span>=<span class="vv">"other.html"</span> <span class="at">class</span>=<span class="vv">"nav-link"</span><span class="kw">&gt;</span>Other Page →<span class="kw">&lt;/a&gt;</span>
+  <span class="kw">&lt;/div&gt;</span>
+<span class="kw">&lt;/footer&gt;</span></pre>
+
+    <div class="callout">
+      <strong>Note:</strong> The <code>.footer</code> class and <code>.footer-sig a</code> styles are in the shared CSS, so links inside <code>.footer-sig</code> inherit the dim/hover colour automatically. You don't need inline styles.
+    </div>
+
+
+    <!-- ══ 9. SECTION TITLE ══ -->
+    <div class="section-title" id="section-title">9 · Section Title</div>
+
+    <p>Use <code>.section-title</code> to divide content sections on prose pages. It renders as a small-caps label with a bottom border. Give it an <code>id</code> if you want TOC anchor links.</p>
+
+<pre><span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"section-title"</span> <span class="at">id</span>=<span class="vv">"my-section"</span><span class="kw">&gt;</span>Section Name<span class="kw">&lt;/div&gt;</span></pre>
+
+    <div class="section-title" style="margin-top:10px">Live example</div>
+
+    <div class="callout">
+      The FAQ page uses the same class but with the alias name <code>faq-section-title</code> — this is identical and can be consolidated to <code>section-title</code> in a future cleanup.
+    </div>
+
+
+    <!-- ══ 10. LEGEND ══ -->
+    <div class="section-title" id="legend">10 · Legend</div>
+
+    <p>The object-type key that appears below the observation table. Also usable on any page that needs a colour-keyed legend row.</p>
+
+<pre><span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"legend"</span><span class="kw">&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"legend-title"</span><span class="kw">&gt;</span>Object Type Key<span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"legend-item"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"legend-dot badge-spiral"</span><span class="kw">&gt;&lt;/div&gt;</span>Spiral Galaxy
+  <span class="kw">&lt;/div&gt;</span>
+  <span class="cm">&lt;!-- repeat .legend-item for each type --&gt;</span>
+<span class="kw">&lt;/div&gt;</span></pre>
+
+
+    <!-- ══ 11. BADGES ══ -->
+    <div class="section-title" id="badges">11 · Type Badge Colours</div>
+
+    <p>Applied to any <code>7–8px</code> circle element. Used as dots in the table <code>.type-badge</code> and in the legend <code>.legend-dot</code>. Not theme-sensitive — these are the same in both modes.</p>
+
+    <div class="demo-badge-row">
+      <div class="demo-badge-item"><div class="demo-dot badge-spiral"></div><code>.badge-spiral</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-ellip"></div><code>.badge-ellip</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-lenticular"></div><code>.badge-lenticular</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-irregular"></div><code>.badge-irregular</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-open"></div><code>.badge-open</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-globular"></div><code>.badge-globular</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-nebula"></div><code>.badge-nebula</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-planetary"></div><code>.badge-planetary</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-snr"></div><code>.badge-snr</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-starcloud"></div><code>.badge-starcloud</code></div>
+      <div class="demo-badge-item"><div class="demo-dot badge-double"></div><code>.badge-double</code></div>
+    </div>
+
+<pre><span class="cm">/* In a table cell */</span>
+<span class="kw">&lt;span</span> <span class="at">class</span>=<span class="vv">"type-badge badge-globular"</span><span class="kw">&gt;&lt;/span&gt;</span>Globular Cluster
+
+<span class="cm">/* In the legend */</span>
+<span class="kw">&lt;div</span> <span class="at">class</span>=<span class="vv">"legend-dot badge-globular"</span><span class="kw">&gt;&lt;/div&gt;</span>Globular Cluster</pre>
+
+
+    <!-- ══ 12. NAV LINK ══ -->
+    <div class="section-title" id="nav-link">12 · Nav Link</div>
+
+    <p>A subtle utility class for cross-page navigation links — typically used in footers or page headers. Monospace, small-caps, dotted underline.</p>
+
+<pre><span class="kw">&lt;a</span> <span class="at">href</span>=<span class="vv">"faq.html"</span> <span class="at">class</span>=<span class="vv">"nav-link"</span><span class="kw">&gt;</span>FAQ →<span class="kw">&lt;/a&gt;</span>
+<span class="kw">&lt;a</span> <span class="at">href</span>=<span class="vv">"index.html"</span> <span class="at">class</span>=<span class="vv">"nav-link"</span><span class="kw">&gt;</span>← Back to Log<span class="kw">&lt;/a&gt;</span></pre>
+
+    <div class="demo-row">
+      <a href="#" class="nav-link" onclick="return false">← Back to Log</a>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin:0 8px">·</span>
+      <a href="#" class="nav-link" onclick="return false">FAQ →</a>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin:0 8px">·</span>
+      <a href="#" class="nav-link" onclick="return false">CSS Cheat Sheet →</a>
+    </div>
+
+  </div><!-- /cs-body -->
+
+  <!-- FOOTER -->
+  <footer class="footer" style="margin-top:52px">
+    <div class="footer-note">
+      Any new page on this site: link <code>mm-shared.css</code>, use <code>.wrapper-prose</code>, add <code>.page-header</code> and <code>.footer</code>, wire the toggle script. That's the whole pattern.
+    </div>
+    <div class="footer-sig">
+      <a href="index.html" class="nav-link">← Back to Log</a><br>
+      <span style="display:inline-block;margin-top:6px"><a href="faq.html" class="nav-link">FAQ →</a></span>
+    </div>
+  </footer>
+
+</div><!-- /wrapper-prose -->
+
+<script>
+const root = document.documentElement;
+const pill  = document.getElementById('themeToggle');
+
+const saved = localStorage.getItem('mm_theme');
+if (saved) root.setAttribute('data-theme', saved);
+
+function applyTheme(t) {
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('mm_theme', t);
+}
+pill.addEventListener('click', () => {
+  applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+pill.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') pill.click();
+});
+</script>
+</body>
+</html>

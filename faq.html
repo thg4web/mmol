@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Messier Marathon Observer's Log</title>
+<style>
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Share Tech Mono"; src: url("fonts/ShareTechMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
+</style>
+<link rel="stylesheet" href="mm-shared.css">
+<style>
+
+/* ════════ FAQ ACCORDION ════════ */
+.faq-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: .14em;
+  color: var(--text-head);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .3s;
+}
+.faq-intro {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--text-meta);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 640px;
+  transition: color .3s;
+}
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  transition: border-color .3s;
+}
+.faq-item:last-of-type { border-bottom: none; }
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 14px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12.5px;
+  color: var(--text-sub);
+  transition: color .2s;
+  line-height: 1.5;
+}
+.faq-question:hover { color: var(--text-data); }
+.faq-chevron {
+  font-size: 9px;
+  color: var(--text-dim);
+  transition: transform .25s, color .2s;
+  flex-shrink: 0;
+}
+.faq-item.open .faq-chevron { transform: rotate(180deg); color: var(--text-meta); }
+.faq-answer {
+  display: none;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text-meta);
+  padding: 2px 4px 18px 4px;
+  max-width: 720px;
+  transition: color .3s;
+}
+.faq-answer p { margin-bottom: 10px; }
+.faq-answer p:last-child { margin-bottom: 0; }
+.faq-answer a { color: var(--text-sub); text-underline-offset: 3px; transition: color .2s; }
+.faq-answer a:hover { color: var(--text-data); }
+.faq-answer strong { color: var(--text-sub); font-weight: 600; }
+.faq-item.open .faq-answer { display: block; }
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header class="page-header">
+    <div class="header-left">
+      <div class="site-title"><a href="index.html">Messier Marathon Observer's Log</a></div>
+      <div class="page-subtitle">Frequently Asked Questions</div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" title="Toggle day/night mode">
+      <span class="theme-icon moon">🌙</span>
+      <div class="toggle-pill"></div>
+      <span class="theme-icon sun">☀</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <h1 class="faq-heading">FAQ</h1>
+  <p class="faq-intro">Answers to common questions about the Messier Marathon, the Astronomical League Messier Observing Program, and how to get the most from this tool.</p>
+
+  <!-- ══ SECTION: THE MESSIER MARATHON ══ -->
+  <div class="faq-section-title">The Messier Marathon</div>
+
+  <div class="faq-item">
+    <button class="faq-question">What is the Messier Marathon?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The Messier Marathon is a challenge to observe all 110 Messier objects in a single night. It is best attempted in late March, when the geometry of the sky from mid-northern latitudes allows every object to be above the horizon at some point between dusk and dawn.</p>
+      <p>Objects are observed in a specific sequence — starting with those that set first in the west just after sunset, and finishing with those that rise last in the east just before sunrise. The # column in the log reflects this optimal search order.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">When is the best time to attempt a marathon?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The ideal window is the few nights around new moon in late March — typically between March 18 and April 5 for most mid-northern latitudes (roughly 25°–50° N). The new moon is essential: even a thin crescent can wash out faint objects at the horizon at the start and end of the night.</p>
+      <p>The earlier in the window you observe, the better your chances with the difficult western objects (M74, M77) at dusk. The later you observe, the more time you have with M30 and other eastern objects at dawn. Most experienced marathoners aim for the first or second night after new moon in the last week of March.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Why are some objects so much harder than others?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>Difficulty varies enormously across the catalog. Showpiece objects like M42 (Orion Nebula), M45 (Pleiades), and M31 (Andromeda Galaxy) are naked-eye targets, while objects like M74, M76, M91, and M98 are notoriously faint or have very low surface brightness, requiring dark skies and patience.</p>
+      <p>During a marathon specifically, the hardest objects are those at the extremes of the night — M74 and M77 in the west at dusk, and M30 in the east just before dawn — where the sky is still brightening or not yet dark, and the targets sit low on the horizon in thicker atmosphere.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What equipment do I need?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>Most Messier objects are within reach of a 3-inch (76mm) telescope under good conditions — in fact, Messier himself used instruments no larger than what amateurs own today. A 4–6 inch telescope will make the night considerably more comfortable, especially for the fainter galaxies in Virgo and the small planetary nebulae.</p>
+      <p>A low-power wide-field eyepiece is invaluable for sweeping between objects quickly. A red flashlight and a printed or digital finder chart are essential. The Astronomical League's rules specifically prohibit GoTo telescopes, computerised setting circles, and phone apps that point to objects — the intent is that you learn to navigate the sky yourself using only a finderscope or Telrad.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What is a good site for a marathon?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>You need a site with a clear, unobstructed horizon in all directions — particularly to the west (for the early evening objects) and to the east and southeast (for the Sagittarius objects and M30 before dawn). Even a small amount of tree cover or a hill in the wrong direction can cost you several objects.</p>
+      <p>Dark skies are critical. Light pollution washes out the low-surface-brightness galaxies in Virgo and Coma Berenices, and brightens the horizon enough to make the dusk/dawn targets even more difficult. A Bortle 4 or darker site will give you the best chance of a complete run.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION: THE AL OBSERVING PROGRAM ══ -->
+  <div class="faq-section-title">Astronomical League Messier Observing Program</div>
+
+  <div class="faq-item">
+    <button class="faq-question">What is the AL Messier Observing Program?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The <a href="https://www.astroleague.org/messier-observing-program/" target="_blank" rel="noopener">Astronomical League Messier Observing Program</a> is a formal certification for amateur astronomers who observe and log Messier objects. There are two certification levels:</p>
+      <p><strong>Silver Level</strong> — observe any 70 Messier objects and submit a qualifying log. Earns a certificate.</p>
+      <p><strong>Gold Level</strong> — observe all 110 Messier objects and submit a complete log. Earns a certificate and an AL Messier pin, signed by the current AL President.</p>
+      <p>Certification is open to AL members, either through a local astronomical society or as members at large.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What does my observing log need to include for AL certification?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>For each object your log must record:</p>
+      <p>a. Date and time of observation (local time or UT)<br>
+         b. Latitude and longitude of your observing site<br>
+         c. Seeing and transparency conditions<br>
+         d. Telescope aperture<br>
+         e. Magnification used<br>
+         f. A description of the object as it appears through the eyepiece</p>
+      <p>The log must then be reviewed by an officer of your astronomical society (or sent directly to the AL program coordinator if you are not a society member), who will forward a letter confirming your observations.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Can I use GoTo or a phone app to find objects?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>No. The AL Messier Observing Program explicitly prohibits GoTo telescopes, digital setting circles, and smartphone apps that point you to objects. The purpose of the program is to teach you to navigate the sky yourself — to associate a chart with the real sky and learn to star-hop from known objects to targets.</p>
+      <p>Acceptable pointing aids include finderscopes, Telrads, and Telrad-like non-electronic finders. The setting circles found on a manual telescope's axes should also be avoided.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Do I have to observe all 110 objects in one night?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>No. The AL certification has no time requirement — you can observe the objects over as many nights and across as many years as you like. The Messier Marathon is a separate personal challenge that happens to align with the certification, but the program itself is designed to be completed at your own pace through all seasons.</p>
+      <p>Many observers work through the catalog systematically by constellation or season, which is a thoroughly rewarding way to build your deep-sky experience.</p>
+    </div>
+  </div>
+
+  <!-- ══ SECTION: USING THIS LOG ══ -->
+  <div class="faq-section-title">Using This Log</div>
+
+  <div class="faq-item">
+    <button class="faq-question">Will my checkboxes and notes be saved if I close the browser?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>Yes — all checkboxes and field notes are saved automatically to your browser's local storage as you type or click. They will persist between sessions as long as you use the same browser on the same device and do not clear your browser data or site storage.</p>
+      <p>Note that local storage is specific to your browser and device, so data will not automatically sync across different devices or browsers. If you want a backup, use the Print button to produce a hard copy of your current log.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Can I use this log to submit for AL certification?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>This log is designed to complement your AL certification effort, but it is not a direct substitute for a formal observing logbook. The AL requires specific details per observation — including seeing, transparency, aperture, magnification, and an eyepiece description — that go beyond the field notes field here.</p>
+      <p>The recommended approach is to use this tool at the telescope to quickly check objects off and jot shorthand notes, then transfer those notes into a more complete log for submission. The Print button produces a clean black-and-white printout of your full observation table that is a useful working reference for this process.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What does the search and filter do?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The filter buttons (All, Galaxy, Open Cluster, Globular, Nebula, Unobserved) narrow the table to objects of that type, or to objects you haven't checked off yet. The <strong>Unobserved</strong> filter is particularly useful mid-session to see only what remains.</p>
+      <p>The search box filters by any text in the table — M number (e.g. "M42"), constellation abbreviation (e.g. "Sgr"), object type (e.g. "Globular"), or marathon order number. Search and filter can be combined.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What are the sky chart links in the lightbox?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p><strong>Stellarium Web</strong> (<a href="https://stellarium-web.org" target="_blank" rel="noopener">stellarium-web.org</a>) opens a real-time 3D sky simulation centred directly on the selected object. Set your location and date/time in Stellarium for an accurate view of where the object sits in your sky tonight.</p>
+      <p><strong>Sky-Map.org</strong> opens a coordinate-precise finder chart using the object's RA and Dec, with constellation lines and a position marker pre-enabled. Useful for a quick visual reference of the surrounding star field.</p>
+      <p>Both links require an internet connection and open in a new tab.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">What do the PSA page numbers refer to?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The PSA column references page numbers in the <em>Pocket Sky Atlas</em> by Roger Sinnott, published by Sky &amp; Telescope. It is one of the most widely used printed star atlases among amateur astronomers and an excellent companion for Messier observing. The page references let you quickly jump to the right chart in the atlas for each object.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">Why does red mode matter for observing?<span class="faq-chevron">▼</span></button>
+    <div class="faq-answer">
+      <p>The human eye contains two types of photoreceptors — cones (for colour and bright light) and rods (for low-light sensitivity). Rods are not sensitive to red wavelengths, which means red light does not trigger the bleaching response that destroys dark adaptation. It takes the eye roughly 20–30 minutes to fully dark-adapt after exposure to white light, and even a brief flash can reset that process.</p>
+      <p>This log's red night-vision mode — deep black background with red-spectrum text — is designed to be used directly at the eyepiece without compromising your dark adaptation. The day mode (warm parchment) is for planning and review in normal lighting conditions.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-note">
+      Messier Marathon Observer's Log — supporting the Astronomical League Messier Observing Program.
+    </div>
+    <div class="footer-sig">
+      <a href="index.html" class="nav-link">← Back to Log</a> &nbsp;·&nbsp;
+      <a href="docs/user-guide.html" class="nav-link">User Guide</a> &nbsp;·&nbsp;
+      <a href="resources.html" class="nav-link">Resources</a>
+    </div>
+  </footer>
+
+</div><!-- /wrapper -->
+
+<script>
+// ── Theme persistence ─────────────────────────────────────────
+const root   = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+
+const saved = localStorage.getItem('mm_theme');
+if (saved) root.setAttribute('data-theme', saved);
+
+toggle.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('mm_theme', next);
+});
+
+// ── FAQ accordion ─────────────────────────────────────────────
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    // open clicked if it was closed
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
