@@ -1,3928 +1,453 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messier Marathon — Observation Log</title>
-<style>
-/* ── Self-hosted fonts ── place .ttf files in a fonts/ folder next to this HTML ── */
-@font-face {
-  font-family: 'Cinzel';
-  src: url('fonts/Cinzel-Regular.ttf') format('truetype');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Cinzel';
-  src: url('fonts/Cinzel-SemiBold.ttf') format('truetype');
-  font-weight: 600; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Cinzel';
-  src: url('fonts/Cinzel-Bold.ttf') format('truetype');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Share Tech Mono';
-  src: url('fonts/ShareTechMono-Regular.ttf') format('truetype');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('fonts/CrimsonPro-Light.ttf') format('truetype');
-  font-weight: 300; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('fonts/CrimsonPro-Regular.ttf') format('truetype');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Crimson Pro';
-  src: url('fonts/CrimsonPro-LightItalic.ttf') format('truetype');
-  font-weight: 300; font-style: italic; font-display: swap;
-}
-</style>
-<link rel="stylesheet" href="mm-shared.css">
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THG Networks — Messier Marathon Observers Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Raleway:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ════════ PROGRESS ════════ */
-.progress-wrap {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: center;
-  margin-top: 18px;
-}
-.progress-label {
-  font-size: 10px;
-  letter-spacing: .2em;
-  color: var(--text-meta);
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-.progress-bar {
-  width: 220px;
-  height: 5px;
-  background: var(--progress-bg);
-  border-radius: 3px;
-  overflow: hidden;
-  border: 1px solid var(--border2);
-  transition: background .3s, border-color .3s;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--red-dim), var(--red-bright));
-  width: 0%;
-  transition: width .45s ease;
-  border-radius: 3px;
-}
-[data-theme="dark"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
-.progress-count {
-  font-size: 12px;
-  color: var(--red-bright);
-  min-width: 58px;
-  font-family: 'Cinzel', serif;
-  transition: color .3s;
-}
+    :root {
+      --gold: #c9a84c;
+      --gold-glow: #e8c97a;
+      --deep: #030610;
+      --mid: #080e22;
+      --text: #d4cfc7;
+      --dim: #7a7a8a;
+    }
 
-/* ════════ CONTROLS ════════ */
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filter-btn {
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--filter-text);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  padding: 5px 13px;
-  cursor: pointer;
-  transition: all .18s;
-  text-transform: uppercase;
-}
-.filter-btn:hover { border-color: var(--border3); color: var(--red-bright); }
-.filter-btn.active {
-  border-color: var(--red-mid);
-  color: var(--red-bright);
-  background: var(--filter-active-bg);
-}
-[data-theme="dark"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+    html, body {
+      height: 100%;
+      background: var(--deep);
+      color: var(--text);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
 
-.search-wrap { margin-left: auto; position: relative; }
-.search-wrap input {
-  background: var(--search-bg);
-  border: 1px solid var(--border2);
-  color: var(--text-data);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  padding: 5px 12px 5px 30px;
-  width: 185px;
-  outline: none;
-  letter-spacing: .04em;
-  transition: border-color .15s, background .3s, color .3s;
-}
-.search-wrap input:focus { border-color: var(--border3); }
-.search-wrap input::placeholder { color: var(--text-dim); }
-.search-icon {
-  position: absolute; left: 9px; top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-dim); font-size: 12px; pointer-events: none;
-}
-/* ════════ TABLE ════════ */
-.table-outer {
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  overflow-x: auto;
-  position: relative;
-  transition: background .3s, border-color .3s;
-}
-table { width: 100%; border-collapse: collapse; }
-colgroup col.col-mo   { width: 44px; }
-colgroup col.col-m    { width: 62px; }
-colgroup col.col-type { width: 120px; }
-colgroup col.col-con  { width: 46px; }
-colgroup col.col-mag  { width: 46px; }
-colgroup col.col-ra   { width: 76px; }
-colgroup col.col-dec  { width: 72px; }
-colgroup col.col-psa  { width: 86px; }
-colgroup col.col-chk  { width: 40px; }
+    /* ── PHOTO BACKGROUND ── */
+    .bg-photo {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url('IMG_1163.png') center center / cover no-repeat;
+    }
+    .bg-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 4, 14, 0.72);
+    }
 
-thead tr {
-  background: var(--thead-bg);
-  border-bottom: 2px solid var(--border3);
-  transition: background .3s;
-}
-th {
-  font-family: 'Cinzel', serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-meta);
-  padding: 11px 9px;
-  text-align: left;
-  white-space: nowrap;
-  border-right: 1px solid var(--border);
-  position: sticky; top: 0;
-  background: var(--thead-bg);
-  z-index: 10;
-  transition: background .3s, color .3s, border-color .3s;
-}
-th:last-child { border-right: none; }
-th.center     { text-align: center; }
+    /* ── STAR CANVAS ── */
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-tbody tr.data-row {
-  border-bottom: 1px solid var(--border);
-  transition: background .12s, opacity .2s;
-}
-tbody tr.data-row:nth-child(even) { background: var(--bg-row-alt); }
-tbody tr.data-row:hover           { background: var(--row-hover); }
-tbody tr.data-row.checked         { opacity: .48; }
-tbody tr.data-row.hidden-row      { display: none; }
+    /* ── NEBULA BG ── */
+    .nebula {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 30%, rgba(30,10,80,0.55) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 70%, rgba(10,40,90,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 55% 50%, rgba(60,10,30,0.25) 0%, transparent 65%);
+      pointer-events: none;
+    }
 
-td {
-  padding: 7px 9px;
-  border-right: 1px solid var(--border);
-  vertical-align: middle;
-  transition: border-color .3s;
-}
-td:last-child { border-right: none; }
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
 
-td.col-mo-val  { color: var(--text-dim); font-size: 10.5px; text-align: right; padding-right: 10px; }
-td.col-m-val   { color: var(--m-color); font-family: 'Cinzel', serif; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; transition: color .3s; }
-tr.checked td.col-m-val { text-decoration: line-through; text-decoration-color: var(--red-dim); }
-td.col-type-val { font-size: 11.5px; color: var(--text-data); transition: color .3s; }
-.type-badge { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
-td.col-con-val { font-size: 11.5px; color: var(--con-color); letter-spacing: .04em; font-weight: 600; text-align: center; transition: color .3s; }
-td.col-mag-val { text-align: right; font-size: 12px; color: var(--text-data); padding-right: 12px; font-variant-numeric: tabular-nums; transition: color .3s; }
-td.col-ra-val, td.col-dec-val { font-size: 11.5px; color: var(--text-data); font-variant-numeric: tabular-nums; opacity: .9; transition: color .3s; }
-td.col-psa-val { font-size: 11px; color: var(--text-sub); transition: color .3s; }
-td.col-chk-val { text-align: center; }
-td.col-chk-val input[type=checkbox] {
-  appearance: none; -webkit-appearance: none;
-  width: 15px; height: 15px;
-  border: 1.5px solid var(--chk-border);
-  background: transparent; cursor: pointer;
-  position: relative; transition: all .15s;
-}
-td.col-chk-val input[type=checkbox]:hover { border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:hover { box-shadow: 0 0 8px rgba(255,70,40,.3); }
-td.col-chk-val input[type=checkbox]:checked { background: var(--filter-active-bg); border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:checked { box-shadow: 0 0 10px rgba(255,70,40,.4); }
-td.col-chk-val input[type=checkbox]:checked::after {
-  content: '✓'; position: absolute; top: -2px; left: 1px;
-  font-size: 12px; color: var(--chk-tick); line-height: 1; font-weight: 700;
-}
-td.col-note-val { min-width: 150px; }
-.note-input {
-  background: transparent; border: none;
-  border-bottom: 1px solid var(--note-border);
-  color: var(--text-data); font-family: 'Share Tech Mono', monospace;
-  font-size: 11px; width: 100%; padding: 2px 4px; outline: none;
-  transition: border-color .15s, background .15s, color .3s;
-}
-.note-input:focus { border-bottom-color: var(--red-mid); background: var(--note-focus); }
-.note-input::placeholder { color: var(--text-dim); font-style: italic; }
+    /* ── SITE HEADER ── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(to bottom, rgba(3,6,16,0.9) 0%, transparent 100%);
+    }
+    .site-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    .site-name span { color: var(--gold); }
 
-/* M# clickable link */
-td.col-m-val a.m-link {
-  color: var(--m-color); text-decoration: none;
-  border-bottom: 1px dotted var(--red-dim); cursor: pointer;
-  transition: color .15s, border-color .15s;
-}
-td.col-m-val a.m-link:hover { color: var(--red-bright); border-bottom-color: var(--red-bright); }
-tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoration-color: var(--red-dim); border-bottom: none; }
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      max-width: 780px;
+      animation: fadeUp 1.2s ease both;
+    }
 
-/* ════════ LIGHTBOX MODAL ════════ */
-.lb-overlay {
-  display: none; position: fixed; inset: 0;
-  background: var(--modal-overlay); z-index: 1000;
-  align-items: center; justify-content: center; padding: 20px;
-  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
-  animation: lb-fade-in .18s ease;
-}
-.lb-overlay.open { display: flex; }
-@keyframes lb-fade-in { from { opacity: 0; } to { opacity: 1; } }
-.lb-box {
-  background: var(--modal-bg); border: 1px solid var(--modal-border);
-  max-width: 860px; width: 100%; position: relative;
-  display: flex; flex-direction: column;
-  animation: lb-slide-up .2s ease; box-shadow: 0 30px 80px rgba(0,0,0,.6);
-}
-@keyframes lb-slide-up {
-  from { transform: translateY(16px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-.lb-header {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 18px 12px; border-bottom: 1px solid var(--border2);
-}
-.lb-title-m {
-  font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700;
-  color: var(--red-bright); letter-spacing: .06em; line-height: 1;
-}
-[data-theme="dark"] .lb-title-m { text-shadow: 0 0 30px rgba(255,70,40,.3); }
-.lb-title-type {
-  font-family: 'Share Tech Mono', monospace; font-size: 10px;
-  letter-spacing: .2em; text-transform: uppercase; color: var(--modal-meta);
-  padding: 3px 8px; border: 1px solid var(--border2); background: var(--filter-active-bg);
-}
-.lb-meta-row { display: flex; gap: 20px; margin-left: auto; flex-wrap: wrap; }
-.lb-meta-item { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
-.lb-meta-label { font-size: 8px; letter-spacing: .22em; color: var(--text-dim); text-transform: uppercase; }
-.lb-meta-val { font-family: 'Share Tech Mono', monospace; font-size: 11.5px; color: var(--text-data); }
-.lb-meta-val.con { color: var(--con-color); font-weight: 600; }
-.lb-close {
-  margin-left: 14px; width: 30px; height: 30px;
-  background: transparent; border: 1px solid var(--border2);
-  color: var(--text-meta); font-size: 16px; line-height: 1; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all .15s;
-}
-.lb-close:hover { background: var(--modal-close-hover); border-color: var(--border3); color: var(--red-bright); }
-.lb-body { display: flex; min-height: 0; }
-.lb-img-wrap {
-  flex: 1 1 auto; background: #000; display: flex;
-  align-items: center; justify-content: center;
-  min-height: 300px; max-height: 520px; overflow: hidden; position: relative;
-}
-.lb-img-wrap img { max-width: 100%; max-height: 520px; object-fit: contain; display: block; }
-.lb-attribution {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 4px 8px; background: rgba(0,0,0,.62);
-  font-family: 'Share Tech Mono', monospace; font-size: 9.5px;
-  color: #888; letter-spacing: .04em; line-height: 1.5; text-align: right;
-  pointer-events: none; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
-}
-[data-theme="light"] .lb-attribution { background: rgba(255,255,255,.55); color: #666; }
-.lb-img-placeholder {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 12px; padding: 40px;
-  color: var(--text-dim); min-height: 280px; width: 100%;
-}
-.lb-img-placeholder .ph-icon { font-size: 42px; opacity: .3; }
-.lb-img-placeholder .ph-text { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .5; text-align: center; line-height: 1.8; }
-.lb-sidebar {
-  width: 190px; flex-shrink: 0; border-left: 1px solid var(--border2);
-  padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; background: var(--bg3);
-}
-.lb-stat { display: flex; flex-direction: column; gap: 3px; }
-.lb-stat-label { font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); }
-.lb-stat-val { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--text-data); }
-.lb-stat-val.highlight { color: var(--red-bright); font-family: 'Cinzel', serif; font-size: 13px; }
-.lb-stat-val.con-val   { color: var(--con-color); }
-.lb-stat-divider { height: 1px; background: var(--border); margin: 2px 0; }
-.lb-psa-badge {
-  margin-top: auto; padding: 8px 10px;
-  border: 1px solid var(--border2); background: var(--filter-active-bg);
-}
-.lb-psa-badge .lb-stat-label { margin-bottom: 4px; }
-.lb-psa-badge .lb-stat-val { font-size: 11px; color: var(--text-sub); }
-.lb-footer {
-  padding: 9px 18px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-}
-.lb-nav-btn {
-  background: transparent; border: 1px solid var(--border2);
-  color: var(--filter-text); font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; letter-spacing: .15em; padding: 4px 12px;
-  cursor: pointer; text-transform: uppercase; transition: all .15s;
-}
-.lb-nav-btn:hover { border-color: var(--border3); color: var(--red-bright); background: var(--filter-active-bg); }
-.lb-nav-btn:disabled { opacity: .25; cursor: default; pointer-events: none; }
-.lb-pos-indicator { font-size: 10px; color: var(--text-meta); letter-spacing: .1em; font-family: 'Cinzel', serif; }
-.lb-sky-links { display: flex; flex-direction: column; gap: 7px; margin-top: auto; }
-.lb-sky-btn {
-  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-  border: 1px solid var(--border2); background: var(--filter-active-bg);
-  color: var(--text-sub); font-family: 'Share Tech Mono', monospace;
-  font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
-  text-decoration: none; cursor: pointer; transition: all .18s; width: 100%;
-}
-.lb-sky-btn:hover { border-color: var(--border3); color: var(--red-bright); background: var(--modal-close-hover); }
-[data-theme="dark"] .lb-sky-btn:hover { box-shadow: 0 0 12px rgba(255,70,40,.12); }
-.lb-sky-btn .sky-icon { font-size: 13px; flex-shrink: 0; opacity: .75; }
-.lb-sky-links-label { font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1px; }
+    .constellation-icon {
+      display: block;
+      margin: 0 auto 2.2rem;
+      width: 140px;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.3s both;
+    }
 
-@media (max-width: 640px) {
-  .lb-body { flex-direction: column; }
-  .lb-sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border2); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 10px; }
-  .lb-stat { min-width: 80px; }
-  .lb-psa-badge { margin-top: 0; }
-  .lb-sky-links { flex-direction: row; margin-top: 0; width: 100%; }
-  .lb-sky-links-label { display: none; }
-  .lb-meta-row { display: none; }
-}
+    .eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.5s both;
+    }
 
-/* ════════ PRINT ════════ */
-@media print {
-  body { background: #fff !important; color: #000 !important; }
-  body::before { display: none; }
-  .controls, .btn-print, .theme-toggle-wrap { display: none; }
-  .table-outer, .legend { border-color: #bbb; background: #fff; }
-  th { background: #eee !important; color: #333; border-color: #ccc; }
-  td { color: #111; border-color: #ddd; }
-  td.col-m-val { color: #800 !important; }
-  td.col-con-val { color: #640 !important; }
-  td.col-type-val { color: #333 !important; }
-  .note-input { border-bottom-color: #aaa; color: #111; }
-  h1 { color: #8b0000 !important; text-shadow: none !important; }
-  .subtitle, .progress-label, .footer-note, .footer-sig { color: #555; }
-  .legend-title, .legend-item { color: #444; }
-  .progress-count { color: #800; }
-}
-.progress-wrap {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: center;
-  margin-top: 18px;
-}
-.progress-label {
-  font-size: 10px;
-  letter-spacing: .2em;
-  color: var(--text-meta);
-  white-space: nowrap;
-  text-transform: uppercase;
-}
-.progress-bar {
-  width: 220px;
-  height: 5px;
-  background: var(--progress-bg);
-  border-radius: 3px;
-  overflow: hidden;
-  border: 1px solid var(--border2);
-  transition: background .3s, border-color .3s;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--red-dim), var(--red-bright));
-  width: 0%;
-  transition: width .45s ease;
-  border-radius: 3px;
-}
-[data-theme="dark"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
-.progress-count {
-  font-size: 12px;
-  color: var(--red-bright);
-  min-width: 58px;
-  font-family: 'Cinzel', serif;
-  transition: color .3s;
-}
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      color: #fff;
+      text-shadow: 0 0 60px rgba(201,168,76,0.3), 0 0 120px rgba(201,168,76,0.15);
+      margin-bottom: 0.4rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.7s both;
+    }
 
-/* ════════ CONTROLS ════════ */
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filter-btn {
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--filter-text);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  padding: 5px 13px;
-  cursor: pointer;
-  transition: all .18s;
-  text-transform: uppercase;
-}
-.filter-btn:hover {
-  border-color: var(--border3);
-  color: var(--red-bright);
-}
-.filter-btn.active {
-  border-color: var(--red-mid);
-  color: var(--red-bright);
-  background: var(--filter-active-bg);
-}
-[data-theme="dark"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+    h1 .accent {
+      color: var(--gold-glow);
+      display: block;
+    }
 
-.search-wrap { margin-left: auto; position: relative; }
-.search-wrap input {
-  background: var(--search-bg);
-  border: 1px solid var(--border2);
-  color: var(--text-data);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  padding: 5px 12px 5px 30px;
-  width: 185px;
-  outline: none;
-  letter-spacing: .04em;
-  transition: border-color .15s, background .3s, color .3s;
-}
-.search-wrap input:focus { border-color: var(--border3); }
-.search-wrap input::placeholder { color: var(--text-dim); }
-.search-icon {
-  position: absolute;
-  left: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-dim);
-  font-size: 12px;
-  pointer-events: none;
-}
-.btn-print {
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--red-bright);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .2em;
-  padding: 5px 16px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-}
-.btn-print:hover { background: var(--filter-active-bg); }
+    .divider {
+      margin: 1.8rem auto;
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      opacity: 0;
+      animation: fadeIn 1s ease 0.9s both;
+    }
 
-.btn-export, .btn-import-label {
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--red-bright);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .2em;
-  padding: 5px 16px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-  white-space: nowrap;
-  display: inline-block;
-  line-height: 1.8;
-}
-.btn-export:hover, .btn-import-label:hover { background: var(--filter-active-bg); }
-.btn-import-input { display: none; }
+    .description {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      line-height: 1.85;
+      color: var(--text);
+      max-width: 580px;
+      margin: 0 auto 0.8rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.1s both;
+    }
 
-/* ════════ LOG MENU DROPDOWN ════════ */
-.log-menu-wrap {
-  position: relative;
-}
-.btn-log-menu {
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--red-bright);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .2em;
-  padding: 5px 14px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.btn-log-menu:hover, .btn-log-menu.open { background: var(--filter-active-bg); }
-.btn-log-menu-caret { font-size: 8px; opacity: .7; transition: transform .2s; }
-.btn-log-menu.open .btn-log-menu-caret { transform: rotate(180deg); }
-.log-menu-dropdown {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 4px);
-  background: var(--modal-bg);
-  border: 1px solid var(--border3);
-  min-width: 210px;
-  z-index: 500;
-  flex-direction: column;
-}
-.log-menu-dropdown.open { display: flex; }
-.log-menu-item {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-sub);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .16em;
-  padding: 10px 16px;
-  cursor: pointer;
-  text-transform: uppercase;
-  text-align: left;
-  transition: background .15s, color .15s;
-  white-space: nowrap;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.log-menu-item:last-child { border-bottom: none; }
-.log-menu-item:hover { background: var(--filter-active-bg); color: var(--red-bright); }
-.log-menu-item.danger { color: var(--text-dim); }
-.log-menu-item.danger:hover { color: var(--red-bright); }
-.log-menu-icon { font-size: 12px; opacity: .8; }
-.log-menu-divider {
-  border: none;
-  border-top: 1px solid var(--border2);
-  margin: 0;
-}
+    .description + .description {
+      animation-delay: 1.25s;
+      margin-bottom: 0;
+    }
 
-/* ════════ TABLE ════════ */
-.table-outer {
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  overflow-x: auto;
-  position: relative;
-  transition: background .3s, border-color .3s;
-}
-table { width: 100%; border-collapse: collapse; }
+    /* ── STATS ROW ── */
+    .stats {
+      display: flex;
+      gap: 2.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2.8rem 0;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.4s both;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--gold-glow);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-top: 0.35rem;
+    }
 
-colgroup col.col-mo   { width: 44px; }
-colgroup col.col-m    { width: 62px; }
-colgroup col.col-type { width: 120px; }
-colgroup col.col-con  { width: 46px; }
-colgroup col.col-mag  { width: 46px; }
-colgroup col.col-ra   { width: 76px; }
-colgroup col.col-dec  { width: 72px; }
-colgroup col.col-psa  { width: 86px; }
-colgroup col.col-chk  { width: 40px; }
+    /* ── CTA BUTTON ── */
+    .cta-wrap {
+      margin-top: 1rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.6s both;
+    }
 
-/* THEAD */
-thead tr {
-  background: var(--thead-bg);
-  border-bottom: 2px solid var(--border3);
-  transition: background .3s;
-}
-th {
-  font-family: 'Cinzel', serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-meta);
-  padding: 11px 9px;
-  text-align: left;
-  white-space: nowrap;
-  border-right: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--thead-bg);
-  z-index: 10;
-  transition: background .3s, color .3s, border-color .3s;
-}
-th:last-child { border-right: none; }
-th.center     { text-align: center; }
+    .cta {
+      display: inline-block;
+      position: relative;
+      padding: 1rem 2.8rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--deep);
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-glow) 50%, var(--gold) 100%);
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    }
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(201,168,76,0.45);
+    }
+    .cta-sub {
+      display: block;
+      margin-top: 0.85rem;
+      font-size: 0.72rem;
+      color: var(--dim);
+      letter-spacing: 0.15em;
+    }
 
-/* ROWS */
-tbody tr.data-row {
-  border-bottom: 1px solid var(--border);
-  transition: background .12s, opacity .2s;
-}
-tbody tr.data-row:nth-child(even) { background: var(--bg-row-alt); }
-tbody tr.data-row:hover { background: var(--row-hover); }
-tbody tr.data-row.checked { opacity: .48; }
-tbody tr.data-row.hidden-row { display: none; }
+    /* ── FEATURE CARDS ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      max-width: 780px;
+      width: 100%;
+      margin-top: 4rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.8s both;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 1.6rem 1.4rem;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      background: rgba(201,168,76,0.05);
+    }
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .feature-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: var(--dim);
+    }
 
-td {
-  padding: 7px 9px;
-  border-right: 1px solid var(--border);
-  vertical-align: middle;
-  transition: border-color .3s;
-}
-td:last-child { border-right: none; }
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+    }
+    footer a { color: var(--gold); text-decoration: none; }
 
-td.col-mo-val {
-  color: var(--text-dim);
-  font-size: 10.5px;
-  text-align: right;
-  padding-right: 10px;
-}
-td.col-m-val {
-  color: var(--m-color);
-  font-family: 'Cinzel', serif;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: .04em;
-  transition: color .3s;
-}
-tr.checked td.col-m-val {
-  text-decoration: line-through;
-  text-decoration-color: var(--red-dim);
-}
-td.col-type-val {
-  font-size: 11.5px;
-  color: var(--text-data);
-  transition: color .3s;
-}
-.type-badge {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-right: 6px;
-  vertical-align: middle;
-  flex-shrink: 0;
-}
-td.col-con-val {
-  font-size: 11.5px;
-  color: var(--con-color);
-  letter-spacing: .04em;
-  font-weight: 600;
-  text-align: center;
-  transition: color .3s;
-}
-td.col-mag-val {
-  text-align: right;
-  font-size: 12px;
-  color: var(--text-data);
-  padding-right: 12px;
-  font-variant-numeric: tabular-nums;
-  transition: color .3s;
-}
-td.col-ra-val, td.col-dec-val {
-  font-size: 11.5px;
-  color: var(--text-data);
-  font-variant-numeric: tabular-nums;
-  opacity: .9;
-  transition: color .3s;
-}
-td.col-psa-val {
-  font-size: 11px;
-  color: var(--text-sub);
-  transition: color .3s;
-}
-td.col-chk-val { text-align: center; }
-td.col-chk-val input[type=checkbox] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
-  border: 1.5px solid var(--chk-border);
-  background: transparent;
-  cursor: pointer;
-  position: relative;
-  transition: all .15s;
-}
-td.col-chk-val input[type=checkbox]:hover { border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:hover {
-  box-shadow: 0 0 8px rgba(255,70,40,.3);
-}
-td.col-chk-val input[type=checkbox]:checked {
-  background: var(--filter-active-bg);
-  border-color: var(--red-bright);
-}
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:checked {
-  box-shadow: 0 0 10px rgba(255,70,40,.4);
-}
-td.col-chk-val input[type=checkbox]:checked::after {
-  content: '✓';
-  position: absolute;
-  top: -2px;
-  left: 1px;
-  font-size: 12px;
-  color: var(--chk-tick);
-  line-height: 1;
-  font-weight: 700;
-}
-td.col-note-val { min-width: 150px; }
-.note-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--note-border);
-  color: var(--text-data);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  width: 100%;
-  padding: 2px 4px;
-  outline: none;
-  transition: border-color .15s, background .15s, color .3s;
-  min-width: 0;
-}
-.note-input:focus {
-  border-bottom-color: var(--red-mid);
-  background: var(--note-focus);
-}
-.note-input::placeholder { color: var(--text-dim); font-style: italic; }
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
 
-/* ── Note cell wrapper + record button ── */
-.note-cell-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.rec-btn {
-  flex-shrink: 0;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-dim);
-  font-size: 11px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all .15s;
-  line-height: 1;
-  padding: 0;
-}
-.rec-btn:hover { border-color: var(--border3); color: var(--red-bright); }
-.rec-btn.has-rec {
-  background: var(--red-dim);
-  border-color: var(--red-mid);
-  color: var(--bg);
-}
-[data-theme="light"] .rec-btn.has-rec { color: #fff; }
-.rec-btn.has-rec:hover {
-  background: var(--red-mid);
-  border-color: var(--red-bright);
-  color: #fff;
-}
-
-/* ── Full record modal ── */
-.rec-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--modal-overlay);
-  z-index: 3000;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 24px 16px;
-  overflow-y: auto;
-}
-.rec-overlay.open { display: flex; }
-.rec-box {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  width: 100%;
-  max-width: 720px;
-  margin: auto;
-  padding: 28px 28px 24px;
-  position: relative;
-}
-.rec-header {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 6px;
-}
-.rec-title-m {
-  font-family: 'Cinzel', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--red-bright);
-  letter-spacing: .1em;
-}
-.rec-title-type {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.rec-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 30px; height: 30px;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-meta);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
-}
-.rec-close:hover { background: var(--modal-close-hover); border-color: var(--border3); color: var(--red-bright); }
-.rec-al-note {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 12.5px;
-  color: var(--text-dim);
-  margin-bottom: 22px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border2);
-}
-.rec-section {
-  font-family: 'Cinzel', serif;
-  font-size: 8.5px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin: 20px 0 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid var(--border);
-}
-.rec-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 20px;
-}
-.rec-grid-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px 20px;
-}
-@media (max-width: 560px) {
-  .rec-grid, .rec-grid-3 { grid-template-columns: 1fr; }
-}
-.rec-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.rec-label {
-  font-family: 'Cinzel', serif;
-  font-size: 8px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.rec-input, .rec-select {
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  border-radius: 0;
-  color: var(--text-data);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11.5px;
-  padding: 6px 8px;
-  outline: none;
-  transition: border-color .15s, background .3s, color .3s;
-  width: 100%;
-  -webkit-appearance: none;
-}
-.rec-input:focus, .rec-select:focus { border-color: var(--red-mid); }
-.rec-input::placeholder { color: var(--text-dim); font-style: italic; }
-.rec-textarea {
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  border-radius: 0;
-  color: var(--text-data);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11.5px;
-  padding: 8px 10px;
-  outline: none;
-  resize: vertical;
-  width: 100%;
-  min-height: 90px;
-  line-height: 1.7;
-  transition: border-color .15s, background .3s, color .3s;
-}
-.rec-textarea:focus { border-color: var(--red-mid); }
-.rec-textarea::placeholder { color: var(--text-dim); font-style: italic; }
-.rec-timestamp {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-top: 18px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-.rec-footer {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border2);
-}
-.rec-save-btn, .rec-cancel-btn {
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--red-bright);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  padding: 7px 20px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-}
-.rec-save-btn:hover { background: var(--filter-active-bg); }
-.rec-cancel-btn { border-color: var(--border2); color: var(--text-dim); }
-.rec-cancel-btn:hover { border-color: var(--border3); color: var(--text-meta); }
-
-/* TYPE BADGE COLORS */
-.badge-spiral    { background: #8040a0; }
-.badge-ellip     { background: #3a5aaa; }
-.badge-lenticular{ background: #2a7090; }
-.badge-irregular { background: #6040a0; }
-.badge-open      { background: #2a8a5a; }
-.badge-globular  { background: #aa7820; }
-.badge-nebula    { background: #aa3030; }
-.badge-planetary { background: #909020; }
-.badge-snr       { background: #cc4020; }
-.badge-starcloud { background: #207878; }
-.badge-double    { background: #606060; }
-
-/* ════════ LEGEND ════════ */
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 26px;
-  padding: 16px 22px;
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  transition: background .3s, border-color .3s;
-}
-.legend-title {
-  width: 100%;
-  font-family: 'Cinzel', serif;
-  font-size: 9px;
-  letter-spacing: .32em;
-  color: var(--text-meta);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  transition: color .3s;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 10.5px;
-  color: var(--text-sub);
-  letter-spacing: .03em;
-  transition: color .3s;
-}
-.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-/* ════════ FOOTER ════════ */
-.footer {
-  margin-top: 32px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border2);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-  transition: border-color .3s;
-}
-.footer-note {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 12.5px;
-  color: var(--text-meta);
-  max-width: 500px;
-  line-height: 1.65;
-  transition: color .3s;
-}
-.footer-sig {
-  font-family: 'Cinzel', serif;
-  font-size: 8.5px;
-  letter-spacing: .22em;
-  color: var(--text-dim);
-  text-align: right;
-  text-transform: uppercase;
-  transition: color .3s;
-}
-
-/* M# clickable link */
-td.col-m-val a.m-link {
-  color: var(--m-color);
-  text-decoration: none;
-  border-bottom: 1px dotted var(--red-dim);
-  cursor: pointer;
-  transition: color .15s, border-color .15s;
-}
-td.col-m-val a.m-link:hover {
-  color: var(--red-bright);
-  border-bottom-color: var(--red-bright);
-}
-tr.checked td.col-m-val a.m-link {
-  text-decoration: line-through;
-  text-decoration-color: var(--red-dim);
-  border-bottom: none;
-}
-
-/* ════════ LIGHTBOX MODAL ════════ */
-.lb-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--modal-overlay);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  animation: lb-fade-in .18s ease;
-}
-.lb-overlay.open { display: flex; }
-@keyframes lb-fade-in { from { opacity: 0; } to { opacity: 1; } }
-
-.lb-box {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  max-width: 860px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  animation: lb-slide-up .2s ease;
-  box-shadow: 0 30px 80px rgba(0,0,0,.6);
-}
-@keyframes lb-slide-up {
-  from { transform: translateY(16px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-
-.lb-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid var(--border2);
-}
-.lb-title-m {
-  font-family: 'Cinzel', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--red-bright);
-  letter-spacing: .06em;
-  line-height: 1;
-}
-[data-theme="dark"] .lb-title-m {
-  text-shadow: 0 0 30px rgba(255,70,40,.3);
-}
-.lb-title-type {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--modal-meta);
-  padding: 3px 8px;
-  border: 1px solid var(--border2);
-  background: var(--filter-active-bg);
-}
-.lb-meta-row {
-  display: flex;
-  gap: 20px;
-  margin-left: auto;
-  flex-wrap: wrap;
-}
-.lb-meta-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1px;
-}
-.lb-meta-label {
-  font-size: 8px;
-  letter-spacing: .22em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-.lb-meta-val {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11.5px;
-  color: var(--text-data);
-}
-.lb-meta-val.con { color: var(--con-color); font-weight: 600; }
-.lb-close {
-  margin-left: 14px;
-  width: 30px;
-  height: 30px;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-meta);
-  font-size: 16px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all .15s;
-}
-.lb-close:hover {
-  background: var(--modal-close-hover);
-  border-color: var(--border3);
-  color: var(--red-bright);
-}
-
-.lb-body {
-  display: flex;
-  min-height: 0;
-}
-
-.lb-img-wrap {
-  flex: 1 1 auto;
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-  max-height: 520px;
-  overflow: hidden;
-  position: relative;
-}
-.lb-img-wrap img {
-  max-width: 100%;
-  max-height: 520px;
-  object-fit: contain;
-  display: block;
-}
-.lb-attribution {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 4px 8px;
-  background: rgba(0,0,0,.62);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9.5px;
-  color: #888;
-  letter-spacing: .04em;
-  line-height: 1.5;
-  text-align: right;
-  pointer-events: none;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-[data-theme="light"] .lb-attribution {
-  background: rgba(255,255,255,.55);
-  color: #666;
-}
-.lb-img-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 40px;
-  color: var(--text-dim);
-  min-height: 280px;
-  width: 100%;
-}
-.lb-img-placeholder .ph-icon {
-  font-size: 42px;
-  opacity: .3;
-}
-.lb-img-placeholder .ph-text {
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  opacity: .5;
-  text-align: center;
-  line-height: 1.8;
-}
-
-.lb-sidebar {
-  width: 190px;
-  flex-shrink: 0;
-  border-left: 1px solid var(--border2);
-  padding: 16px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  background: var(--bg3);
-}
-.lb-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.lb-stat-label {
-  font-size: 8px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.lb-stat-val {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  color: var(--text-data);
-}
-.lb-stat-val.highlight { color: var(--red-bright); font-family: 'Cinzel', serif; font-size: 13px; }
-.lb-stat-val.con-val   { color: var(--con-color); }
-.lb-stat-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 2px 0;
-}
-.lb-psa-badge {
-  margin-top: auto;
-  padding: 8px 10px;
-  border: 1px solid var(--border2);
-  background: var(--filter-active-bg);
-}
-.lb-psa-badge .lb-stat-label { margin-bottom: 4px; }
-.lb-psa-badge .lb-stat-val { font-size: 11px; color: var(--text-sub); }
-
-.lb-footer {
-  padding: 9px 18px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.lb-nav-btn {
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--filter-text);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  padding: 4px 12px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .15s;
-}
-.lb-nav-btn:hover {
-  border-color: var(--border3);
-  color: var(--red-bright);
-  background: var(--filter-active-bg);
-}
-.lb-nav-btn:disabled {
-  opacity: .25;
-  cursor: default;
-  pointer-events: none;
-}
-.lb-pos-indicator {
-  font-size: 10px;
-  color: var(--text-meta);
-  letter-spacing: .1em;
-  font-family: 'Cinzel', serif;
-}
-
-@media (max-width: 640px) {
-  .lb-body { flex-direction: column; }
-  .lb-sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border2); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 10px; }
-  .lb-stat { min-width: 80px; }
-  .lb-psa-badge { margin-top: 0; }
-  .lb-sky-links { flex-direction: row; margin-top: 0; width: 100%; }
-  .lb-sky-links-label { display: none; }
-  .lb-meta-row { display: none; }
-}
-
-/* ── SKY CHART LINKS ── */
-.lb-sky-links {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  margin-top: auto;
-}
-.lb-sky-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border: 1px solid var(--border2);
-  background: var(--filter-active-bg);
-  color: var(--text-sub);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9.5px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all .18s;
-  width: 100%;
-}
-.lb-sky-btn:hover {
-  border-color: var(--border3);
-  color: var(--red-bright);
-  background: var(--modal-close-hover);
-}
-[data-theme="dark"] .lb-sky-btn:hover {
-  box-shadow: 0 0 12px rgba(255,70,40,.12);
-}
-.lb-sky-btn .sky-icon {
-  font-size: 13px;
-  flex-shrink: 0;
-  opacity: .75;
-}
-.lb-sky-links-label {
-  font-size: 8px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 1px;
-}
-
-/* ════════ PRINT ════════ */
-@media print {
-  body { background: #fff !important; color: #000 !important; }
-  body::before { display: none; }
-  .controls, .log-menu-wrap, .btn-import-input, .theme-toggle-wrap { display: none; }
-  .table-outer, .legend { border-color: #bbb; background: #fff; }
-  th { background: #eee !important; color: #333; border-color: #ccc; }
-  td { color: #111; border-color: #ddd; }
-  td.col-m-val { color: #800 !important; }
-  td.col-con-val { color: #640 !important; }
-  td.col-type-val { color: #333 !important; }
-  .note-input { border-bottom-color: #aaa; color: #111; }
-  h1 { color: #8b0000 !important; text-shadow: none !important; }
-  .subtitle, .progress-label, .footer-note, .footer-sig { color: #555; }
-  .legend-title, .legend-item { color: #444; }
-  .progress-count { color: #800; }
-}
-
-@media (max-width: 700px) {
-  .footer { flex-direction: column; align-items: flex-start; }
-  .theme-toggle-wrap { position: static; margin-bottom: 14px; }
-}
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    /* ── ICON LINK TOOLTIP ── */
+    .icon-link {
+      display: block;
+      position: relative;
+      width: fit-content;
+      margin: 0 auto 2.2rem;
+      cursor: pointer;
+    }
+    .icon-link .tooltip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: rgba(3, 6, 16, 0.92);
+      border: 1px solid var(--gold);
+      color: var(--gold-glow);
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      white-space: nowrap;
+      padding: 0.45rem 1rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .icon-link:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .icon-link:hover .constellation-icon {
+      filter: drop-shadow(0 0 12px rgba(201,168,76,0.6));
+      transition: filter 0.3s ease;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <!-- THEME TOGGLE -->
-  <div class="theme-toggle-wrap">
-    <span class="theme-icon moon">🌙</span>
-    <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
-    <span class="theme-icon sun">☀</span>
-    <span class="toggle-label" id="toggleLabel">Night</span>
+<div class="bg-photo"></div>
+<canvas id="stars"></canvas>
+<div class="nebula"></div>
+
+<header class="site-header">
+  <div class="site-name">THG<span>Networks</span></div>
+</header>
+
+<main class="page">
+  <div class="hero">
+
+    <!-- Supplied hexagon icon -->
+    <a class="icon-link" href="https://en.wikipedia.org/wiki/Pleiades" target="_blank" rel="noopener noreferrer">
+      <span class="tooltip">For my Love</span>
+      <img class="constellation-icon" style="margin: 0;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACAgAAAbbCAYAAACJtgR1AABVaklEQVR42uzdP44sS1YH4OpW76nBQGygbNRgIJaBWAUGa0Al4TYYCHzKGJslsIWnMaYw7rvv3dvTfyozT0SciPN90hgjzdzujszIOBnxq1OnEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARvoLyWrrAcfOAWEAAAAASUVORK5CYII=" alt="constellation icon" />
+    </a>
+
+    <p class="eyebrow">THG Networks Presents</p>
+    <h1>Messier Marathon<span class="accent">Observers Log</span></h1>
+    <div class="divider"></div>
+    <p class="description">
+      Track your journey through Charles Messier's iconic catalog of 110 deep-sky objects.
+      Log galaxies, nebulae, star clusters, and more as you race the night sky in a single evening.
+    </p>
+    <p class="description" style="margin-top:0.8rem">
+      Whether you're a seasoned observer or taking your first look through an eyepiece,
+      MMOL keeps your observations organized, dated, and ready to revisit.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">110</div>
+        <div class="stat-label">Messier Objects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Night to Log Them</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Clear Skies Ahead</div>
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <a class="cta" href="https://mmol.thgnetworks.com">
+        Open the Observers Log
+      </a>
+      <span class="cta-sub">mmol.thgnetworks.com</span>
+    </div>
+
   </div>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-eyebrow">Charles Messier · 1771 — 110 Objects</div>
-    <h1>Messier Marathon</h1>
-    <div class="subtitle">Observation Log &amp; AL Certificate Record</div>
-    <div class="progress-wrap">
-      <span class="progress-label">Observed</span>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <span class="progress-count" id="progressCount">0 / 110</span>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🔭</div>
+      <div class="feature-title">Log Observations</div>
+      <div class="feature-desc">Record each object you spot with date, time, conditions, and personal notes.</div>
     </div>
-    <span class="header-rule"></span>
-  </header>
-
-  <!-- CONTROLS -->
-  <div class="controls">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="Galaxy">Galaxy</button>
-    <button class="filter-btn" data-filter="Open Cluster">Open Cluster</button>
-    <button class="filter-btn" data-filter="Globular Clust">Globular</button>
-    <button class="filter-btn" data-filter="Nebula">Nebula</button>
-    <button class="filter-btn" data-filter="unchecked">Unobserved</button>
-    <div class="search-wrap">
-      <span class="search-icon">⌕</span>
-      <input type="text" id="searchInput" placeholder="Search M#, type, con…">
+    <div class="feature-card">
+      <div class="feature-icon">🌌</div>
+      <div class="feature-title">Full Catalog</div>
+      <div class="feature-desc">All 110 Messier objects — galaxies, nebulae, clusters — in one place.</div>
     </div>
-    <div class="log-menu-wrap">
-      <button class="btn-log-menu" id="btnLogMenu">
-        ☰ Log <span class="btn-log-menu-caret">▼</span>
-      </button>
-      <div class="log-menu-dropdown" id="logMenuDropdown">
-        <button class="log-menu-item" id="menuPrint">
-          <span class="log-menu-icon">⎙</span> Print
-        </button>
-        <button class="log-menu-item" id="menuExport">
-          <span class="log-menu-icon">⬇</span> Export CSV
-        </button>
-        <label class="log-menu-item" for="btnImportFile">
-          <span class="log-menu-icon">⬆</span> Import CSV
-        </label>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="menuExportAL">
-          <span class="log-menu-icon">⬇</span> Export AL Records
-        </button>
-        <label class="log-menu-item" for="btnImportALFile">
-          <span class="log-menu-icon">⬆</span> Import AL Records
-        </label>
-        <button class="log-menu-item" id="menuGenerateReport">
-          <span class="log-menu-icon">📄</span> Generate AL Report…
-        </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="menuSession">
-          <span class="log-menu-icon">⚙</span> Session Setup…
-        </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item danger" id="menuReset">
-          <span class="log-menu-icon">↺</span> Reset All Data…
-        </button>
-      </div>
-    </div>
-    <input type="file" id="btnImportFile"   class="btn-import-input" accept=".csv">
-    <input type="file" id="btnImportALFile" class="btn-import-input" accept=".json">
-    <div class="session-indicator" id="sessionIndicator">
-      <span class="session-dot"></span> Session active
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <div class="feature-title">Marathon Ready</div>
+      <div class="feature-desc">Built for the annual Messier Marathon — observe all 110 in a single night.</div>
     </div>
   </div>
+</main>
 
-  <!-- TABLE -->
-  <div class="table-outer">
-    <table id="mainTable">
-      <colgroup>
-        <col class="col-mo"><col class="col-m"><col class="col-type">
-        <col class="col-con"><col class="col-mag"><col class="col-ra">
-        <col class="col-dec"><col class="col-psa"><col class="col-chk"><col class="col-note">
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="center">#</th>
-          <th>Object</th>
-          <th>Type</th>
-          <th class="center">Con</th>
-          <th class="center">Mag</th>
-          <th>RA</th>
-          <th>Dec</th>
-          <th>PSA Pg</th>
-          <th class="center">✓</th>
-          <th>Field Notes</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-  <!-- LEGEND -->
-  <div class="legend">
-    <div class="legend-title">Object Type Key</div>
-    <div class="legend-item"><div class="legend-dot badge-spiral"></div>Spiral Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-ellip"></div>Elliptical Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-lenticular"></div>Lenticular Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-irregular"></div>Irregular Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-open"></div>Open Cluster</div>
-    <div class="legend-item"><div class="legend-dot badge-globular"></div>Globular Cluster</div>
-    <div class="legend-item"><div class="legend-dot badge-nebula"></div>Diffuse Nebula</div>
-    <div class="legend-item"><div class="legend-dot badge-planetary"></div>Planetary Nebula</div>
-    <div class="legend-item"><div class="legend-dot badge-snr"></div>Supernova Remnant</div>
-    <div class="legend-item"><div class="legend-dot badge-starcloud"></div>Star Cloud</div>
-    <div class="legend-item"><div class="legend-dot badge-double"></div>Double Star / Asterism</div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-note">
-      Objects are ordered for optimal marathon viewing — beginning in the west at dusk, finishing in the east at dawn.
-      RA and Dec are J2000.0 coordinates. PSA page numbers reference the <em>Pocket Sky Atlas</em> by Roger Sinnott.
-    </div>
-    <div class="footer-sig">Messier Marathon<br>Observation Log · PSA Reference Edition<br>
-      <span style="display:inline-flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
-        <a href="faq.html" class="nav-link">FAQ</a>
-        <a href="docs/user-guide.html" class="nav-link">User Guide</a>
-        <a href="resources.html" class="nav-link">Resources</a>
-      </span></div>
-  </footer>
-
-</div><!-- /wrapper -->
-
-<!-- IMPORT DIALOG MODAL -->
-<style>
-.import-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--modal-overlay);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-.import-overlay.open { display: flex; }
-.import-dialog {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  max-width: 520px;
-  width: 100%;
-  padding: 32px 28px 24px;
-  position: relative;
-}
-.import-dialog-title {
-  font-family: 'Cinzel', serif;
-  font-size: 13px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--red-bright);
-  margin-bottom: 18px;
-}
-.import-dialog-body {
-  font-family: 'Crimson Pro', serif;
-  font-size: 14.5px;
-  color: var(--text-meta);
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-.import-conflict-box {
-  background: var(--bg3);
-  border: 1px solid var(--border3);
-  padding: 10px 14px;
-  margin-bottom: 20px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--red-bright);
-  line-height: 1.8;
-  max-height: 120px;
-  overflow-y: auto;
-}
-.import-conflict-label {
-  font-family: 'Cinzel', serif;
-  font-size: 8.5px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 8px;
-}
-.import-dialog-btns {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin-top: 8px;
-}
-.import-btn {
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--red-bright);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  padding: 7px 18px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-  white-space: nowrap;
-}
-.import-btn:hover { background: var(--filter-active-bg); }
-.import-btn.primary {
-  border-color: var(--red-bright);
-  color: var(--red-bright);
-}
-.import-btn.cancel {
-  border-color: var(--border2);
-  color: var(--text-dim);
-}
-.import-btn.cancel:hover { border-color: var(--border3); color: var(--text-meta); background: transparent; }
-.import-divider {
-  border: none;
-  border-top: 1px solid var(--border2);
-  margin: 18px 0 16px;
-}
-</style>
-
-<div class="import-overlay" id="importOverlay" role="dialog" aria-modal="true" aria-label="Import options">
-  <div class="import-dialog">
-    <div class="import-dialog-title">⬆ Import Observing Log</div>
-    <div class="import-dialog-body" id="importSummary"></div>
-    <div id="importConflictSection" style="display:none">
-      <div class="import-conflict-label">Conflicts — objects with data in both the page and the file</div>
-      <div class="import-conflict-box" id="importConflictList"></div>
-    </div>
-    <hr class="import-divider">
-    <div class="import-dialog-body" style="font-size:13px;margin-bottom:14px">
-      How would you like to proceed?
-    </div>
-    <div class="import-dialog-btns">
-      <button class="import-btn cancel" id="importCancelBtn">Cancel</button>
-      <button class="import-btn" id="importMergeBtn">Merge — keep existing where file is blank</button>
-      <button class="import-btn primary" id="importOverwriteBtn">Overwrite — replace all with file data</button>
-    </div>
-  </div>
-</div>
-
-<!-- QUICK START GUIDE MODAL -->
-<style>
-/* ── Quick Start ── */
-.qs-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.82);
-  z-index: 5000;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-.qs-overlay.open { display: flex; }
-.qs-box {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  width: 100%;
-  max-width: 740px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  padding: 32px 32px 28px;
-}
-.qs-logo {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: .35em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-align: center;
-  margin-bottom: 8px;
-}
-.qs-title {
-  font-family: 'Cinzel', serif;
-  font-size: 20px;
-  letter-spacing: .12em;
-  color: var(--red-bright);
-  text-align: center;
-  margin-bottom: 6px;
-}
-.qs-tagline {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 14px;
-  color: var(--text-dim);
-  text-align: center;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border2);
-}
-.qs-modes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-@media (max-width: 560px) { .qs-modes { grid-template-columns: 1fr; } }
-.qs-mode {
-  border: 1px solid var(--border2);
-  padding: 18px 18px 14px;
-  background: var(--bg2);
-}
-.qs-mode-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-.qs-mode-icon {
-  font-size: 22px;
-  line-height: 1;
-}
-.qs-mode-title {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--red-mid);
-}
-.qs-mode-sub {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  color: var(--text-dim);
-  letter-spacing: .1em;
-}
-.qs-mode p {
-  font-family: 'Crimson Pro', serif;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-sub);
-  margin: 0;
-}
-.qs-features {
-  margin-bottom: 24px;
-}
-.qs-features-title {
-  font-family: 'Cinzel', serif;
-  font-size: 9px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
-}
-.qs-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 24px;
-}
-@media (max-width: 480px) { .qs-grid { grid-template-columns: 1fr; } }
-.qs-feat {
-  display: flex;
-  gap: 9px;
-  align-items: flex-start;
-  font-family: 'Crimson Pro', serif;
-  font-size: 12.5px;
-  color: var(--text-sub);
-  line-height: 1.45;
-}
-.qs-feat-icon {
-  color: var(--red-dim);
-  flex-shrink: 0;
-  font-size: 13px;
-  margin-top: 1px;
-}
-.qs-feat strong {
-  color: var(--text-meta);
-  font-weight: 600;
-}
-.qs-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border2);
-  flex-wrap: wrap;
-}
-.qs-dont-show {
-  margin-right: auto;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: .12em;
-  color: var(--text-dim);
-  cursor: pointer;
-  text-transform: uppercase;
-}
-.qs-dont-show input { cursor: pointer; accent-color: var(--red-mid); }
-.qs-guide-link {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--red-mid);
-  text-decoration: none;
-  border: 1px solid var(--border2);
-  padding: 7px 14px;
-  transition: all .2s;
-}
-.qs-guide-link:hover { border-color: var(--border3); color: var(--red-bright); background: var(--filter-active-bg); }
-</style>
-
-<div class="qs-overlay" id="qsOverlay" role="dialog" aria-modal="true" aria-label="Quick Start Guide">
-  <div class="qs-box">
-    <div class="qs-logo">Messier Marathon Observer's Log</div>
-    <div class="qs-title">Welcome — Quick Start</div>
-    <div class="qs-tagline">Choose how you plan to use this log. You can do both — many observers start casual and add full records over time.</div>
-
-    <div class="qs-modes">
-      <div class="qs-mode">
-        <div class="qs-mode-header">
-          <span class="qs-mode-icon">☑</span>
-          <div>
-            <div class="qs-mode-title">Casual Messier Checklist</div>
-            <div class="qs-mode-sub">Just track what you've seen</div>
-          </div>
-        </div>
-        <p>Check off objects as you observe them, jot a brief note in the inline field, and watch the progress bar advance. The log remembers everything between sessions. Use the <strong>🌙 Night Mode</strong> toggle (top right) at the telescope to preserve your dark adaptation — red text on near-black causes no eye strain.</p>
-        <p style="margin-top:8px">When you're done, export your log as a CSV from the <strong>☰ Log</strong> menu.</p>
-      </div>
-      <div class="qs-mode">
-        <div class="qs-mode-header">
-          <span class="qs-mode-icon">🏅</span>
-          <div>
-            <div class="qs-mode-title">AL Messier Certificate</div>
-            <div class="qs-mode-sub">Full records for award submission</div>
-          </div>
-        </div>
-        <p>Click the <strong>✎</strong> button on any object to open the full observation record — date, time, site, seeing, transparency, limiting magnitude, telescope, eyepiece, and a written description. The red-filled ✎ icon shows at a glance which records are complete.</p>
-        <p style="margin-top:8px">Before an observing session, use <strong>☰ Log → Session Setup</strong> to set location and equipment once — those values auto-fill every record you open that night. When ready, generate your submission PDF from the Log menu.</p>
-      </div>
-    </div>
-
-    <div class="qs-features">
-      <div class="qs-features-title">At a Glance</div>
-      <div class="qs-grid">
-        <div class="qs-feat"><span class="qs-feat-icon">🌙</span><span><strong>Night / Day toggle</strong> — Red-on-black for the telescope; warm parchment for planning indoors</span></div>
-        <div class="qs-feat"><span class="qs-feat-icon">⚙</span><span><strong>Session Setup</strong> — Set location (with GPS), sky conditions &amp; equipment once per night</span></div>
-        <div class="qs-feat"><span class="qs-feat-icon">✎</span><span><strong>Full AL Records</strong> — All fields required for the AL Messier Club certificate, per object</span></div>
-        <div class="qs-feat"><span class="qs-feat-icon">📄</span><span><strong>AL Report PDF</strong> — One-click formatted PDF ready for club submission</span></div>
-        <div class="qs-feat"><span class="qs-feat-icon">🖼</span><span><strong>Image Lightbox</strong> — Photo, catalog data, finder chart and Stellarium link per object</span></div>
-        <div class="qs-feat"><span class="qs-feat-icon">💾</span><span><strong>Auto-save</strong> — Everything saves instantly to your browser; nothing sent to any server</span></div>
-      </div>
-    </div>
-
-    <div class="qs-footer">
-      <label class="qs-dont-show">
-        <input type="checkbox" id="qsDontShow"> Don't show again
-      </label>
-      <a class="qs-guide-link" href="docs/user-guide.html" target="_blank" rel="noopener">📖 Open User Guide</a>
-      <button class="rec-save-btn" id="qsDismissBtn">Get Started →</button>
-    </div>
-  </div>
-</div>
-
-<!-- AL REPORT GENERATOR MODAL -->
-<style>
-.rpt-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--modal-overlay);
-  z-index: 4000;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-.rpt-overlay.open { display: flex; }
-.rpt-box {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  width: 100%;
-  max-width: 540px;
-  padding: 28px 28px 24px;
-  position: relative;
-}
-.rpt-title {
-  font-family: 'Cinzel', serif;
-  font-size: 12px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--red-bright);
-  margin-bottom: 6px;
-}
-.rpt-subtitle {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-bottom: 22px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border2);
-}
-.rpt-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 30px; height: 30px;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-meta);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
-}
-.rpt-close:hover { border-color: var(--border3); color: var(--red-bright); }
-.rpt-status {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  color: var(--red-mid);
-  min-height: 16px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border2);
-}
-.rpt-status.err { color: #c05030; }
-.rpt-footer {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-</style>
-
-<div class="rpt-overlay" id="rptOverlay" role="dialog" aria-modal="true" aria-label="Generate AL Report">
-  <div class="rpt-box">
-    <div class="rpt-title">📄 Generate AL Report</div>
-    <div class="rpt-subtitle">Produces a formatted PDF of all saved full observation records, ready for AL Messier Club certificate submission.</div>
-    <button class="rpt-close" id="rptClose">✕</button>
-
-    <div class="rec-section">Report Details</div>
-    <div class="rec-grid" style="margin-bottom:0">
-      <div class="rec-field">
-        <label class="rec-label">Observer Name</label>
-        <input class="rec-input" type="text" id="rptObserver" placeholder="Your full name">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Club / Location (optional)</label>
-        <input class="rec-input" type="text" id="rptSubtitle" placeholder="e.g. Chatham Astronomical Society">
-      </div>
-    </div>
-
-    <div class="rpt-status" id="rptStatus"></div>
-
-    <div class="rpt-footer">
-      <button class="rec-cancel-btn" id="rptCancelBtn">Cancel</button>
-      <button class="rec-save-btn"   id="rptGenerateBtn">Generate PDF</button>
-    </div>
-  </div>
-</div>
-
-<!-- SESSION SETUP MODAL -->
-<style>
-/* ── Session indicator pill ── */
-.session-indicator {
-  display: none;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--red-mid);
-  border: 1px solid var(--red-dim);
-  padding: 3px 9px;
-  white-space: nowrap;
-  align-items: center;
-  gap: 5px;
-  transition: all .3s;
-}
-.session-indicator.active { display: flex; }
-.session-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--red-mid);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%,100% { opacity: 1; }
-  50%      { opacity: .3; }
-}
-
-/* ── Session modal reuses rec-modal design language ── */
-.sess-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--modal-overlay);
-  z-index: 3500;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-}
-.sess-overlay.open { display: flex; }
-.sess-box {
-  background: var(--modal-bg);
-  border: 1px solid var(--modal-border);
-  width: 100%;
-  max-width: 620px;
-  padding: 28px 28px 24px;
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.sess-title {
-  font-family: 'Cinzel', serif;
-  font-size: 13px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--red-bright);
-  margin-bottom: 6px;
-}
-.sess-subtitle {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-bottom: 22px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border2);
-}
-.sess-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 30px; height: 30px;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-meta);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .15s;
-}
-.sess-close:hover { background: var(--modal-close-hover); border-color: var(--border3); color: var(--red-bright); }
-
-/* Location row with geo button */
-.sess-loc-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
-.sess-loc-row .rec-input { flex: 1; }
-.sess-geo-btn {
-  flex-shrink: 0;
-  background: transparent;
-  border: 1px solid var(--border3);
-  color: var(--text-sub);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .12em;
-  padding: 6px 12px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-  white-space: nowrap;
-  height: 33px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.sess-geo-btn:hover { background: var(--filter-active-bg); color: var(--red-bright); }
-.sess-geo-btn:disabled { opacity: .4; cursor: default; }
-.sess-geo-status {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-top: 4px;
-  min-height: 14px;
-  transition: color .3s;
-}
-.sess-geo-status.ok  { color: var(--red-mid); }
-.sess-geo-status.err { color: #a05030; }
-
-.sess-coords {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  margin-top: 3px;
-  letter-spacing: .08em;
-}
-
-/* Footer buttons reuse rec styles */
-.sess-footer {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 22px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border2);
-  flex-wrap: wrap;
-}
-.sess-clear-btn {
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--text-dim);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  padding: 7px 16px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all .2s;
-  margin-right: auto;
-}
-.sess-clear-btn:hover { border-color: var(--border3); color: var(--red-bright); background: var(--filter-active-bg); }
-</style>
-
-<div class="sess-overlay" id="sessOverlay" role="dialog" aria-modal="true" aria-label="Session setup">
-  <div class="sess-box">
-    <div class="sess-title">⚙ Session Setup</div>
-    <div class="sess-subtitle">
-      These defaults auto-fill blank fields in every observation record opened this session.
-      Existing saved data is never overwritten — session values only fill gaps.
-    </div>
-    <button class="sess-close" id="sessClose" aria-label="Close">✕</button>
-
-    <div class="rec-section">Location</div>
-    <div class="rec-field">
-      <label class="rec-label">Observing Site</label>
-      <div class="sess-loc-row">
-        <input class="rec-input" type="text" id="sessSite"
-               placeholder="e.g. Jordan Lake SRA, NC — Bortle 4">
-        <button class="sess-geo-btn" id="sessGeoBtn" title="Get location from device">
-          📍 Locate
-        </button>
-      </div>
-      <div class="sess-geo-status" id="sessGeoStatus"></div>
-      <div class="sess-coords"    id="sessCoords"></div>
-    </div>
-
-    <div class="rec-section">Sky Conditions</div>
-    <div class="rec-grid-3">
-      <div class="rec-field">
-        <label class="rec-label">Seeing (Antoniadi)</label>
-        <select class="rec-select" id="sessSeeing">
-          <option value="">— leave blank —</option>
-          <option value="1">1 · Perfect</option>
-          <option value="2">2 · Slight undulations</option>
-          <option value="3">3 · Moderate</option>
-          <option value="4">4 · Poor</option>
-          <option value="5">5 · Very bad</option>
-        </select>
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Transparency</label>
-        <select class="rec-select" id="sessTransparency">
-          <option value="">— leave blank —</option>
-          <option value="5">5 · Excellent</option>
-          <option value="4">4 · Good</option>
-          <option value="3">3 · Average</option>
-          <option value="2">2 · Poor</option>
-          <option value="1">1 · Very poor</option>
-        </select>
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Limiting Magnitude</label>
-        <input class="rec-input" type="text" id="sessLimitMag" placeholder="e.g. 6.3">
-      </div>
-    </div>
-
-    <div class="rec-section">Equipment</div>
-    <div class="rec-grid">
-      <div class="rec-field">
-        <label class="rec-label">Telescope / Instrument</label>
-        <input class="rec-input" type="text" id="sessScope"
-               placeholder="e.g. 8″ Dobsonian f/6">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Aperture (mm)</label>
-        <input class="rec-input" type="text" id="sessAperture" placeholder="e.g. 203">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Eyepiece</label>
-        <input class="rec-input" type="text" id="sessEyepiece"
-               placeholder="e.g. 24mm Panoptic">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Magnification (×)</label>
-        <input class="rec-input" type="text" id="sessMag" placeholder="e.g. 50×">
-      </div>
-    </div>
-
-    <div class="sess-footer">
-      <button class="sess-clear-btn" id="sessClearBtn">↺ Clear Session</button>
-      <button class="rec-cancel-btn" id="sessCancelBtn">Cancel</button>
-      <button class="rec-save-btn"   id="sessSaveBtn">Save Session</button>
-    </div>
-  </div>
-</div>
-
-<!-- FULL OBSERVATION RECORD MODAL -->
-<div class="rec-overlay" id="recOverlay" role="dialog" aria-modal="true" aria-label="Full observation record">
-  <div class="rec-box">
-    <div class="rec-header">
-      <span class="rec-title-m" id="recTitleM">M1</span>
-      <span class="rec-title-type" id="recTitleType">Supernova Remnant</span>
-    </div>
-    <div class="rec-al-note">
-      Astronomical League Messier Club observation record. All fields are optional but a description of what you observed is required for AL certification.
-    </div>
-    <button class="rec-close" id="recClose" aria-label="Close">✕</button>
-
-    <div class="rec-section">When &amp; Where</div>
-    <div class="rec-grid">
-      <div class="rec-field">
-        <label class="rec-label">Date</label>
-        <input class="rec-input" type="date" id="recDate">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Time (local)</label>
-        <input class="rec-input" type="time" id="recTime">
-      </div>
-      <div class="rec-field" style="grid-column:1/-1">
-        <label class="rec-label">Observing Site / Location</label>
-        <input class="rec-input" type="text" id="recSite" placeholder="e.g. Jordan Lake SRA, NC — Bortle 4">
-      </div>
-    </div>
-
-    <div class="rec-section">Sky Conditions</div>
-    <div class="rec-grid-3">
-      <div class="rec-field">
-        <label class="rec-label">Seeing (1–5 Antoniadi)</label>
-        <select class="rec-select" id="recSeeing">
-          <option value="">—</option>
-          <option value="1">1 · Perfect, no quivering</option>
-          <option value="2">2 · Slight undulations</option>
-          <option value="3">3 · Moderate, some blurring</option>
-          <option value="4">4 · Poor, constant troublesome</option>
-          <option value="5">5 · Very bad, barely usable</option>
-        </select>
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Transparency (1–5)</label>
-        <select class="rec-select" id="recTransparency">
-          <option value="">—</option>
-          <option value="5">5 · Excellent</option>
-          <option value="4">4 · Good</option>
-          <option value="3">3 · Average</option>
-          <option value="2">2 · Poor</option>
-          <option value="1">1 · Very poor</option>
-        </select>
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Limiting Magnitude</label>
-        <input class="rec-input" type="text" id="recLimitMag" placeholder="e.g. 6.3">
-      </div>
-    </div>
-
-    <div class="rec-section">Equipment</div>
-    <div class="rec-grid">
-      <div class="rec-field">
-        <label class="rec-label">Telescope / Instrument</label>
-        <input class="rec-input" type="text" id="recScope" placeholder="e.g. 8″ Dobsonian f/6">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Aperture (mm)</label>
-        <input class="rec-input" type="text" id="recAperture" placeholder="e.g. 203">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Eyepiece</label>
-        <input class="rec-input" type="text" id="recEyepiece" placeholder="e.g. 24mm Panoptic">
-      </div>
-      <div class="rec-field">
-        <label class="rec-label">Magnification (×)</label>
-        <input class="rec-input" type="text" id="recMag" placeholder="e.g. 50×">
-      </div>
-    </div>
-
-    <div class="rec-section">Observation</div>
-    <div class="rec-field" style="margin-bottom:12px">
-      <label class="rec-label">Description — what you saw (required for AL)</label>
-      <textarea class="rec-textarea" id="recDescription" placeholder="Describe the object's appearance: size, shape, brightness, core concentration, notable features, averted vision needed, etc."></textarea>
-    </div>
-    <div class="rec-field">
-      <label class="rec-label">Sketch Notes</label>
-      <textarea class="rec-textarea" id="recSketch" placeholder="Notes on any sketch made, orientation, field stars noted, etc." style="min-height:60px"></textarea>
-    </div>
-
-    <div class="rec-timestamp" id="recTimestamp"></div>
-
-    <div class="rec-footer">
-      <button class="rec-cancel-btn" id="recCancelBtn">Cancel</button>
-      <button class="rec-save-btn" id="recSaveBtn">Save Record</button>
-    </div>
-  </div>
-</div>
-
-<!-- LIGHTBOX MODAL -->
-<div class="lb-overlay" id="lbOverlay" role="dialog" aria-modal="true" aria-label="Object image viewer">
-  <div class="lb-box" id="lbBox">
-    <div class="lb-header">
-      <span class="lb-title-m" id="lbTitleM">M1</span>
-      <span class="lb-title-type" id="lbTitleType">Supernova Remnant</span>
-      <div class="lb-meta-row">
-        <div class="lb-meta-item">
-          <span class="lb-meta-label">RA</span>
-          <span class="lb-meta-val" id="lbRA">—</span>
-        </div>
-        <div class="lb-meta-item">
-          <span class="lb-meta-label">Dec</span>
-          <span class="lb-meta-val" id="lbDec">—</span>
-        </div>
-        <div class="lb-meta-item">
-          <span class="lb-meta-label">Mag</span>
-          <span class="lb-meta-val" id="lbMagH">—</span>
-        </div>
-      </div>
-      <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
-    </div>
-    <div class="lb-body">
-      <div class="lb-img-wrap" id="lbImgWrap">
-        <!-- image or placeholder injected here -->
-      </div>
-      <div class="lb-sidebar">
-        <div class="lb-stat">
-          <span class="lb-stat-label">Object</span>
-          <span class="lb-stat-val highlight" id="lbSideM">M1</span>
-        </div>
-        <div class="lb-stat">
-          <span class="lb-stat-label">Type</span>
-          <span class="lb-stat-val" id="lbSideType">—</span>
-        </div>
-        <div class="lb-stat-divider"></div>
-        <div class="lb-stat">
-          <span class="lb-stat-label">Constellation</span>
-          <span class="lb-stat-val con-val" id="lbSideCon">—</span>
-        </div>
-        <div class="lb-stat">
-          <span class="lb-stat-label">Magnitude</span>
-          <span class="lb-stat-val" id="lbSideMag">—</span>
-        </div>
-        <div class="lb-stat">
-          <span class="lb-stat-label">Right Ascension</span>
-          <span class="lb-stat-val" id="lbSideRA">—</span>
-        </div>
-        <div class="lb-stat">
-          <span class="lb-stat-label">Declination</span>
-          <span class="lb-stat-val" id="lbSideDec">—</span>
-        </div>
-        <div class="lb-stat-divider"></div>
-        <div class="lb-psa-badge">
-          <span class="lb-stat-label">PSA Page</span>
-          <span class="lb-stat-val" id="lbSidePSA">—</span>
-        </div>
-        <div class="lb-stat-divider"></div>
-        <div class="lb-sky-links">
-          <span class="lb-sky-links-label">Sky Charts</span>
-          <a class="lb-sky-btn" id="lbLocalChart" href="#" target="_blank" rel="noopener">
-            <span class="sky-icon">🗺</span>Finder Chart
-          </a>
-          <a class="lb-sky-btn" id="lbStellarium" href="#" target="_blank" rel="noopener">
-            <span class="sky-icon">🔭</span>Stellarium Web
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="lb-footer">
-      <button class="lb-nav-btn" id="lbPrev">← Prev</button>
-      <span class="lb-pos-indicator" id="lbPos">1 / 110</span>
-      <button class="lb-nav-btn" id="lbNext">Next →</button>
-    </div>
-  </div>
-</div>
+<footer>
+  &copy; 2025 <a href="https://thgnetworks.com">THG Networks</a> &nbsp;·&nbsp; All rights reserved
+</footer>
 
 <script>
-const DATA = [
-  [1,"M77","Spiral Gal","Cet",8.9,"02 42.7","-00 01","4, 6"],
-  [2,"M74","Spiral Gal","Psc",9.4,"01 36.7","+15 47","4, 5"],
-  [3,"M33","Spiral Gal","Tri",5.7,"01 33.9","+30 39","2, 3, 4, 5"],
-  [4,"M31","Spiral Gal","And",3.4,"00 42.7","+41 16","3, 72"],
-  [5,"M32","Elliptical Gal","And",8.1,"00 42.7","+40 52","3, 72"],
-  [6,"M110","Elliptical Gal","And",8.5,"00 40.4","+41 41","3, 72"],
-  [7,"M52","Open Cluster","Cas",7.3,"23 24.2","+61 35","3, 71, 72"],
-  [8,"M103","Open Cluster","Cas",7.4,"01 33.2","+60 42","1, 2, 3, 72"],
-  [9,"M76","Planetary Neb","Per",10.1,"01 42.4","+51 34","2, 13"],
-  [10,"M34","Open Cluster","Per",5.5,"02 42.0","+42 47","2, 13"],
-  [11,"M45","Open Cluster","Tau",1.6,"03 47.0","+24 07","13, 15, A"],
-  [12,"M79","Globular Clust","Lep",7.7,"05 24.5","-24 33","16, 18"],
-  [13,"M42","Diffuse Neb","Ori",4.0,"05 35.4","-05 27","16, B"],
-  [14,"M43","Diffuse Neb","Ori",9.0,"05 35.6","-05 16","16, B"],
-  [15,"M78","Diffuse Neb","Ori",8.3,"05 46.7","+00 03","14, 16"],
-  [16,"M1","Supernova Rem","Tau",8.4,"05 34.5","+22 01","14"],
-  [17,"M35","Open Cluster","Gem",5.3,"06 08.9","+24 20","12, 14, 23, 25"],
-  [18,"M37","Open Cluster","Aur",6.2,"05 52.4","+32 33","12, 14, 23, 25"],
-  [19,"M36","Open Cluster","Aur",6.3,"05 36.1","+34 08","12, 14"],
-  [20,"M38","Open Cluster","Aur",7.4,"05 28.4","+35 50","12, 14"],
-  [21,"M41","Open Cluster","CMa",4.6,"06 46.0","-20 44","27"],
-  [22,"M93","Open Cluster","Pup",6.0,"07 44.6","-23 52","26, 28"],
-  [23,"M47","Open Cluster","Pup",5.2,"07 36.6","-14 30","26, 27"],
-  [24,"M46","Open Cluster","Pup",6.0,"07 41.8","-14 49","26, 27"],
-  [25,"M50","Open Cluster","Mon",6.3,"07 03.2","-08 20","27"],
-  [26,"M48","Open Cluster","Hya",5.5,"08 13.8","-05 48","26"],
-  [27,"M44","Open Cluster","Cnc",3.7,"08 40.1","+19 59","24, 35"],
-  [28,"M67","Open Cluster","Cnc",6.1,"08 50.4","+11 49","24, 35"],
-  [29,"M95","Spiral Gal","Leo",9.7,"10 44.0","+11 42","34"],
-  [30,"M96","Spiral Gal","Leo",9.2,"10 46.8","+11 49","34"],
-  [31,"M105","Elliptical Gal","Leo",9.3,"10 47.8","+12 35","34"],
-  [32,"M65","Spiral Gal","Leo",9.3,"11 18.9","+13 05","34, G"],
-  [33,"M66","Spiral Gal","Leo",8.9,"11 20.2","+12 59","34, G"],
-  [34,"M81","Spiral Gal","UMa",6.9,"09 55.6","+69 04","21, 31"],
-  [35,"M82","Irregular Gal","UMa",8.4,"09 55.8","+69 41","21, 31"],
-  [36,"M97","Planetary Neb","UMa",9.9,"11 14.8","+55 01","32, 43, F"],
-  [37,"M108","Spiral Gal","UMa",10.0,"11 11.5","+55 40","31, 32, 33, 43, F"],
-  [38,"M109","Spiral Gal","UMa",9.8,"11 57.6","+53 23","32, 43, F"],
-  [39,"M40","Double Star","UMa",8.4,"12 22.4","+58 05","32, 41, 43, F"],
-  [40,"M106","Spiral Gal","CVn",8.4,"12 19.0","+47 18","32, 43"],
-  [41,"M94","Spiral Gal","CVn",8.2,"12 50.9","+41 07","32, 43"],
-  [42,"M63","Spiral Gal","CVn",8.6,"13 15.8","+42 02","32, 43"],
-  [43,"M51","Spiral Gal","CVn",8.4,"13 29.9","+47 12","32, 43"],
-  [44,"M101","Spiral Gal","UMa",7.9,"14 03.2","+54 21","32, 42, 53"],
-  [45,"M102","Lenticular Gal","Dra",9.9,"15 06.5","+55 46","52"],
-  [46,"M53","Globular Clust","Com",7.6,"13 12.9","+18 10","45"],
-  [47,"M64","Spiral Gal","Com",8.5,"12 56.7","+21 41","45"],
-  [48,"M3","Globular Clust","CVn",6.2,"13 42.2","+28 23","43, 44"],
-  [49,"M98","Spiral Gal","Com",10.1,"12 13.8","+14 54","34, 45, C"],
-  [50,"M99","Spiral Gal","Com",9.9,"12 18.8","+14 25","45, C"],
-  [51,"M100","Spiral Gal","Com",9.3,"12 22.9","+15 49","45, C"],
-  [52,"M85","Lenticular Gal","Com",9.1,"12 25.4","+18 11","45, C"],
-  [53,"M84","Lenticular Gal","Vir",9.1,"12 25.1","+12 53","45, C"],
-  [54,"M86","Lenticular Gal","Vir",8.9,"12 26.2","+12 57","45, C"],
-  [55,"M87","Elliptical Gal","Vir",8.6,"12 30.8","+12 24","45, C"],
-  [56,"M89","Elliptical Gal","Vir",9.8,"12 35.7","+12 33","45, C"],
-  [57,"M90","Spiral Gal","Vir",9.5,"12 36.8","+13 10","45, C"],
-  [58,"M88","Spiral Gal","Com",9.6,"12 32.0","+14 25","45, C"],
-  [59,"M91","Spiral Gal","Com",10.2,"12 35.4","+14 30","45, C"],
-  [60,"M58","Spiral Gal","Vir",9.7,"12 37.7","+11 49","45, C"],
-  [61,"M59","Elliptical Gal","Vir",9.6,"12 42.0","+11 39","45, C"],
-  [62,"M60","Elliptical Gal","Vir",8.8,"12 43.7","+11 33","45, C"],
-  [63,"M49","Elliptical Gal","Vir",8.4,"12 29.8","+08 00","45, C"],
-  [64,"M61","Spiral Gal","Vir",9.7,"12 21.9","+04 28","45, 47"],
-  [65,"M104","Spiral Gal","Vir",8.0,"12 40.0","-11 37","47"],
-  [66,"M68","Globular Clust","Hya",7.8,"12 39.5","-26 45","47, 49"],
-  [67,"M83","Spiral Gal","Hya",7.6,"13 37.0","-29 52","46, 47, 48"],
-  [68,"M5","Globular Clust","Ser",5.6,"15 18.6","+02 05","55, 57"],
-  [69,"M13","Globular Clust","Her",5.8,"16 41.7","+36 28","52"],
-  [70,"M92","Globular Clust","Her",6.4,"17 17.1","+43 08","52, 63"],
-  [71,"M57","Planetary Neb","Lyr",8.8,"18 53.6","+33 02","63, 65"],
-  [72,"M56","Globular Clust","Lyr",8.3,"19 16.6","+30 11","63, 65"],
-  [73,"M29","Open Cluster","Cyg",7.1,"20 23.9","+38 32","62, 73"],
-  [74,"M39","Open Cluster","Cyg",4.6,"21 32.2","+48 26","62, 73"],
-  [75,"M27","Planetary Neb","Vul",7.4,"19 59.6","+22 43","62, 64"],
-  [76,"M71","Globular Clust","Sge",8.2,"19 53.8","+18 47","64"],
-  [77,"M107","Globular Clust","Oph",7.9,"16 32.5","-13 03","56"],
-  [78,"M12","Globular Clust","Oph",6.7,"16 47.2","-01 57","54, 56"],
-  [79,"M10","Globular Clust","Oph",6.6,"16 57.1","-04 06","54, 56"],
-  [80,"M14","Globular Clust","Oph",7.6,"17 37.6","-03 15","54, 56, 67"],
-  [81,"M9","Globular Clust","Oph",7.7,"17 19.2","-18 31","56"],
-  [82,"M4","Globular Clust","Sco",5.6,"16 23.6","-26 32","56, 58"],
-  [83,"M80","Globular Clust","Sco",7.3,"16 17.0","-22 59","56"],
-  [84,"M19","Globular Clust","Oph",6.8,"17 02.6","-26 16","56, 58"],
-  [85,"M62","Globular Clust","Oph",6.5,"17 01.2","-30 07","56, 58"],
-  [86,"M6","Open Cluster","Sco",5.3,"17 40.1","-32 13","56, 58, 67, 69, J"],
-  [87,"M7","Open Cluster","Sco",4.1,"17 53.9","-34 49","58, 67, 69, J"],
-  [88,"M11","Open Cluster","Sct",6.3,"18 51.1","-06 16","65, 67"],
-  [89,"M26","Open Cluster","Sct",8.0,"18 45.2","-09 24","67"],
-  [90,"M16","Open Cluster","Ser",6.4,"18 18.8","-13 47","67, I"],
-  [91,"M17","Diffuse Neb","Sgr",7.0,"18 20.8","-16 11","67, I"],
-  [92,"M18","Open Cluster","Sgr",7.5,"18 19.9","-17 08","67"],
-  [93,"M24","Star Cloud","Sgr",4.6,"18 16.9","-18 29","67, I"],
-  [94,"M25","Open Cluster","Sgr",6.5,"18 31.6","-19 15","67, I"],
-  [95,"M23","Open Cluster","Sgr",6.9,"17 56.8","-19 01","67, I"],
-  [96,"M21","Open Cluster","Sgr",6.5,"18 04.6","-22 30","67, 69, I"],
-  [97,"M20","Diffuse Neb","Sgr",9.0,"18 02.6","-23 02","67, 69, I"],
-  [98,"M8","Diffuse Neb","Sgr",6.0,"18 03.8","-24 23","67, 69, I"],
-  [99,"M28","Globular Clust","Sgr",6.8,"18 24.5","-24 52","67, 69, I"],
-  [100,"M22","Globular Clust","Sgr",5.1,"18 36.4","-23 54","67, 69, I"],
-  [101,"M69","Globular Clust","Sgr",7.6,"18 31.4","-32 21","67, 69, I"],
-  [102,"M70","Globular Clust","Sgr",7.9,"18 43.2","-32 18","67, 69, I"],
-  [103,"M54","Globular Clust","Sgr",7.6,"18 55.1","-30 29","67, 69"],
-  [104,"M55","Globular Clust","Sgr",6.3,"19 40.0","-30 58","66, 68"],
-  [105,"M75","Globular Clust","Sgr",8.5,"20 06.1","-21 55","66"],
-  [106,"M15","Globular Clust","Peg",6.2,"21 30.0","+12 10","75"],
-  [107,"M2","Globular Clust","Aqr",6.5,"21 33.5","-00 49","75, 77"],
-  [108,"M72","Globular Clust","Aqr",9.3,"20 53.5","-12 32","66, 77"],
-  [109,"M73","Asterism","Aqr",9.0,"20 58.9","-12 38","66, 77"],
-  [110,"M30","Globular Clust","Cap",7.2,"21 40.4","-23 11","77"],
-];
+  // ── STAR FIELD ──
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
 
-function getTypeClass(type) {
-  if (type.includes("Spiral"))      return "badge-spiral";
-  if (type.includes("Elliptical"))  return "badge-ellip";
-  if (type.includes("Lenticular"))  return "badge-lenticular";
-  if (type.includes("Irregular"))   return "badge-irregular";
-  if (type.includes("Open"))        return "badge-open";
-  if (type.includes("Globular"))    return "badge-globular";
-  if (type.includes("Diffuse"))     return "badge-nebula";
-  if (type.includes("Planetary"))   return "badge-planetary";
-  if (type.includes("Supernova"))   return "badge-snr";
-  if (type.includes("Star Cloud"))  return "badge-starcloud";
-  return "badge-double";
-}
-function matchesFilterType(type, filter) {
-  if (filter === "all")            return true;
-  if (filter === "Galaxy")         return type.includes("Gal");
-  if (filter === "Open Cluster")   return type === "Open Cluster";
-  if (filter === "Globular Clust") return type.includes("Globular");
-  if (filter === "Nebula")         return type.includes("Neb") || type.includes("Supernova") || type.includes("Star Cloud");
-  return true;
-}
-
-const SAVED_NOTES = {}, SAVED_CHECKS = {}, SAVED_TIMES = {}, SAVED_FULLNOTES = {};
-function loadState() {
-  try {
-    const c = localStorage.getItem("mm_checks");
-    const n = localStorage.getItem("mm_notes");
-    const t = localStorage.getItem("mm_times");
-    const f = localStorage.getItem("mm_fullnotes");
-    if (c) Object.assign(SAVED_CHECKS,    JSON.parse(c));
-    if (n) Object.assign(SAVED_NOTES,     JSON.parse(n));
-    if (t) Object.assign(SAVED_TIMES,     JSON.parse(t));
-    if (f) Object.assign(SAVED_FULLNOTES, JSON.parse(f));
-  } catch(e) {}
-}
-function saveState() {
-  try {
-    localStorage.setItem("mm_checks",    JSON.stringify(SAVED_CHECKS));
-    localStorage.setItem("mm_notes",     JSON.stringify(SAVED_NOTES));
-    localStorage.setItem("mm_times",     JSON.stringify(SAVED_TIMES));
-    localStorage.setItem("mm_fullnotes", JSON.stringify(SAVED_FULLNOTES));
-  } catch(e) {}
-}
-
-function renderTable() {
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
-  DATA.forEach(([mo,m,type,con,mag,ra,dec,psa], idx) => {
-    const id = m.replace(/\s/g,"");
-    const tr = document.createElement("tr");
-    tr.className = "data-row";
-    Object.assign(tr.dataset, { mo, m, type, con, id });
-    if (SAVED_CHECKS[id]) tr.classList.add("checked");
-    tr.innerHTML = `
-      <td class="col-mo-val">${mo}</td>
-      <td class="col-m-val"><a class="m-link" data-idx="${idx}" href="#">${m}</a></td>
-      <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}"></span>${type}</td>
-      <td class="col-con-val">${con}</td>
-      <td class="col-mag-val">${mag}</td>
-      <td class="col-ra-val">${ra}</td>
-      <td class="col-dec-val">${dec}</td>
-      <td class="col-psa-val">${psa}</td>
-      <td class="col-chk-val"><input type="checkbox" ${SAVED_CHECKS[id]?"checked":""}></td>
-      <td class="col-note-val">
-        <div class="note-cell-wrap">
-          <input class="note-input" type="text" placeholder="notes…" value="${SAVED_NOTES[id]||""}">
-          <button class="rec-btn${SAVED_FULLNOTES[id] ? " has-rec" : ""}" title="Full observation record" data-id="${id}">✎</button>
-        </div>
-      </td>
-    `;
-    tr.querySelector(".m-link").addEventListener("click", function(e) {
-      e.preventDefault();
-      openLightbox(parseInt(this.dataset.idx));
-    });
-    tr.querySelector("input[type=checkbox]").addEventListener("change", function() {
-      SAVED_CHECKS[id] = this.checked;
-      // Stamp time when checked; clear when unchecked
-      if (this.checked) {
-        SAVED_TIMES[id] = new Date().toISOString();
-      } else {
-        delete SAVED_TIMES[id];
-      }
-      tr.classList.toggle("checked", this.checked);
-      saveState(); updateProgress(); applyFilter();
-    });
-    tr.querySelector(".note-input").addEventListener("input", function() {
-      SAVED_NOTES[id] = this.value; saveState();
-    });
-    tr.querySelector(".rec-btn").addEventListener("click", function() {
-      openRecModal(id, m, type);
-    });
-    tbody.appendChild(tr);
-  });
-}
-
-/* ── FULL OBSERVATION RECORD MODAL ──────────────────────────────── */
-let recCurrentId = null;
-
-function openRecModal(id, m, type) {
-  recCurrentId = id;
-  const saved = SAVED_FULLNOTES[id] || {};
-
-  document.getElementById("recTitleM").textContent    = m;
-  document.getElementById("recTitleType").textContent = type;
-
-  // Populate fields from saved data, then fall back to session defaults for blank fields.
-  // For date and time, also fall back to the hidden observation timestamp (SAVED_TIMES)
-  // so the moment the checkbox was ticked is available as a starting point.
-  const sess = SESSION;
-  // Priority: saved record value → checkbox timestamp → right now
-  // Date and time always get a value so the PDF report is never missing them.
-  const autoTs   = SAVED_TIMES[id] ? new Date(SAVED_TIMES[id]) : new Date();
-  const autoDate = autoTs.toLocaleDateString("en-CA");  // YYYY-MM-DD
-  const autoTime = autoTs.toTimeString().slice(0, 5);    // HH:MM
-  document.getElementById("recDate").value         = saved.date || autoDate;
-  document.getElementById("recTime").value         = saved.time || autoTime;
-  document.getElementById("recSite").value         = saved.site         || sess.site         || "";
-  document.getElementById("recSeeing").value       = saved.seeing       || sess.seeing       || "";
-  document.getElementById("recTransparency").value = saved.transparency || sess.transparency || "";
-  document.getElementById("recLimitMag").value     = saved.limitMag     || sess.limitMag     || "";
-  document.getElementById("recScope").value        = saved.scope        || sess.scope        || "";
-  document.getElementById("recAperture").value     = saved.aperture     || sess.aperture     || "";
-  document.getElementById("recEyepiece").value     = saved.eyepiece     || sess.eyepiece     || "";
-  document.getElementById("recMag").value          = saved.mag          || sess.mag          || "";
-  document.getElementById("recSketch").value       = saved.sketch       || "";
-
-  // Field Notes ↔ Description two-way sync logic:
-  //
-  // On OPEN — Field Notes is the inbound source of truth:
-  //   • If Field Notes has text  → always seed Description from it
-  //     (covers both: first-time entry, and subsequent opens after the
-  //      user manually edits the inline note between sessions)
-  //   • If Field Notes is blank  → fall back to any previously saved
-  //     description so existing work is never lost
-  //
-  // On SAVE (handled in saveRecModal) — Description is the outbound
-  // source of truth → always written back to Field Notes.
-  const fieldNote = (SAVED_NOTES[id] || "").trim();
-  document.getElementById("recDescription").value =
-    fieldNote || saved.description || "";
-
-  // Show hidden observation timestamp if it exists
-  const ts = SAVED_TIMES[id];
-  const tsEl = document.getElementById("recTimestamp");
-  if (ts) {
-    const d = new Date(ts);
-    tsEl.textContent = `Observation logged: ${d.toLocaleString()}`;
-    tsEl.style.display = "block";
-  } else {
-    tsEl.style.display = "none";
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-
-  document.getElementById("recOverlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-
-function closeRecModal() {
-  document.getElementById("recOverlay").classList.remove("open");
-  document.body.style.overflow = "";
-  recCurrentId = null;
-}
-
-function saveRecModal() {
-  if (!recCurrentId) return;
-  SAVED_FULLNOTES[recCurrentId] = {
-    date:         document.getElementById("recDate").value,
-    time:         document.getElementById("recTime").value,
-    site:         document.getElementById("recSite").value,
-    seeing:       document.getElementById("recSeeing").value,
-    transparency: document.getElementById("recTransparency").value,
-    limitMag:     document.getElementById("recLimitMag").value,
-    scope:        document.getElementById("recScope").value,
-    aperture:     document.getElementById("recAperture").value,
-    eyepiece:     document.getElementById("recEyepiece").value,
-    mag:          document.getElementById("recMag").value,
-    description:  document.getElementById("recDescription").value,
-    sketch:       document.getElementById("recSketch").value,
-  };
-
-  // Check if any field has content
-  const hasData = Object.values(SAVED_FULLNOTES[recCurrentId]).some(v => v && v.trim());
-  if (!hasData) {
-    delete SAVED_FULLNOTES[recCurrentId];
-  }
-
-  // Sync Description back to Field Notes so the inline note always reflects
-  // the most recent description text:
-  //   • If Field Notes was blank on open → it now gets populated from the description
-  //   • If Field Notes had text on open  → it gets replaced with the updated description
-  // Either way the two fields stay in sync after every save.
-  const descNow = document.getElementById("recDescription").value.trim();
-  if (descNow) {
-    SAVED_NOTES[recCurrentId] = descNow;
-    // Also update the visible note-input in the table row without re-rendering.
-    // The note-input has no data-id, but its sibling rec-btn does — use that to
-    // find the correct row and then walk to the input.
-    const recBtnEl = document.querySelector(`.rec-btn[data-id="${recCurrentId}"]`);
-    if (recBtnEl) {
-      const noteEl = recBtnEl.closest(".note-cell-wrap").querySelector(".note-input");
-      if (noteEl) noteEl.value = descNow;
-    }
-  }
-
-  saveState();
-
-  // Update the rec button indicator in the table row without full re-render
-  const btn = document.querySelector(`.rec-btn[data-id="${recCurrentId}"]`);
-  if (btn) btn.classList.toggle("has-rec", !!SAVED_FULLNOTES[recCurrentId]);
-
-  closeRecModal();
-}
-
-document.getElementById("recClose").addEventListener("click", closeRecModal);
-document.getElementById("recCancelBtn").addEventListener("click", closeRecModal);
-document.getElementById("recSaveBtn").addEventListener("click", saveRecModal);
-document.getElementById("recOverlay").addEventListener("click", function(e) {
-  if (e.target === this) closeRecModal();
-});
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape" && document.getElementById("recOverlay").classList.contains("open")) {
-    closeRecModal();
-  }
-});
-
-/* ── LIGHTBOX ── */
-let lbCurrentIdx = 0;
-
-function imgKey(m) {
-  // "M1" -> "images/m1.jpg"
-  return "images/" + m.replace(/\s/g,"").toLowerCase() + ".jpg";
-}
-
-function openLightbox(idx) {
-  lbCurrentIdx = idx;
-  populateLightbox(idx);
-  document.getElementById("lbOverlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-  document.getElementById("lbClose").focus();
-}
-
-function closeLightbox() {
-  document.getElementById("lbOverlay").classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-/* ── COORDINATE HELPERS ── */
-// "05 34.5"  → decimal hours (for RA)
-function raToDecimal(ra) {
-  const parts = ra.trim().split(/\s+/);
-  const h = parseFloat(parts[0]);
-  const m = parseFloat(parts[1] || 0);
-  return h + m / 60;
-}
-// "+22 01" or "-00 01" → decimal degrees (for Dec)
-function decToDecimal(dec) {
-  const sign  = dec.trim().startsWith('-') ? -1 : 1;
-  const clean = dec.trim().replace(/^[+-]/, '');
-  const parts = clean.split(/\s+/);
-  const d = parseFloat(parts[0]);
-  const m = parseFloat(parts[1] || 0);
-  return sign * (d + m / 60);
-}
-
-function buildStellariumURL(m) {
-  // Stellarium Web supports direct Messier lookups by name
-  const id = m.replace(/\s/g, '');   // "M1", "M110", etc.
-  return `https://stellarium-web.org/skysource/${id}`;
-}
-
-function buildLocalChartURL(m) {
-  // Local finder chart — charts/M1.png, M2.png, etc.
-  const id = m.replace(/\s/g, '');   // "M1", "M110", etc.
-  return `charts/${id}.png`;
-}
-
-function populateLightbox(idx) {
-  const [mo, m, type, con, mag, ra, dec, psa] = DATA[idx];
-
-  // Header
-  document.getElementById("lbTitleM").textContent    = m;
-  document.getElementById("lbTitleType").textContent = type;
-  document.getElementById("lbRA").textContent        = ra;
-  document.getElementById("lbDec").textContent       = dec;
-  document.getElementById("lbMagH").textContent      = mag;
-
-  // Sidebar
-  document.getElementById("lbSideM").textContent    = m;
-  document.getElementById("lbSideType").textContent = type;
-  document.getElementById("lbSideCon").textContent  = con;
-  document.getElementById("lbSideMag").textContent  = mag;
-  document.getElementById("lbSideRA").textContent   = ra;
-  document.getElementById("lbSideDec").textContent  = dec;
-  document.getElementById("lbSidePSA").textContent  = psa;
-
-  // Sky chart links
-  document.getElementById("lbLocalChart").href = buildLocalChartURL(m);
-  document.getElementById("lbStellarium").href  = buildStellariumURL(m);
-
-  // Position indicator
-  document.getElementById("lbPos").textContent = `${idx + 1} / ${DATA.length}`;
-
-  // Nav buttons
-  document.getElementById("lbPrev").disabled = idx === 0;
-  document.getElementById("lbNext").disabled = idx === DATA.length - 1;
-
-  // Image + optional attribution
-  const wrap = document.getElementById("lbImgWrap");
-  wrap.innerHTML = "";
-  const img = new Image();
-  img.alt = m + " — " + type;
-  img.style.cssText = "max-width:100%;max-height:520px;object-fit:contain;display:block;";
-
-  const placeholder = () => {
-    wrap.innerHTML = `
-      <div class="lb-img-placeholder">
-        <div class="ph-icon">✦</div>
-        <div class="ph-text">${imgKey(m)}<br>Image not yet loaded</div>
-      </div>`;
-  };
-
-  const attribKey = (m) =>
-    "images/" + m.replace(/\s/g,"").toLowerCase() + "-attrib.txt";
-
-  img.onload = () => {
-    wrap.appendChild(img);
-    // Try to load attribution file
-    fetch(attribKey(m))
-      .then(r => r.ok ? r.text() : null)
-      .then(text => {
-        if (text && text.trim()) {
-          const div = document.createElement("div");
-          div.className = "lb-attribution";
-          div.textContent = text.trim();
-          wrap.appendChild(div);
-        }
-      })
-      .catch(() => {}); // silently ignore if file absent
-  };
-  img.onerror = placeholder;
-  img.src     = imgKey(m);
-}
-
-/* Lightbox controls */
-document.getElementById("lbClose").addEventListener("click", closeLightbox);
-document.getElementById("lbPrev").addEventListener("click", () => {
-  if (lbCurrentIdx > 0) populateLightbox(--lbCurrentIdx);
-});
-document.getElementById("lbNext").addEventListener("click", () => {
-  if (lbCurrentIdx < DATA.length - 1) populateLightbox(++lbCurrentIdx);
-});
-
-// Close on overlay click (outside box)
-document.getElementById("lbOverlay").addEventListener("click", function(e) {
-  if (e.target === this) closeLightbox();
-});
-
-// Keyboard nav
-document.addEventListener("keydown", function(e) {
-  const overlay = document.getElementById("lbOverlay");
-  if (!overlay.classList.contains("open")) return;
-  if (e.key === "Escape")     closeLightbox();
-  if (e.key === "ArrowLeft"  && lbCurrentIdx > 0)             populateLightbox(--lbCurrentIdx);
-  if (e.key === "ArrowRight" && lbCurrentIdx < DATA.length-1) populateLightbox(++lbCurrentIdx);
-});
-
-function updateProgress() {
-  const done = Object.values(SAVED_CHECKS).filter(Boolean).length;
-  document.getElementById("progressCount").textContent = `${done} / ${DATA.length}`;
-  document.getElementById("progressFill").style.width = `${(done/DATA.length)*100}%`;
-}
-
-let activeFilter = "all", searchTerm = "";
-function applyFilter() {
-  document.querySelectorAll("tr.data-row").forEach(tr => {
-    const { type, id, m, con, mo } = tr.dataset;
-    const filterOk = activeFilter === "unchecked" ? !SAVED_CHECKS[id] : matchesFilterType(type, activeFilter);
-    const searchOk = !searchTerm || [m,type,con,mo].some(v => v.toLowerCase().includes(searchTerm));
-    tr.classList.toggle("hidden-row", !filterOk || !searchOk);
-  });
-}
-
-document.querySelectorAll(".filter-btn").forEach(btn => btn.addEventListener("click", function() {
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  this.classList.add("active");
-  activeFilter = this.dataset.filter;
-  applyFilter();
-}));
-document.getElementById("searchInput").addEventListener("input", function() {
-  searchTerm = this.value.trim().toLowerCase(); applyFilter();
-});
-
-/* ── EXPORT ─────────────────────────────────────────────────────── */
-// ── CSV helpers ─────────────────────────────────────────────────────
-// Quote a single field: wrap in quotes, escape any internal quotes as ""
-function csvField(val) {
-  const s = String(val === null || val === undefined ? "" : val);
-  return `"${s.replace(/"/g, '""')}"`;
-}
-
-// Parse one CSV line into an array of strings, respecting quoted fields
-function parseCSVLine(line) {
-  const fields = [];
-  let cur = "", inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (inQ) {
-      if (ch === '"' && line[i+1] === '"') { cur += '"'; i++; }   // escaped ""
-      else if (ch === '"')                 { inQ = false; }        // closing quote
-      else                                 { cur += ch; }
-    } else {
-      if      (ch === '"') { inQ = true; }
-      else if (ch === ',') { fields.push(cur); cur = ""; }
-      else                 { cur += ch; }
-    }
-  }
-  fields.push(cur);
-  return fields;
-}
-
-/* ── EXPORT ─────────────────────────────────────────────────────── */
-document.getElementById("menuExport").addEventListener("click", function () {
-
-  // Build timestamp: YYYY-MM-DD-HHmmss
-  const now = new Date();
-  const pad = n => String(n).padStart(2, "0");
-  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`
-              + `-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-  const filename = `${stamp}-observing-log.csv`;
-
-  // CSV header — all fields quoted
-  const header = ["Marathon Order","Object","Type","Constellation","Magnitude",
-                  "RA (J2000)","Dec (J2000)","PSA Page","Observed","Date Observed","Field Notes"]
-                  .map(csvField).join(",");
-  const rows = [header];
-
-  // One row per object — every field quoted so commas inside PSA pages are safe
-  DATA.forEach(([mo, m, type, con, mag, ra, dec, psa]) => {
-    const observed  = SAVED_CHECKS[m] ? "Yes" : "No";
-    const notes     = SAVED_NOTES[m] || "";
-    const timestamp = SAVED_TIMES[m]
-      ? new Date(SAVED_TIMES[m]).toLocaleString()
-      : "";
-    rows.push([mo, m, type, con, mag, ra, dec, psa, observed, timestamp, notes].map(csvField).join(","));
-  });
-
-  const csv  = rows.join("\r\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href     = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-/* ── IMPORT ─────────────────────────────────────────────────────── */
-let _pendingImport = null;  // holds parsed rows until user confirms
-
-function openImportDialog(parsed, conflicts) {
-  const overlay = document.getElementById("importOverlay");
-  const summary = document.getElementById("importSummary");
-  const conflictSection = document.getElementById("importConflictSection");
-  const conflictList = document.getElementById("importConflictList");
-
-  const total    = parsed.length;
-  const observed = parsed.filter(r => r.observed).length;
-  const noted    = parsed.filter(r => r.notes).length;
-
-  let summaryHTML = `File contains <strong>${total}</strong> objects — `
-    + `<strong>${observed}</strong> marked observed`;
-  if (noted) summaryHTML += `, <strong>${noted}</strong> with field notes`;
-  summaryHTML += ".";
-
-  if (conflicts.length > 0) {
-    summaryHTML += `<br><br><strong>${conflicts.length}</strong> object`
-      + (conflicts.length > 1 ? "s have" : " has")
-      + " data on this page that may be overwritten.";
-    conflictSection.style.display = "block";
-    conflictList.textContent = conflicts.map(c => {
-      const parts = [];
-      if (c.existingObserved && !c.fileObserved) parts.push("observed → not observed");
-      if (!c.existingObserved && c.fileObserved) parts.push("not observed → observed");
-      if (c.existingNotes && c.fileNotes && c.existingNotes !== c.fileNotes)
-        parts.push(`notes differ`);
-      if (c.existingNotes && !c.fileNotes) parts.push("notes → blank");
-      return `${c.m}  ${parts.join(" · ")}`;
-    }).join("\n");
-  } else {
-    summaryHTML += "<br><br>No conflicts detected — existing data will not be altered by a merge.";
-    conflictSection.style.display = "none";
-  }
-
-  summary.innerHTML = summaryHTML;
-  _pendingImport = parsed;
-  overlay.classList.add("open");
-}
-
-function closeImportDialog() {
-  document.getElementById("importOverlay").classList.remove("open");
-  _pendingImport = null;
-}
-
-function applyImport(mode) {
-  // mode: "overwrite" | "merge"
-  if (!_pendingImport) return;
-  let imported = 0;
-
-  _pendingImport.forEach(({ m, observed, notes, obsTime }) => {
-    if (mode === "overwrite") {
-      SAVED_CHECKS[m] = observed;
-      SAVED_NOTES[m]  = notes;
-      if (obsTime) SAVED_TIMES[m] = obsTime; else delete SAVED_TIMES[m];
-      imported++;
-    } else {
-      // merge: only write if the file has something and the page has nothing
-      if (observed && !SAVED_CHECKS[m]) SAVED_CHECKS[m] = observed;
-      if (notes    && !SAVED_NOTES[m])  SAVED_NOTES[m]  = notes;
-      if (obsTime  && !SAVED_TIMES[m])  SAVED_TIMES[m]  = obsTime;
-      imported++;
-    }
-  });
-
-  try {
-    localStorage.setItem("mm_checks", JSON.stringify(SAVED_CHECKS));
-    localStorage.setItem("mm_notes",  JSON.stringify(SAVED_NOTES));
-  } catch(err) {}
-
-  renderTable();
-  updateProgress();
-  applyFilter();
-  closeImportDialog();
-
-  const modeLabel = mode === "overwrite" ? "Overwrite" : "Merge";
-  alert(`${modeLabel} complete — ${imported} objects applied.`);
-}
-
-document.getElementById("importCancelBtn").addEventListener("click", () => {
-  closeImportDialog();
-  document.getElementById("btnImportFile").value = "";
-});
-document.getElementById("importMergeBtn").addEventListener("click",     () => applyImport("merge"));
-document.getElementById("importOverwriteBtn").addEventListener("click", () => applyImport("overwrite"));
-
-document.getElementById("btnImportFile").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (evt) {
-    const lines = evt.target.result.split(/\r?\n/).filter(l => l.trim());
-    if (lines.length < 2) {
-      alert("That doesn't look like a valid observing log CSV.");
-      e.target.value = "";
-      return;
-    }
-
-    const headers   = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
-    const iObj      = headers.indexOf("object");
-    const iObserved = headers.indexOf("observed");
-    const iNotes    = headers.indexOf("field notes");
-    const iTime     = headers.indexOf("date observed");
-
-    if (iObj === -1 || iObserved === -1) {
-      alert("CSV header not recognised — make sure you're importing an observing log exported from this page.");
-      e.target.value = "";
-      return;
-    }
-
-    const parsed    = [];
-    const conflicts = [];
-    let skipped     = 0;
-
-    for (let i = 1; i < lines.length; i++) {
-      const cols     = parseCSVLine(lines[i]);
-      const m        = (cols[iObj]      || "").trim();
-      const observed = (cols[iObserved] || "").trim().toLowerCase() === "yes";
-      const notes    = iNotes >= 0 ? (cols[iNotes] || "").trim() : "";
-      const obsTime  = iTime  >= 0 ? (cols[iTime]  || "").trim() : "";
-
-      if (!m.match(/^M\d+$/i)) { skipped++; continue; }
-
-      parsed.push({ m, observed, notes, obsTime });
-
-      // Detect conflicts: existing page data vs incoming file data
-      const existingObserved = !!SAVED_CHECKS[m];
-      const existingNotes    = SAVED_NOTES[m] || "";
-      const hasConflict =
-        (existingObserved && !observed) ||          // would lose an observation
-        (existingNotes && !notes) ||                // would lose existing notes
-        (existingNotes && notes && existingNotes !== notes); // notes would change
-
-      if (hasConflict) {
-        conflicts.push({ m, existingObserved, fileObserved: observed,
-                             existingNotes,   fileNotes: notes });
-      }
-    }
-
-    e.target.value = "";  // reset so same file can be re-imported
-    openImportDialog(parsed, conflicts);
-  };
-  reader.readAsText(file);
-});
-
-/* ── AL RECORDS EXPORT (JSON) ───────────────────────────────────── */
-document.getElementById("menuExportAL").addEventListener("click", function () {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-
-  const recordCount = Object.keys(SAVED_FULLNOTES).length;
-  if (recordCount === 0) {
-    alert("No AL observation records to export yet.\n\nFill in at least one full record using the ✎ button in the notes column.");
-    return;
-  }
-
-  const now = new Date();
-  const pad = n => String(n).padStart(2, "0");
-  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`
-              + `-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-
-  // Include the hidden observation timestamps so the PDF generator and any future
-  // tools can access the exact moment each object was checked off, even if the user
-  // never manually filled the date field in the full record form.
-  const payload = {
-    exported:   now.toISOString(),
-    version:    1,
-    records:    SAVED_FULLNOTES,
-    timestamps: SAVED_TIMES       // mm_times: { "M1": "2026-03-22T02:15:00.000Z", ... }
-  };
-
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href     = url;
-  a.download = `${stamp}-al-records.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-/* ── AL RECORDS IMPORT (JSON) ───────────────────────────────────── */
-document.getElementById("btnImportALFile").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (evt) {
-    let payload;
-    try {
-      payload = JSON.parse(evt.target.result);
-    } catch {
-      alert("Could not parse the file — make sure you're importing an AL Records JSON exported from this page.");
-      e.target.value = "";
-      return;
-    }
-
-    const incoming = payload.records || payload; // support bare object or wrapped
-    if (typeof incoming !== "object" || Array.isArray(incoming)) {
-      alert("Unrecognised format — expected an AL Records JSON file.");
-      e.target.value = "";
-      return;
-    }
-
-    const incomingKeys  = Object.keys(incoming);
-    const existingKeys  = Object.keys(SAVED_FULLNOTES);
-    const conflicts     = incomingKeys.filter(k => existingKeys.includes(k));
-    const newCount      = incomingKeys.filter(k => !existingKeys.includes(k)).length;
-
-    let msg = `Found ${incomingKeys.length} AL record${incomingKeys.length !== 1 ? "s" : ""} in the file.\n`;
-    if (newCount)          msg += `  • ${newCount} new (not on this page)\n`;
-    if (conflicts.length)  msg += `  • ${conflicts.length} will overwrite existing records\n`;
-    if (payload.exported)  msg += `\nFile exported: ${new Date(payload.exported).toLocaleString()}`;
-    msg += "\n\nImport and merge all records?";
-
-    if (!confirm(msg)) { e.target.value = ""; return; }
-
-    // Merge records — incoming overwrites any conflicts
-    Object.assign(SAVED_FULLNOTES, incoming);
-
-    // Also restore observation timestamps if the file includes them
-    if (payload.timestamps && typeof payload.timestamps === "object") {
-      Object.assign(SAVED_TIMES, payload.timestamps);
-    }
-
-    saveState();
-
-    // Refresh all rec-btn indicators without full table re-render
-    document.querySelectorAll(".rec-btn").forEach(btn => {
-      btn.classList.toggle("has-rec", !!SAVED_FULLNOTES[btn.dataset.id]);
-    });
-
-    alert(`AL Records imported — ${incomingKeys.length} record${incomingKeys.length !== 1 ? "s" : ""} loaded.`);
-    e.target.value = "";
-  };
-  reader.readAsText(file);
-});
-
-/* ── SESSION SETUP ──────────────────────────────────────────────── */
-const SESSION_FIELDS = ["site","seeing","transparency","limitMag","scope","aperture","eyepiece","mag"];
-let SESSION = {};
-
-function loadSession() {
-  try {
-    const s = localStorage.getItem("mm_session");
-    if (s) SESSION = JSON.parse(s);
-  } catch(e) {}
-}
-
-function saveSession() {
-  try { localStorage.setItem("mm_session", JSON.stringify(SESSION)); } catch(e) {}
-}
-
-function sessionIsActive() {
-  return SESSION_FIELDS.some(k => SESSION[k] && String(SESSION[k]).trim());
-}
-
-function updateSessionIndicator() {
-  document.getElementById("sessionIndicator")
-    .classList.toggle("active", sessionIsActive());
-}
-
-function openSessionModal() {
-  document.getElementById("sessSite").value         = SESSION.site         || "";
-  document.getElementById("sessSeeing").value       = SESSION.seeing       || "";
-  document.getElementById("sessTransparency").value = SESSION.transparency || "";
-  document.getElementById("sessLimitMag").value     = SESSION.limitMag     || "";
-  document.getElementById("sessScope").value        = SESSION.scope        || "";
-  document.getElementById("sessAperture").value     = SESSION.aperture     || "";
-  document.getElementById("sessEyepiece").value     = SESSION.eyepiece     || "";
-  document.getElementById("sessMag").value          = SESSION.mag          || "";
-
-  const coordEl = document.getElementById("sessCoords");
-  const statEl  = document.getElementById("sessGeoStatus");
-  if (SESSION.lat && SESSION.lon) {
-    coordEl.textContent = `${SESSION.lat.toFixed(5)}°, ${SESSION.lon.toFixed(5)}°`;
-    statEl.textContent  = "Location previously obtained from device.";
-    statEl.className    = "sess-geo-status ok";
-  } else {
-    coordEl.textContent = "";
-    statEl.textContent  = "";
-    statEl.className    = "sess-geo-status";
-  }
-
-  document.getElementById("sessOverlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-}
-
-function closeSessionModal() {
-  document.getElementById("sessOverlay").classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-function saveSessionModal() {
-  SESSION = {
-    site:         document.getElementById("sessSite").value.trim(),
-    seeing:       document.getElementById("sessSeeing").value,
-    transparency: document.getElementById("sessTransparency").value,
-    limitMag:     document.getElementById("sessLimitMag").value.trim(),
-    scope:        document.getElementById("sessScope").value.trim(),
-    aperture:     document.getElementById("sessAperture").value.trim(),
-    eyepiece:     document.getElementById("sessEyepiece").value.trim(),
-    mag:          document.getElementById("sessMag").value.trim(),
-    lat: SESSION.lat || null,
-    lon: SESSION.lon || null,
-  };
-  saveSession();
-  updateSessionIndicator();
-  closeSessionModal();
-}
-
-document.getElementById("sessGeoBtn").addEventListener("click", function () {
-  const btn     = this;
-  const statEl  = document.getElementById("sessGeoStatus");
-  const coordEl = document.getElementById("sessCoords");
-  const siteEl  = document.getElementById("sessSite");
-
-  if (!navigator.geolocation) {
-    statEl.textContent = "Geolocation is not supported by this browser.";
-    statEl.className   = "sess-geo-status err";
-    return;
-  }
-
-  btn.disabled        = true;
-  statEl.textContent  = "Requesting location…";
-  statEl.className    = "sess-geo-status";
-  coordEl.textContent = "";
-
-  navigator.geolocation.getCurrentPosition(
-    function (pos) {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
-      SESSION.lat = lat;
-      SESSION.lon = lon;
-      coordEl.textContent = `${lat.toFixed(5)}°, ${lon.toFixed(5)}°`;
-      statEl.textContent  = "Got coordinates — looking up place name…";
-      statEl.className    = "sess-geo-status ok";
-
-      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
-        .then(r => r.json())
-        .then(data => {
-          const addr  = data.address || {};
-          const parts = [
-            addr.city || addr.town || addr.village || addr.hamlet || addr.county,
-            addr.state,
-            addr.country_code ? addr.country_code.toUpperCase() : null
-          ].filter(Boolean);
-          const placeName = parts.join(", ");
-          if (placeName && !siteEl.value) siteEl.value = placeName;
-          statEl.textContent = placeName
-            ? `Location found: ${placeName}`
-            : "Coordinates obtained — place name lookup returned no result.";
-          btn.disabled = false;
-        })
-        .catch(() => {
-          statEl.textContent = "Coordinates obtained. Place name lookup failed (no network?).";
-          statEl.className   = "sess-geo-status err";
-          btn.disabled = false;
-        });
-    },
-    function (err) {
-      const msgs = {
-        1: "Permission denied — allow location access in your browser settings.",
-        2: "Position unavailable — device could not determine location.",
-        3: "Timed out waiting for location."
-      };
-      statEl.textContent = msgs[err.code] || "Could not get location.";
-      statEl.className   = "sess-geo-status err";
-      btn.disabled = false;
-    },
-    { timeout: 12000, maximumAge: 60000 }
-  );
-});
-
-document.getElementById("menuSession").addEventListener("click", function () {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-  openSessionModal();
-});
-document.getElementById("sessClose").addEventListener("click",     closeSessionModal);
-document.getElementById("sessCancelBtn").addEventListener("click", closeSessionModal);
-document.getElementById("sessSaveBtn").addEventListener("click",   saveSessionModal);
-document.getElementById("sessOverlay").addEventListener("click", function(e) {
-  if (e.target === this) closeSessionModal();
-});
-document.getElementById("sessClearBtn").addEventListener("click", function () {
-  if (!confirm("Clear all session defaults?\n\nThis will not affect any saved observation records.")) return;
-  SESSION = {};
-  saveSession();
-  updateSessionIndicator();
-  closeSessionModal();
-});
-
-const logMenuBtn      = document.getElementById("btnLogMenu");
-const logMenuDropdown = document.getElementById("logMenuDropdown");
-
-logMenuBtn.addEventListener("click", function(e) {
-  e.stopPropagation();
-  const isOpen = logMenuDropdown.classList.toggle("open");
-  logMenuBtn.classList.toggle("open", isOpen);
-});
-
-// Close when clicking anywhere outside
-document.addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-});
-logMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
-
-document.getElementById("menuPrint").addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-  window.print();
-});
-
-/* ── RESET ──────────────────────────────────────────────────────── */
-document.getElementById("menuReset").addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-
-  const done = Object.values(SAVED_CHECKS).filter(Boolean).length;
-  const noted = Object.values(SAVED_NOTES).filter(v => v && v.trim()).length;
-
-  let msg = "Reset all observation data?\n\n";
-  if (done > 0)  msg += `  • ${done} object${done  > 1 ? "s" : ""} marked observed\n`;
-  if (noted > 0) msg += `  • ${noted} field note${noted > 1 ? "s" : ""}\n`;
-  if (done === 0 && noted === 0) msg += "  (no data currently recorded)\n";
-  msg += "\nThis cannot be undone.";
-
-  if (!confirm(msg)) return;
-
-  // Clear all data
-  Object.keys(SAVED_CHECKS).forEach(k    => delete SAVED_CHECKS[k]);
-  Object.keys(SAVED_NOTES).forEach(k     => delete SAVED_NOTES[k]);
-  Object.keys(SAVED_TIMES).forEach(k     => delete SAVED_TIMES[k]);
-  Object.keys(SAVED_FULLNOTES).forEach(k => delete SAVED_FULLNOTES[k]);
-  try {
-    localStorage.removeItem("mm_checks");
-    localStorage.removeItem("mm_notes");
-    localStorage.removeItem("mm_times");
-    localStorage.removeItem("mm_fullnotes");
-  } catch(e) {}
-
-  renderTable();
-  updateProgress();
-  applyFilter();
-});
-
-/* THEME */
-const html = document.documentElement;
-const toggleEl = document.getElementById("themeToggle");
-const labelEl  = document.getElementById("toggleLabel");
-function setTheme(t) {
-  html.setAttribute("data-theme", t);
-  labelEl.textContent = t === "dark" ? "Night" : "Day";
-  try { localStorage.setItem("mm_theme", t); } catch(e) {}
-}
-toggleEl.addEventListener("click", () =>
-  setTheme(html.getAttribute("data-theme") === "dark" ? "light" : "dark")
-);
-toggleEl.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") toggleEl.click(); });
-
-/* INIT */
-loadState();
-loadSession();
-try { const t = localStorage.getItem("mm_theme"); if (t) setTheme(t); } catch(e) {}
-renderTable();
-updateProgress();
-updateSessionIndicator();
-/* ══════════════════════════════════════════════════════════════════
-   QUICK START GUIDE
-═══════════════════════════════════════════════════════════════════ */
-(function () {
-  const VISITED_KEY = "mm_visited";
-  const overlay    = document.getElementById("qsOverlay");
-  const dismissBtn = document.getElementById("qsDismissBtn");
-  const dontShow   = document.getElementById("qsDontShow");
-
-  // The Quick Start is always shown in Day (light) mode so it's
-  // easy to read as a first-time welcome screen. We record the
-  // user's current theme and restore it on dismiss.
-  let themeBeforeQS = null;
-
-  function openQS() {
-    themeBeforeQS = document.documentElement.getAttribute("data-theme") || "dark";
-    setTheme("light");   // force readable day mode for the guide
-    overlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeQS() {
-    if (dontShow.checked) {
-      try { localStorage.setItem(VISITED_KEY, "1"); } catch(e) {}
-    }
-    overlay.classList.remove("open");
-    document.body.style.overflow = "";
-    // Restore the theme that was active before the guide opened
-    if (themeBeforeQS) setTheme(themeBeforeQS);
-  }
-
-  dismissBtn.addEventListener("click", closeQS);
-  overlay.addEventListener("click", function(e) {
-    if (e.target === this) closeQS();
-  });
-  document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape" && overlay.classList.contains("open")) closeQS();
-  });
-
-  // Show on first visit: none of the data keys and no visited flag
-  function isFirstVisit() {
-    try {
-      if (localStorage.getItem(VISITED_KEY)) return false;
-      const dataKeys = ["mm_checks","mm_notes","mm_times","mm_fullnotes"];
-      return dataKeys.every(k => !localStorage.getItem(k));
-    } catch(e) { return false; }
-  }
-
-  if (isFirstVisit()) openQS();
-})();
-
-/* ══════════════════════════════════════════════════════════════════
-   AL REPORT PDF GENERATOR  (jsPDF + autotable)
-═══════════════════════════════════════════════════════════════════ */
-(function () {
-
-  // ── Colour palette (matches Python script) ──────────────────────
-  const C = {
-    darkBg:   [26,  10,  0],
-    maroon:   [139, 42,  16],
-    redMid:   [192, 64,  42],
-    redLight: [232, 96,  74],
-    cream:    [250, 244, 236],
-    ruleLine: [200, 160, 112],
-    lightBand:[240, 228, 208],
-    midBand:  [224, 205, 176],
-    textDark: [26,  15,  8],
-    textMeta: [106, 74,  48],
-    white:    [255, 255, 255],
-  };
-
-  // ── Seeing / transparency labels ────────────────────────────────
-  const SEEING = { "1":"I – Perfect","2":"II – Slight undulations",
-    "3":"III – Moderate","4":"IV – Poor","5":"V – Very bad" };
-  const TRANS  = { "5":"5 – Excellent","4":"4 – Good",
-    "3":"3 – Average","2":"2 – Poor","1":"1 – Very poor" };
-
-  // ── Build catalog lookup from DATA array ────────────────────────
-  function buildCatalog() {
-    const map = {};
-    const typeMap = {
-      "Spiral Gal":    "Spiral Galaxy",
-      "Elliptical Gal":"Elliptical Galaxy",
-      "Lenticular Gal":"Lenticular Galaxy",
-      "Irregular Gal": "Irregular Galaxy",
-      "Open Cluster":  "Open Cluster",
-      "Globular Clust":"Globular Cluster",
-      "Diffuse Neb":   "Diffuse Nebula",
-      "Planetary Neb": "Planetary Nebula",
-      "Supernova Rem": "Supernova Remnant",
-      "Star Cloud":    "Star Cloud",
-      "Double Star":   "Double Star",
-      "Asterism":      "Asterism",
-    };
-    DATA.forEach(function(row) {
-      const id = row[1].replace(/\s/g,"");
-      map[id] = {
-        order: row[0],
-        type:  typeMap[row[2]] || row[2],
-        con:   row[3],
-        mag:   row[4],
-        ra:    row[5],
-        dec:   row[6],
-        psa:   row[7],
-      };
-    });
-    return map;
-  }
-
-  // ── Date formatting ─────────────────────────────────────────────
-  function fmtDate(d) {
-    if (!d) return "";
-    try {
-      const p = d.split("-");
-      const dt = new Date(+p[0], +p[1]-1, +p[2]);
-      return dt.toLocaleDateString("en-US", {year:"numeric",month:"long",day:"numeric"});
-    } catch(e) { return d; }
-  }
-
-  function dateRange(records) {
-    const dates = [];
-    Object.values(records).forEach(function(r) {
-      if (r.date) try { dates.push(new Date(r.date)); } catch(e){}
-    });
-    if (!dates.length) return "";
-    const mn = new Date(Math.min.apply(null,dates));
-    const mx = new Date(Math.max.apply(null,dates));
-    const fmt = function(d) { return d.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}); };
-    return mn.toDateString()===mx.toDateString() ? fmt(mn) : fmt(mn)+" — "+fmt(mx);
-  }
-
-  // ── PDF helpers ─────────────────────────────────────────────────
-  function rgb(arr) { return { r:arr[0], g:arr[1], b:arr[2] }; }
-
-  function headerBand(doc, observerName) {
-    const pw = doc.internal.pageSize.getWidth();
-    const ph = doc.internal.pageSize.getHeight();
-    doc.setFillColor(...C.darkBg);
-    doc.rect(0, 0, pw, 11, "F");
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(8);
-    doc.setTextColor(...C.white);
-    doc.text("Astronomical League — Messier Club Observation Record", 15, 7);
-    if (observerName) {
-      doc.setFont("helvetica","normal");
-      doc.text(observerName, pw - 15, 7, {align:"right"});
-    }
-  }
-
-  function footerLine(doc) {
-    const pw = doc.internal.pageSize.getWidth();
-    const ph = doc.internal.pageSize.getHeight();
-    doc.setDrawColor(...C.ruleLine);
-    doc.setLineWidth(0.3);
-    doc.line(15, ph - 12, pw - 15, ph - 12);
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(7);
-    doc.setTextColor(...C.textMeta);
-    const now = new Date().toISOString().slice(0,10);
-    doc.text(
-      "Page " + doc.internal.getNumberOfPages() + "  ·  Generated " + now,
-      pw / 2, ph - 7, {align:"center"}
-    );
-  }
-
-  function addPage(doc, observerName) {
-    doc.addPage();
-    headerBand(doc, observerName);
-    footerLine(doc);
-  }
-
-  // ── Cover page ──────────────────────────────────────────────────
-  function buildCover(doc, observerName, subtitle, records) {
-    const pw = doc.internal.pageSize.getWidth();
-    const ph = doc.internal.pageSize.getHeight();
-
-    // Dark top band
-    doc.setFillColor(...C.darkBg);
-    doc.rect(0, 0, pw, 42, "F");
-    doc.setFillColor(...C.maroon);
-    doc.rect(0, 42, pw, 2.5, "F");
-
-    // Title block
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(10);
-    doc.setTextColor(...C.ruleLine);
-    doc.text("MESSIER CLUB", pw/2, 18, {align:"center"});
-    doc.setFontSize(22);
-    doc.setTextColor(...C.white);
-    doc.text("Observation Record", pw/2, 31, {align:"center"});
-
-    // Subtitle / observer
-    let y = 60;
-    if (observerName) {
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(13);
-      doc.setTextColor(...C.textDark);
-      doc.text(observerName, pw/2, y, {align:"center"});
-      y += 8;
-    }
-    if (subtitle) {
-      doc.setFont("helvetica","italic");
-      doc.setFontSize(10);
-      doc.setTextColor(...C.textMeta);
-      doc.text(subtitle, pw/2, y, {align:"center"});
-      y += 8;
-    }
-
-    // Divider
-    doc.setDrawColor(...C.ruleLine);
-    doc.setLineWidth(0.5);
-    doc.line(pw*0.2, y+2, pw*0.8, y+2);
-    y += 12;
-
-    // Stats table
-    const nRec = Object.keys(records).length;
-    const nDesc = Object.values(records).filter(r => r.description && r.description.trim()).length;
-    const dr = dateRange(records);
-    const rows = [
-      ["Objects with full records", String(nRec)],
-      ["Objects with descriptions", String(nDesc)],
-    ];
-    if (dr) rows.push(["Observation dates", dr]);
-    rows.push(["Generated", new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})]);
-    rows.push(["Submitted for", "AL Messier Club Observing Certificate"]);
-
-    doc.autoTable({
-      startY: y,
-      body: rows,
-      theme: "plain",
-      margin: {left: pw*0.15, right: pw*0.15},
-      styles: { fontSize:9, cellPadding:3 },
-      columnStyles: {
-        0: { textColor: C.textMeta, fontStyle:"bold", cellWidth: 68 },
-        1: { textColor: C.textDark },
-      },
-      alternateRowStyles: { fillColor: C.cream },
-    });
-
-    // Bottom band
-    doc.setFillColor(...C.darkBg);
-    doc.rect(0, ph-14, pw, 14, "F");
-    doc.setFillColor(...C.maroon);
-    doc.rect(0, ph-14, pw, 1.5, "F");
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(7);
-    doc.setTextColor(...C.ruleLine);
-    doc.text("astronomicalleague.net", pw/2, ph-5, {align:"center"});
-  }
-
-  // ── Index table ─────────────────────────────────────────────────
-  function buildIndex(doc, records, catalog, observerName) {
-    addPage(doc, observerName);
-    const pw = doc.internal.pageSize.getWidth();
-
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(14);
-    doc.setTextColor(...C.textDark);
-    doc.text("Observation Index", pw/2, 22, {align:"center"});
-    doc.setDrawColor(...C.ruleLine);
-    doc.setLineWidth(0.4);
-    doc.line(15, 25, pw-15, 25);
-
-    // Sort by Messier number
-    const sorted = Object.keys(records).sort(function(a,b) {
-      return (parseInt(a.slice(1))||999) - (parseInt(b.slice(1))||999);
-    });
-
-    const rows = sorted.map(function(id) {
-      const rec = records[id];
-      const cat = catalog[id] || {};
-      const scope = rec.scope || "";
-      const apt   = rec.aperture ? scope + (scope?" / ":"") + rec.aperture+"mm" : scope;
-      return [
-        id,
-        cat.type || "—",
-        cat.con  || "—",
-        fmtDate(rec.date) || "—",
-        rec.site ? rec.site.substring(0,28)+(rec.site.length>28?"…":"") : "—",
-        SEEING[rec.seeing] ? rec.seeing : (rec.seeing||"—"),
-        rec.transparency || "—",
-        rec.limitMag || "—",
-        apt.substring(0,30)+(apt.length>30?"…":"") || "—",
-      ];
-    });
-
-    doc.autoTable({
-      startY: 29,
-      head: [["Object","Type","Con.","Date","Site","See.","Trans.","Lim.","Scope / Aperture"]],
-      body: rows,
-      theme: "grid",
-      headStyles: {
-        fillColor: C.midBand,
-        textColor: C.textDark,
-        fontStyle: "bold",
-        fontSize: 7,
-        cellPadding: 2.5,
-      },
-      styles: { fontSize:7, cellPadding:2, textColor:C.textDark },
-      alternateRowStyles: { fillColor: C.lightBand },
-      columnStyles: {
-        0: { fontStyle:"bold", cellWidth:14 },
-        1: { cellWidth:28 },
-        2: { cellWidth:14 },
-        3: { cellWidth:28 },
-        4: { cellWidth:30 },
-        5: { cellWidth:10, halign:"center" },
-        6: { cellWidth:11, halign:"center" },
-        7: { cellWidth:11, halign:"center" },
-        8: { cellWidth:"auto" },
-      },
-      margin: {top:29, left:15, right:15},
-      didDrawPage: function(data) {
-        headerBand(doc, observerName);
-        footerLine(doc);
-      },
-    });
-  }
-
-  // ── Individual record pages ──────────────────────────────────────
-  function buildRecord(doc, id, rec, cat, observerName) {
-    addPage(doc, observerName);
-    const pw = doc.internal.pageSize.getWidth();
-    let y = 18;
-
-    // Object heading band
-    doc.setFillColor(...C.lightBand);
-    doc.rect(0, y-1, pw, 13, "F");
-    doc.setFillColor(...C.maroon);
-    doc.rect(0, y+12, pw, 0.8, "F");
-
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(16);
-    doc.setTextColor(...C.darkBg);
-    doc.text(id, 15, y+9);
-
-    const typeStr = (cat.type||"") + "  ·  " + (cat.con||"") + "  ·  Mag " + (cat.mag||"—");
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(8);
-    doc.setTextColor(...C.redMid);
-    doc.text(typeStr, 36, y+6);
-
-    if (cat.order) {
-      doc.setFont("helvetica","italic");
-      doc.setFontSize(7.5);
-      doc.text("Marathon #" + cat.order, pw-15, y+9, {align:"right"});
-    }
-    y += 18;
-
-    // ── Section helper ───────────────────────────────────────────
-    function section(title) {
-      doc.setFont("helvetica","bold");
-      doc.setFontSize(7.5);
-      doc.setTextColor(...C.maroon);
-      const tw = doc.getTextWidth(title.toUpperCase());
-      doc.text(title.toUpperCase(), 15, y);
-      doc.setDrawColor(...C.ruleLine);
-      doc.setLineWidth(0.3);
-      doc.line(15 + tw + 3, y-0.5, pw-15, y-0.5);
-      y += 5;
-    }
-
-    // ── Field row helper ─────────────────────────────────────────
-    function fieldRow(pairs) {
-      // pairs: [[label, value], ...]  up to 4 across
-      const colW = (pw - 30) / pairs.length;
-      pairs.forEach(function(pair, i) {
-        const x = 15 + i * colW;
-        doc.setFont("helvetica","bold");
-        doc.setFontSize(7);
-        doc.setTextColor(...C.textMeta);
-        doc.text(pair[0], x, y);
-        doc.setFont("helvetica","normal");
-        doc.setFontSize(8.5);
-        doc.setTextColor(...C.textDark);
-        const val = String(pair[1]||"—");
-        const maxW = colW - 4;
-        const lines = doc.splitTextToSize(val, maxW);
-        doc.text(lines[0], x, y+5);
+  resize();
+  window.addEventListener('resize', () => { resize(); drawStars(); });
+
+  const stars = [];
+  function generateStars(n) {
+    stars.length = 0;
+    for (let i = 0; i < n; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random() * 0.7 + 0.3,
+        speed: Math.random() * 3000 + 2000,
+        offset: Math.random() * Math.PI * 2
       });
-      y += 12;
     }
-
-    // ── When & Where ─────────────────────────────────────────────
-    section("When & Where");
-    const dateStr = fmtDate(rec.date);
-    const timeStr = rec.time || "";
-    const whenStr = [dateStr, timeStr].filter(Boolean).join(" at ") || "—";
-    fieldRow([["Date / Time", whenStr], ["RA (J2000)", cat.ra||"—"], ["Dec (J2000)", cat.dec||"—"]]);
-    fieldRow([["Observing Site", rec.site||"—"], ["PSA Page", cat.psa||"—"], ["Magnitude", cat.mag||"—"]]);
-    y += 2;
-
-    // ── Sky Conditions ───────────────────────────────────────────
-    section("Sky Conditions");
-    fieldRow([
-      ["Seeing (Antoniadi)", SEEING[rec.seeing]||rec.seeing||"—"],
-      ["Transparency",       TRANS[rec.transparency]||rec.transparency||"—"],
-      ["Limiting Magnitude", rec.limitMag||"—"],
-    ]);
-    y += 2;
-
-    // ── Equipment ────────────────────────────────────────────────
-    section("Equipment");
-    fieldRow([["Telescope / Instrument", rec.scope||"—"], ["Aperture (mm)", rec.aperture||"—"]]);
-    fieldRow([["Eyepiece", rec.eyepiece||"—"], ["Magnification", rec.mag||"—"]]);
-    y += 2;
-
-    // ── Description ──────────────────────────────────────────────
-    section("Observation Description");
-    const desc = (rec.description || "").trim() || "(No description recorded)";
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(9);
-    doc.setTextColor(...C.textDark);
-    const descLines = doc.splitTextToSize(desc, pw - 30);
-    doc.text(descLines, 15, y);
-    y += descLines.length * 4.5 + 4;
-
-    // ── Sketch Notes ─────────────────────────────────────────────
-    if (rec.sketch && rec.sketch.trim()) {
-      section("Sketch Notes");
-      doc.setFont("helvetica","italic");
-      doc.setFontSize(8.5);
-      doc.setTextColor(...C.textMeta);
-      const skLines = doc.splitTextToSize(rec.sketch.trim(), pw - 30);
-      doc.text(skLines, 15, y);
-    }
-
-    // Bottom rule
-    const ph = doc.internal.pageSize.getHeight();
-    doc.setDrawColor(...C.ruleLine);
-    doc.setLineWidth(0.3);
-    doc.line(15, ph - 20, pw - 15, ph - 20);
   }
 
-  // ── Main generate function ────────────────────────────────────
-  function generateReport(observerName, subtitle) {
-    const statusEl = document.getElementById("rptStatus");
-
-    // Check jsPDF loaded
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-      statusEl.textContent = "Error: PDF library not loaded. Check your internet connection and reload the page.";
-      statusEl.className = "rpt-status err";
-      return;
-    }
-
-    const records = SAVED_FULLNOTES;
-    const nRec = Object.keys(records).length;
-
-    if (nRec === 0) {
-      statusEl.textContent = "No full AL records found. Fill in at least one record using the ✎ button.";
-      statusEl.className = "rpt-status err";
-      return;
-    }
-
-    statusEl.textContent = "Generating…";
-    statusEl.className = "rpt-status";
-
-    // Small delay so the browser renders the status message before the heavy work
-    setTimeout(function() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation:"portrait", unit:"mm", format:"letter" });
-        const catalog = buildCatalog();
-
-        // Cover
-        buildCover(doc, observerName, subtitle, records);
-        footerLine(doc);
-
-        // Index
-        buildIndex(doc, records, catalog, observerName);
-
-        // Individual records sorted by M number
-        const sorted = Object.keys(records).sort(function(a,b) {
-          return (parseInt(a.slice(1))||999) - (parseInt(b.slice(1))||999);
-        });
-        sorted.forEach(function(id) {
-          buildRecord(doc, id, records[id], catalog[id]||{}, observerName);
-        });
-
-        // Save
-        const now = new Date();
-        const pad = function(n){ return String(n).padStart(2,"0"); };
-        const stamp = now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate())
-                    + "-"+pad(now.getHours())+pad(now.getMinutes())+pad(now.getSeconds());
-        doc.save(stamp + "-al-report.pdf");
-
-        statusEl.textContent = "✓  PDF saved — " + nRec + " record" + (nRec!==1?"s":"") + " included.";
-        statusEl.className = "rpt-status";
-      } catch(err) {
-        statusEl.textContent = "Error generating PDF: " + err.message;
-        statusEl.className = "rpt-status err";
-        console.error(err);
-      }
-    }, 80);
+  function drawStars(t = 0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const pulse = 0.5 + 0.5 * Math.sin((t / s.speed) + s.offset);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha * (0.5 + 0.5 * pulse)})`;
+      ctx.fill();
+    });
   }
 
-  // ── Report modal wiring ──────────────────────────────────────
-  const rptOverlay = document.getElementById("rptOverlay");
+  generateStars(320);
 
-  function openReportModal() {
-    // Pre-fill observer from session if available
-    const obsEl = document.getElementById("rptObserver");
-    if (!obsEl.value && SESSION && SESSION.site) {
-      document.getElementById("rptSubtitle").value = SESSION.site;
-    }
-    document.getElementById("rptStatus").textContent = "";
-    document.getElementById("rptStatus").className = "rpt-status";
-    rptOverlay.classList.add("open");
-    document.body.style.overflow = "hidden";
-    obsEl.focus();
+  let lastT = 0;
+  function loop(t) {
+    drawStars(t);
+    requestAnimationFrame(loop);
   }
-
-  function closeReportModal() {
-    rptOverlay.classList.remove("open");
-    document.body.style.overflow = "";
-  }
-
-  document.getElementById("menuGenerateReport").addEventListener("click", function() {
-    logMenuDropdown.classList.remove("open");
-    logMenuBtn.classList.remove("open");
-    openReportModal();
-  });
-  document.getElementById("rptClose").addEventListener("click", closeReportModal);
-  document.getElementById("rptCancelBtn").addEventListener("click", closeReportModal);
-  rptOverlay.addEventListener("click", function(e) { if (e.target===this) closeReportModal(); });
-  document.getElementById("rptGenerateBtn").addEventListener("click", function() {
-    const observer = document.getElementById("rptObserver").value.trim();
-    const subtitle = document.getElementById("rptSubtitle").value.trim();
-    generateReport(observer, subtitle);
-  });
-
-})();
-
+  requestAnimationFrame(loop);
 </script>
 </body>
 </html>
