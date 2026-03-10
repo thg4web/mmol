@@ -162,9 +162,6 @@ body::before {
 
 /* ════════ THEME TOGGLE (full-page version) ════════ */
 .theme-toggle-wrap {
-  position: absolute;
-  top: 0;
-  right: 0;
   display: flex;
   align-items: center;
   gap: 8px;

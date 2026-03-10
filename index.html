@@ -1362,9 +1362,48 @@ tr.checked td.col-m-val a.m-link {
   .progress-count { color: #800; }
 }
 
+/* ════════ TOP RIGHT CONTROLS ════════ */
+.top-right-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 200;
+}
+.theme-toggle-wrap {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dots-menu-wrap {
+  position: relative;
+}
+.dots-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--text-sub);
+  padding: 2px 6px;
+  opacity: .55;
+  transition: opacity .2s;
+  letter-spacing: 0;
+}
+.dots-menu-btn:hover,
+.dots-menu-btn.open { opacity: 1; }
+.dots-menu-dropdown {
+  right: 0;
+  left: auto;
+  min-width: 220px;
+}
+
 @media (max-width: 700px) {
+  .top-right-controls { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; }
   .footer { flex-direction: column; align-items: flex-start; }
-  .theme-toggle-wrap { position: static; margin-bottom: 14px; }
 }
 
 /* ════════ TOP NAV MENU ════════ */
@@ -1448,12 +1487,58 @@ tr.checked td.col-m-val a.m-link {
     </div>
   </div>
 
-  <!-- THEME TOGGLE -->
-  <div class="theme-toggle-wrap">
-    <span class="theme-icon moon">🌙</span>
-    <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
-    <span class="theme-icon sun">☀</span>
-    <span class="toggle-label" id="toggleLabel">Night</span>
+  <!-- TOP RIGHT CONTROLS (theme toggle + three-dot menu) -->
+  <div class="top-right-controls">
+
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle-wrap">
+      <span class="theme-icon moon">🌙</span>
+      <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
+      <span class="theme-icon sun">☀</span>
+      <span class="toggle-label" id="toggleLabel">Night</span>
+    </div>
+
+    <!-- THREE-DOT MENU -->
+    <div class="dots-menu-wrap">
+      <button class="dots-menu-btn" id="dotsMenuBtn" aria-label="More options">&#8942;</button>
+      <div class="dots-menu-dropdown log-menu-dropdown" id="dotsMenuDropdown">
+        <button class="log-menu-item" id="dotsMenuPrint">
+          <span class="log-menu-icon">⎙</span> Print
+        </button>
+        <button class="log-menu-item" id="dotsMenuExport">
+          <span class="log-menu-icon">⬇</span> Export CSV
+        </button>
+        <label class="log-menu-item" for="btnImportFile">
+          <span class="log-menu-icon">⬆</span> Import CSV
+        </label>
+        <hr class="log-menu-divider">
+        <button class="log-menu-item" id="dotsMenuExportAL">
+          <span class="log-menu-icon">⬇</span> Export AL Records
+        </button>
+        <label class="log-menu-item" for="btnImportALFile">
+          <span class="log-menu-icon">⬆</span> Import AL Records
+        </label>
+        <button class="log-menu-item" id="dotsMenuReport">
+          <span class="log-menu-icon">📄</span> Generate AL Report…
+        </button>
+        <hr class="log-menu-divider">
+        <button class="log-menu-item" id="dotsMenuSession">
+          <span class="log-menu-icon">⚙</span> Session Setup…
+        </button>
+        <hr class="log-menu-divider">
+        <a href="https://github.com/thg4web/mmol" target="_blank" rel="noopener" class="log-menu-item">
+          <span class="log-menu-icon">⌂</span> Project Home
+        </a>
+        <a href="about.html" class="log-menu-item">
+          <span class="log-menu-icon">◎</span> About
+        </a>
+        <hr class="log-menu-divider">
+        <button class="log-menu-item danger" id="dotsMenuReset">
+          <span class="log-menu-icon">↺</span> Reset All Data…
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <!-- HEADER -->
@@ -3392,7 +3477,30 @@ document.getElementById("sessClearBtn").addEventListener("click", function () {
 const logMenuBtn      = document.getElementById("btnLogMenu");
 const logMenuDropdown = document.getElementById("logMenuDropdown");
 
-// ── Top nav menu ──────────────────────────────────────────────────────────────
+// ── Three-dot menu ────────────────────────────────────────────────────────────
+const dotsMenuBtn      = document.getElementById("dotsMenuBtn");
+const dotsMenuDropdown = document.getElementById("dotsMenuDropdown");
+
+dotsMenuBtn.addEventListener("click", function(e) {
+  e.stopPropagation();
+  const isOpen = dotsMenuDropdown.classList.toggle("open");
+  dotsMenuBtn.classList.toggle("open", isOpen);
+  logMenuDropdown.classList.remove("open");
+  logMenuBtn.classList.remove("open");
+  navMenuDropdown.classList.remove("open");
+  navMenuBtn.classList.remove("open");
+});
+dotsMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
+
+// Wire dots menu items to existing Log menu handlers
+document.getElementById("dotsMenuPrint")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuPrint").click(); });
+document.getElementById("dotsMenuExport")  .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExport").click(); });
+document.getElementById("dotsMenuExportAL").addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExportAL").click(); });
+document.getElementById("dotsMenuReport")  .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateReport").click(); });
+document.getElementById("dotsMenuSession") .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuSession").click(); });
+document.getElementById("dotsMenuReset")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuReset").click(); });
+
+
 const navMenuBtn      = document.getElementById("navMenuBtn");
 const navMenuDropdown = document.getElementById("navMenuDropdown");
 
@@ -3415,12 +3523,14 @@ logMenuBtn.addEventListener("click", function(e) {
   navMenuBtn.classList.remove("open");
 });
 
-// Close both menus when clicking anywhere outside
+// Close all menus when clicking anywhere outside
 document.addEventListener("click", function() {
   logMenuDropdown.classList.remove("open");
   logMenuBtn.classList.remove("open");
   navMenuDropdown.classList.remove("open");
   navMenuBtn.classList.remove("open");
+  dotsMenuDropdown.classList.remove("open");
+  dotsMenuBtn.classList.remove("open");
 });
 logMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 

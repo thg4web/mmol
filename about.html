@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<script>
+// Apply saved theme immediately to prevent flash of wrong theme
+(function(){var t=localStorage.getItem('mm_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Messier Marathon Observer's Log</title>
+<style>
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Cinzel"; src: url("fonts/Cinzel-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Share Tech Mono"; src: url("fonts/ShareTechMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Crimson Pro"; src: url("fonts/CrimsonPro-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
+</style>
+<link rel="stylesheet" href="mm-shared.css">
+<style>
+
+.about-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: .14em;
+  color: var(--text-head);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .3s;
+}
+.about-intro {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--text-meta);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 640px;
+  transition: color .3s;
+}
+.about-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 36px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  transition: color .3s, border-color .3s;
+}
+.about-body {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text-meta);
+  max-width: 720px;
+  margin-bottom: 16px;
+  transition: color .3s;
+}
+.about-body strong { color: var(--text-sub); font-weight: 600; }
+.about-body a { color: var(--text-sub); text-underline-offset: 3px; transition: color .2s; }
+.about-body a:hover { color: var(--text-data); }
+
+.about-meta-table {
+  width: 100%;
+  max-width: 560px;
+  border-collapse: collapse;
+  margin-bottom: 28px;
+}
+.about-meta-table td {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  transition: color .3s, border-color .3s;
+}
+.about-meta-table td:first-child {
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  font-size: 9px;
+  width: 140px;
+  padding-right: 20px;
+}
+.about-meta-table td:last-child { color: var(--text-sub); }
+.about-meta-table tr:last-child td { border-bottom: none; }
+.about-meta-table a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--border3); transition: color .2s; }
+.about-meta-table a:hover { color: var(--text-data); }
+
+.page-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border2);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  transition: border-color .3s;
+}
+@media (max-width: 700px) { .page-footer { flex-direction: column; align-items: flex-start; } }
+
+
+
+/* ════════ HAMBURGER NAV MENU ════════ */
+.nav-menu-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+}
+.nav-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: .6;
+  transition: opacity .2s;
+}
+.nav-menu-btn:hover,
+.nav-menu-btn.open { opacity: 1; }
+.nav-menu-btn .bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-sub);
+  border-radius: 1px;
+  transition: background .3s, transform .2s, opacity .2s;
+}
+.nav-menu-btn.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-menu-btn.open .bar:nth-child(2) { opacity: 0; }
+.nav-menu-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-menu-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 180px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  padding: 4px 0;
+  z-index: 600;
+}
+.nav-menu-dropdown.open { display: block; }
+.nav-menu-link {
+  display: block;
+  padding: 10px 18px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color .15s, background .15s;
+}
+.nav-menu-link:last-child { border-bottom: none; }
+.nav-menu-link:hover { color: var(--text-data); background: var(--bg2); }
+
+</style>
+</head>
+<body>
+<div class="wrapper-prose">
+
+
+
+  <!-- HEADER -->
+
+  <!-- HAMBURGER NAV MENU -->
+  <div class="nav-menu-wrap">
+    <button class="nav-menu-btn" id="navMenuBtn" aria-label="Site navigation">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="nav-menu-dropdown" id="navMenuDropdown">
+      <a href="index.html" class="nav-menu-link">Log</a>
+      <a href="faq.html" class="nav-menu-link">FAQ</a>
+      <a href="resources.html" class="nav-menu-link">Resources</a>
+      <a href="docs/user-guide.html" class="nav-menu-link">User Guide</a>
+    </div>
+  </div>
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="site-title"><a href="index.html">Messier Marathon Observer's Log</a></div>
+      <div class="page-subtitle">About</div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" title="Toggle day/night mode">
+      <span class="theme-icon moon">🌙</span>
+      <div class="toggle-pill"></div>
+      <span class="theme-icon sun">☀</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <h1 class="about-heading">About This Project</h1>
+  <p class="about-intro">A free, self-contained observation log for the Messier catalog — built for the field, designed for the Astronomical League, and distributed as open-source software.</p>
+
+
+  <!-- PROJECT -->
+  <div class="about-section-title">The Project</div>
+
+  <p class="about-body">
+    The <strong>Messier Marathon Observer's Log</strong> is a browser-based tool created by <strong>Aaron Henderson</strong> for fellow amateur astronomers observing Charles Messier's catalog of 110 deep-sky objects. It requires no installation, no account, and no internet connection after the page has loaded once. All observation data is stored locally in the browser — nothing is ever sent to a server.
+  </p>
+  <p class="about-body">
+    The log is designed around two use cases: a <strong>casual Messier checklist</strong> for observers who want a fast, red-light-friendly way to tick objects off during a marathon night, and a <strong>full AL certificate record</strong> for observers pursuing the Astronomical League Messier Club observing award. Both use cases share the same interface — the AL record forms are simply available for those who need them.
+  </p>
+  <p class="about-body">
+    The project was developed with the <strong>Skies of the Roanoke Star Party (SRSP) 2026</strong> in mind, and was tested by field observers before its first public release.
+  </p>
+
+
+  <!-- FEATURES AT A GLANCE -->
+  <div class="about-section-title">Features at a Glance</div>
+
+  <p class="about-body">
+    <strong>Night vision mode</strong> — deep black background with red-spectrum text to preserve dark adaptation; toggles to a warm parchment day mode for planning indoors.<br>
+    <strong>110 objects in marathon order</strong> — west to east, beginning with objects that set first after dusk and ending with those that rise last before dawn.<br>
+    <strong>Full AL observation records</strong> — per-object forms capturing date, time, site, seeing, transparency, limiting magnitude, equipment, written description, and sketch notes.<br>
+    <strong>Session Setup</strong> — set location and equipment once per night; auto-fills every record opened during the session. GPS locate supported.<br>
+    <strong>In-browser PDF report</strong> — generates a formatted multi-page submission document with cover page, index, and one full page per record.<br>
+    <strong>CSV and JSON export/import</strong> — back up and restore all data; move between devices; share records with a club coordinator.<br>
+    <strong>Image lightbox</strong> — click any Messier number to see the object photo, full catalog data, local finder chart, and a link to Stellarium Web.<br>
+    <strong>Works offline</strong> — the full tool functions without network access after first load.
+  </p>
+
+
+  <!-- PROJECT INFO -->
+  <div class="about-section-title">Project Information</div>
+
+  <table class="about-meta-table">
+    <tr>
+      <td>Version</td>
+      <td>1.0 — SRSP 2026 Edition</td>
+    </tr>
+    <tr>
+      <td>Status</td>
+      <td>Active development — feedback welcome</td>
+    </tr>
+    <tr>
+      <td>Repository</td>
+      <td><a href="https://github.com/thg4web/mmol" target="_blank" rel="noopener">github.com/thg4web/mmol</a></td>
+    </tr>
+    <tr>
+      <td>License</td>
+      <td>MIT — free to use, share, and modify</td>
+    </tr>
+    <tr>
+      <td>AL Program</td>
+      <td><a href="https://www.astroleague.org/messier-observing-program/" target="_blank" rel="noopener">astroleague.org — Messier Observing Program</a></td>
+    </tr>
+    <tr>
+      <td>Sky Atlas Ref</td>
+      <td>Pocket Sky Atlas, Roger Sinnott (Sky &amp; Telescope)</td>
+    </tr>
+    <tr>
+      <td>Object Data</td>
+      <td><a href="http://www.messier.seds.org/" target="_blank" rel="noopener">SEDS Messier Database</a></td>
+    </tr>
+  </table>
+
+
+  <!-- ACKNOWLEDGEMENTS -->
+  <div class="about-section-title">Acknowledgements</div>
+
+  <p class="about-body">
+    Object photographs courtesy of the <a href="http://www.messier.seds.org/" target="_blank" rel="noopener">SEDS Messier Catalog</a> (downloaded separately).
+    Sky simulation links provided by <a href="https://stellarium-web.org" target="_blank" rel="noopener">Stellarium Web</a>.
+    Geolocation reverse-geocoding via <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap Nominatim</a>.
+    In-browser PDF generation via <a href="https://github.com/parallax/jsPDF" target="_blank" rel="noopener">jsPDF</a> and <a href="https://github.com/simonbengtsson/jsPDF-AutoTable" target="_blank" rel="noopener">jspdf-autotable</a>.
+    Typography: <a href="https://fonts.google.com/specimen/Cinzel" target="_blank" rel="noopener">Cinzel</a>, <a href="https://fonts.google.com/specimen/Share+Tech+Mono" target="_blank" rel="noopener">Share Tech Mono</a>, and <a href="https://fonts.google.com/specimen/Crimson+Pro" target="_blank" rel="noopener">Crimson Pro</a> via Google Fonts (self-hosted).
+  </p>
+  <p class="about-body">
+    Special thanks to the field testers who observed with early versions of this log and provided the feedback that shaped it into what it is today. Clear skies.
+  </p>
+  <p class="about-body">
+    Questions, feedback, or bug reports: <a href="/cdn-cgi/l/email-protection#3855555754784c505f565d4c4f574a534b165b5755">mmol [at] thgnetworks [dot] com</a>
+  </p>
+
+
+  <!-- FOOTER -->
+  <footer class="page-footer">
+    <div class="footer-note">
+      Messier Marathon Observer's Log — supporting the Astronomical League Messier Observing Program.
+    </div>
+    <div class="footer-sig">
+      <a href="index.html" class="nav-link">← Back to Log</a> &nbsp;·&nbsp;
+      <a href="faq.html" class="nav-link">FAQ</a> &nbsp;·&nbsp;
+      <a href="docs/user-guide.html" class="nav-link">User Guide</a> &nbsp;·&nbsp;
+      <a href="resources.html" class="nav-link">Resources</a>
+    </div>
+  </footer>
+
+</div><!-- /wrapper-prose -->
+
+<script>
+// ── Theme persistence ─────────────────────────────────────────────────────────
+const root   = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+const saved  = localStorage.getItem('mm_theme');
+if (saved) root.setAttribute('data-theme', saved);
+toggle.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('mm_theme', next);
+});
+
+// ── Hamburger nav menu ────────────────────────────────────────────────────────
+const navMenuBtn      = document.getElementById('navMenuBtn');
+const navMenuDropdown = document.getElementById('navMenuDropdown');
+navMenuBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  const isOpen = navMenuDropdown.classList.toggle('open');
+  navMenuBtn.classList.toggle('open', isOpen);
+});
+navMenuDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+document.addEventListener('click', function() {
+  navMenuDropdown.classList.remove('open');
+  navMenuBtn.classList.remove('open');
+});
+</script>
+</body>
+</html>
