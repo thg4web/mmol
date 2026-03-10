@@ -1,200 +1,165 @@
-# 🔭 Messier Marathon — Observer's Log
+# Messier Marathon Observer's Log
 
-A beautifully designed, fully self-contained observation log for the **Messier Marathon** and the **Astronomical League Messier Observing Program**. Built for the field — red night-vision mode, offline-capable, no install, no account, no server.
+A browser-based observation log for Charles Messier's catalog of 110 deep-sky objects, designed for the field, built around the Astronomical League Messier Club certificate, and distributed as open-source software.
 
-![Night Mode](https://img.shields.io/badge/Night%20Mode-Red%20Vision-cc3322?style=flat-square)
-![Objects](https://img.shields.io/badge/Objects-110%20Messier-gold?style=flat-square)
-![AL Program](https://img.shields.io/badge/AL-Messier%20Club-8844aa?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+**Live site:** [mmol.thgnetworks.com](https://mmol.thgnetworks.com)
 
 ---
 
-## Two Use Cases
+## What it is
 
-| Use Case | What you need | How it works |
-|----------|--------------|--------------|
-| **Casual Messier Checklist** | Just track what you've seen | Check objects off, add brief notes, export CSV when done |
-| **AL Messier Certificate** | Full records for award submission | Fill the ✎ form per object, use Session Setup to pre-fill equipment, generate a PDF report for your club coordinator |
+The log presents all 110 Messier objects in **marathon search order** (the Don Machholz sequence, west to east, objects that set first after dusk through objects that rise last before dawn). It serves two kinds of observers:
+
+- **Casual checklist** — tick objects as you observe them, add brief eyepiece notes, watch the progress bar. Export as CSV at any time.
+- **AL Messier Club certificate** — full per-object forms capturing every field required for the Astronomical League Messier Observing Program submission. Generate a formatted multi-page PDF report directly in the browser.
+
+Both use cases share the same interface.
 
 ---
 
 ## Features
 
-- **Red night-vision mode** — deep black background with full red-spectrum text to preserve dark adaptation; toggle to warm parchment day mode for planning indoors
-- **110 Messier objects** in optimal marathon search order, west to east
-- **Per-object checkboxes and field notes** — persisted in `localStorage` across sessions
-- **Automatic observation timestamp** — silently recorded when you check an object
-- **Progress bar** — live count of observed vs. total objects
-- **Filter and search** — filter by Galaxy / Open Cluster / Globular / Nebula / Unobserved; search by M#, type, or constellation
-- **Image lightbox** — click any M# to open the object photo, full data sidebar, local finder chart, and Stellarium Web link
-- **Full AL observation records** — per-object form (✎ button) with all AL-required fields; solid red icon when a record is saved
-- **Field Notes ↔ Description sync** — notes seed the AL description on open; description writes back to notes on save
-- **In-browser AL Report PDF** — generates a complete formatted submission PDF via the Log menu; no Python required
-- **Session Setup** — set location and equipment once per night; auto-fills every new record; includes GPS locate
-- **Quick Start Guide** — shown on first visit, explains the two use cases and links to the User Guide
-- **Log menu** — Print, Export CSV, Import CSV, Export AL Records (JSON), Import AL Records (JSON), Generate AL Report, Session Setup, Reset All Data
-- **Resources page** — curated links to databases, observing guides, marathon planners, and logbooks
+- **Night vision mode** — deep black background, red-spectrum text. All emoji icons automatically swap to short ASCII labels in night mode so no bright or coloured symbols appear at the eyepiece. Object photos in the lightbox are automatically red-filtered.
+- **110 objects in marathon order** — with a clickable toggle to numeric (M-number) order for cross-reference
+- **Angular size column** — apparent dimensions in arcminutes for every object
+- **Monospace type symbols** — each object type has a distinct ASCII symbol that reads clearly in red-only night mode (see [features.md](features.md) for the full symbol map)
+- **Image lightbox** — click any M-number for the object photo, full catalog data, finder chart link, and Stellarium Web link; images are red-filtered in night mode
+- **Session Setup** — set location (with optional GPS), sky conditions, and equipment once per night; values auto-fill every record opened during the session
+- **Full AL observation records** — date, time, site, seeing (Antoniadi scale), transparency, limiting magnitude, scope, eyepiece, description, and sketch notes
+- **AL Report PDF** — multi-page submission document (cover, index, one page per record) generated entirely in the browser, no internet required
+- **Themed confirmation dialogs** — all destructive actions use a custom modal that follows the current night/day theme, so no browser-native white dialog ever appears at the telescope
+- **CSV and JSON export / import** — back up and restore all data; move between devices; merge records without overwriting
+- **Works offline** — after first load, every core feature works without internet
+- **Best on laptop or tablet** — the table has 10+ columns and is designed for larger screens
+
+---
+
+## Telescope Requirements
+
+We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortable marathon experience. Most objects are within theoretical reach of a 4-inch (101 mm) telescope under extremely good conditions, but the fainter Virgo cluster galaxies and small planetary nebulae will be difficult or invisible at smaller apertures. More aperture makes the night considerably more comfortable across the board.
 
 ---
 
 ## Quick Start
 
-```
-index.html              ← open this in any modern browser
-faq.html                ← frequently asked questions
-resources.html          ← external resource links
-mm-shared.css           ← shared stylesheet (must be alongside index.html)
-docs/user-guide.html    ← full user guide
-fonts/                  ← self-hosted typefaces (see Fonts section below)
-images/                 ← optional object photos
-charts/                 ← optional local finder charts
-```
-
-No server, no build step, no dependencies.
+1. Clone or download the repository and open `index.html` in a browser, no build step, no server, no installation required.
+2. Add media files to `images/` and `charts/` for the lightbox (optional but recommended, see below).
+3. Place font TTF files in `fonts/` (optional, the site falls back to system fonts).
+4. At the telescope, switch to **Night Mode** using the toggle in the top-right corner.
+5. Use **☰ Log → Session Setup** to set your location and equipment once for the night.
+6. Check off objects as you observe them. Click the **✎** button for a full AL record.
+7. Export your data from **☰ Log → Export AL Records** (JSON) after every session.
 
 ---
 
-## Fonts
+## Repository Structure
 
-Typography is self-hosted — no Google Fonts or CDN calls at runtime. Download the following from [Google Fonts](https://fonts.google.com) and place them in a `fonts/` folder:
-
-| File | Family |
-|------|--------|
-| `Cinzel-Regular.ttf` | [Cinzel](https://fonts.google.com/specimen/Cinzel) |
-| `Cinzel-SemiBold.ttf` | Cinzel |
-| `Cinzel-Bold.ttf` | Cinzel |
-| `ShareTechMono-Regular.ttf` | [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono) |
-| `CrimsonPro-Light.ttf` | [Crimson Pro](https://fonts.google.com/specimen/Crimson+Pro) |
-| `CrimsonPro-Regular.ttf` | Crimson Pro |
-| `CrimsonPro-LightItalic.ttf` | Crimson Pro |
-
----
-
-## Adding Photos
-
-Place JPEGs in an `images/` folder named `M1.jpg` … `M110.jpg`.
-
-```bash
-# Linux / macOS — wget
-mkdir -p images && for i in $(seq 1 110); do
-  wget -q --show-progress --tries=3 --timeout=15 \
-    -O "images/M${i}.jpg" "http://www.messier.seds.org/Jpg/m${i}.jpg" \
-    || echo "⚠ Failed: M${i}.jpg"
-done
 ```
-
-```bash
-# macOS — curl
-mkdir -p images && for i in $(seq 1 110); do
-  curl -s -o "images/M${i}.jpg" "http://www.messier.seds.org/Jpg/m${i}.jpg" \
-    && echo "✓ M${i}.jpg" || echo "⚠ Failed: M${i}.jpg"
-done
-```
-
-Generate attribution text files: `chmod +x create_attributions.sh && ./create_attributions.sh`
-
----
-
-## Finder Charts
-
-Place PNGs in a `charts/` folder (`M1.png` … `M110.png`). Use `generate_charts.py` to produce red-on-black night-vision charts for all 110 objects:
-
-```bash
-pip install matplotlib numpy
-python generate_charts.py
+mmol/
+├── index.html              Main observation log
+├── CNAME                   mmol.thgnetworks.com
+├── css/
+│   └── mm-shared.css       Shared design tokens and layout
+├── fonts/                  Self-hosted TTF files
+├── images/                 Self-hosted jpg and png files 
+├── charts/                 Finder charts from freestarcharts.com
+└── docs/
+    ├── faq.html
+    ├── resources.html
+    ├── about.html
+    └── user-guide.html
 ```
 
 ---
 
-## Data Export and Import
+## Setting Up Media Files
 
-All user data is managed via **☰ Log** in the toolbar.
+### Object photos (optional)
 
-**Observation Log (CSV)** — exports `YYYY-MM-DD-HHmmss-observing-log.csv` with marathon order, catalog data, observed status, observation timestamp, and field notes. On import choose Overwrite or Merge.
+Place JPEG images in an `images/` folder named `M1.jpg` through `M110.jpg`. The SEDS Messier Catalog at [messier.seds.org](http://www.messier.seds.org/) is the recommended source. The `scripts/download_images.sh` script automates the batch download.
 
-**AL Records (JSON)** — exports `YYYY-MM-DD-HHmmss-al-records.json` with all full observation records. Import merges with existing records and shows a conflict count before confirming.
+In night mode, all lightbox photos are automatically red-filtered via CSS, no separate night-mode image set is needed.
 
----
+### Finder charts (optional)
 
-## AL Observation Records
+Place PNG charts in a `charts/` folder named `M1.png` through `M110.png`. The `scripts/generate_charts.py` script produces red-on-black night-vision charts for all 110 objects using matplotlib and astropy.
 
-Click **✎** in any object's notes cell to open the full record form:
+### Fonts
 
-- **When & Where** — date, time, observing site (with optional GPS → place name lookup)
-- **Sky Conditions** — seeing (Antoniadi 1–5), transparency, limiting magnitude
-- **Equipment** — telescope, aperture, eyepiece, magnification
-- **Observation** — written description (required for AL certificate), sketch notes
+Place the following seven TTF files in a `fonts/` folder. All are available from Google Fonts.
 
-The ✎ icon is outlined when empty and fills solid red when a record is saved. The description field is always seeded from Field Notes on open, and written back to Field Notes on save.
-
----
-
-## AL Report PDF
-
-**☰ Log → Generate AL Report…** builds a complete submission PDF in the browser:
-
-1. **Cover page** — title, observer name, club / location, summary statistics
-2. **Observation Index** — one-row-per-object table
-3. **Individual record pages** — one full page per saved record
-
-Saved as `YYYY-MM-DD-HHmmss-al-report.pdf`. A Python command-line version is also available:
-
-```bash
-pip install reportlab
-python al_report.py --records al-records.json \
-  --observer "Your Name" --subtitle "Your Club" --output report.pdf
-```
+| File | Font | Weight |
+|------|------|--------|
+| `Cinzel-Regular.ttf` | Cinzel | 400 |
+| `Cinzel-SemiBold.ttf` | Cinzel | 600 |
+| `Cinzel-Bold.ttf` | Cinzel | 700 |
+| `ShareTechMono-Regular.ttf` | Share Tech Mono | 400 |
+| `CrimsonPro-Light.ttf` | Crimson Pro | 300 |
+| `CrimsonPro-Regular.ttf` | Crimson Pro | 400 |
+| `CrimsonPro-LightItalic.ttf` | Crimson Pro | 300 italic |
 
 ---
 
-## Session Setup
+## Data and Privacy
 
-**☰ Log → Session Setup** sets defaults that auto-fill blank fields in every record opened during the session. The **📍 Locate** button gets GPS coordinates from the device and reverse-geocodes to a place name via OpenStreetMap. A pulsing **Session active** pill appears in the toolbar while defaults are active.
+All observation data is stored in your browser's `localStorage`, a private, local database on your own device. Nothing is ever sent to any server.
 
----
+| localStorage key | Contents |
+|-----------------|----------|
+| `mm_checks` | Observed status per object |
+| `mm_notes` | Inline field notes per object |
+| `mm_times` | Observation timestamps (ISO string) |
+| `mm_fullnotes` | Full AL record data (JSON) |
+| `mm_session` | Session defaults and GPS coordinates |
+| `mm_theme` | Night or day mode preference |
+| `mm_visited` | Quick Start "don't show again" flag |
 
-## localStorage Keys
-
-| Key | Contents |
-|-----|----------|
-| `mm_checks` | Observed state per object |
-| `mm_notes` | Brief field notes per object (synced with AL description) |
-| `mm_times` | ISO timestamp of each observation |
-| `mm_fullnotes` | Full AL record data per object |
-| `mm_session` | Current session defaults |
-| `mm_theme` | `"dark"` or `"light"` |
-| `mm_visited` | Set when "Don't show again" is ticked in Quick Start |
+**Important:** localStorage is tied to one browser on one device and is cleared by browser data resets or private/incognito mode. Use **☰ Log → Export AL Records** (JSON) after every observing session. Use **Import AL Records** to restore on a new device or browser.
 
 ---
 
-## GitHub Pages Deployment
+## Deployment (GitHub Pages)
 
-1. Rename `messier_marathon.html` → `index.html`
-2. Push to GitHub
-3. **Settings → Pages → Source → GitHub Actions**
+See [Github_Subdomain_Configuration.md](Github_Subdomain_Configuration.md) for the full guide. Summary:
 
-The included `.github/workflows/deploy.yml` publishes only public-facing files. Internal docs (`features.md`, `project-design-summary.md`, `css-cheatsheet.md`) and scripts are excluded from the live site. `docs/user-guide.html` **is** published.
+1. Push the repo to `github.com/thg4web/mmol` (must be public)
+2. Settings → Pages → Branch: `main` / `(root)` → Custom domain: `mmol.thgnetworks.com`
+3. DNS: add a CNAME record `mmol` → `thg4web.github.io` at your registrar
+4. Enforce HTTPS once DNS propagates (~15 minutes to a few hours)
 
----
-
-## Browser Compatibility
-
-Chrome, Firefox, Safari, and Edge (current versions). Requires `localStorage`. Geolocation requires HTTPS or `localhost`. The in-browser PDF generator requires the jsPDF library to load from cdnjs on first use.
+The `CNAME` file must be present on every push, or the custom domain will need to be re-entered.
 
 ---
 
-## Acknowledgements
+## Documentation
 
-- Object data: **Messier Catalog** (Charles Messier, 1771)
-- Marathon order: standard AL / community observing sequence
-- PSA references: *Pocket Sky Atlas*, Roger Sinnott (Sky & Telescope)
-- Sky simulation: [Stellarium Web](https://stellarium-web.org)
-- Reverse geocoding: [OpenStreetMap Nominatim](https://nominatim.openstreetmap.org)
-- Object photos: [SEDS Messier Catalog](http://www.messier.seds.org) (optional, downloaded separately)
-- In-browser PDF: [jsPDF](https://github.com/parallax/jsPDF) + [jspdf-autotable](https://github.com/simonbengtsson/jsPDF-AutoTable)
+| File | Purpose |
+|------|---------|
+| `README.md` | This file — setup and overview |
+| `features.md` | Complete feature reference |
+| `project-design-summary.md` | Architecture and technical design notes |
+| `docs/user-guide.html` | End-user documentation |
+| `docs/faq.html` | Common questions |
+| `docs/resources.html` | Curated external links |
+| `docs/about.html` | Project information and credits |
+
+---
+
+## References
+
+- **Marathon sequence:** Don Machholz, *Messier Marathon Observer's Guide*
+- **Object data:** [SEDS Messier Database](http://www.messier.seds.org/) (Hartmut Frommert & Christine Kronberg)
+- **Sky atlas references:** Roger Sinnott, *Pocket Sky Atlas* (Sky & Telescope)
+- **AL program:** [Astronomical League Messier Observing Program](https://www.astroleague.org/messier-observing-program/)
 
 ---
 
 ## License
 
-MIT — free to use, share, and modify. Clear skies! 🌌
+GPL Version 3, 29 June 2007
+
+---
+
+## Contact
+
+Questions, feedback, or bug reports: mmol [at] thgnetworks [dot] com

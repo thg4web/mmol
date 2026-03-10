@@ -1,228 +1,197 @@
-# Messier Marathon Observer's Log — Feature Guide
+# Messier Marathon Observer's Log — Feature Reference
 
-*A complete reference to everything the site can do.*
-
----
-
-## What Is This?
-
-The Messier Marathon Observer's Log is a free, browser-based tool for amateur astronomers observing the 110 objects in the Messier catalogue. It is designed around two use cases:
-
-1. **Casual Messier Checklist** — a fast, red-light-friendly checklist for tracking which objects you have seen, with optional brief notes. No forms to fill in. Check, note, done.
-2. **AL Messier Certificate** — a structured observation record for earning the Astronomical League Messier Club certificate. Per-object forms capture every required field; a one-click PDF generates your submission document.
-
-Nothing is installed. Nothing is sent to a server. All data lives in your browser.
+A complete listing of all features implemented in the log. Intended as a quick reference for contributors and observers wanting to understand what the tool can do.
 
 ---
 
-## Quick Start Guide
+## Observation Table
 
-On your very first visit — before any observations are recorded — the site opens a **Quick Start Guide** modal automatically. It explains the two use cases above, summarises the key features at a glance, and links to the full User Guide.
+**110 objects in marathon search order** — The Don Machholz sequence (west to east), beginning with objects that set first after dusk and ending with those rising last before dawn. This is the optimal order for attempting a one-night complete observation of the entire catalog.
 
-- **"Don't show again"** checkbox — tick it before dismissing to suppress the guide on future visits. Leave it unticked and the guide will reappear on any browser where no data exists yet.
-- The guide is always displayed in **Day mode** (warm parchment) for easy reading, then restores whichever theme was active before you opened it.
-- The full User Guide is always accessible at `docs/user-guide.html`, linked in the footer of every page.
+**Object sort toggle** — The Object column header is clickable. It toggles between Marathon order (the default, numbered 1–110 by marathon position) and Numeric order (M1–M110 by Messier number). The header label updates to reflect the active mode (`Marathon ▲` / `Numeric ▲`). Filters, search, and the lightbox all work correctly in both modes.
 
----
+**Column layout** — Each row shows: marathon position (#), Messier designation (Object), type symbol (Type), constellation (Con), visual magnitude (Mag), angular size (Size), right ascension (RA), declination (Dec), Pocket Sky Atlas page reference (PSA Pg), observation checkbox (✓), and a combined field notes / AL record cell.
 
-## Night Vision Mode
+**Angular Size column** — Apparent dimensions in arcminutes sourced from the SEDS marathon data (Hartmut Frommert). Two-axis objects show width × height (e.g. `178×63`); circular objects show a single value (e.g. `110'`).
 
-The site opens in **dark / night mode** by default: a near-black background with all text and controls rendered in shades of red. Red light does not constrict the pupil or bleach rhodopsin the way white light does, so your eyes stay dark-adapted while you navigate the log.
+**Object type symbols** — Each type is represented by a monospace ASCII symbol that reads clearly in red night mode where colour differentiation is not available:
 
-A pill-shaped toggle in the top-right corner switches between:
+| Symbol | Type |
+|--------|------|
+| `@` | Spiral Galaxy |
+| `●` | Elliptical Galaxy |
+| `◑` | Lenticular Galaxy |
+| `*` | Irregular Galaxy |
+| `+` | Open Cluster |
+| `◎` | Globular Cluster |
+| `~` | Diffuse Nebula |
+| `○` | Planetary Nebula |
+| `✕` | Supernova Remnant |
+| `::` | Star Cloud |
+| `·` | Double Star / Asterism |
 
-- 🌙 **Night mode** — red-on-black, for use at the telescope
-- ☀ **Day mode** — dark ink on warm parchment, for planning indoors
+In day mode the symbols are rendered in black on a transparent background. In night mode all symbols switch to `var(--red-bright)` with a transparent background — the type column never bleaches adapted eyes. The **Object Type Key** legend below the toolbar uses the same symbols.
 
-Your preference is remembered between visits.
+**Filter buttons** — Filter the table by object type (Galaxy, Open Cluster, Globular Cluster, Nebula) or by observation status (Unobserved). Click All to reset. Filters combine with the search field.
 
----
+**Search** — Filters by M-number, type name, or constellation abbreviation. Examples: `Sgr` shows Sagittarius objects; `glob` shows globulars; `M10` shows all entries containing "M10". The × button clears instantly. Search and filter are fully combinable.
 
-## The Main Table
+**Progress bar** — Shows observed / 110 as a percentage bar. Updates in real time as checkboxes are ticked or unticked.
 
-The centrepiece of the site is a 110-row table listing every Messier object in **marathon search order** — the sequence that gives the best statistical chance of observing all 110 in one night, beginning with western objects visible just after dusk and ending with eastern objects visible just before dawn. This sequence is different from Messier number order.
+**Observation checkboxes** — Ticking records a hidden ISO timestamp. Unticking removes it. The timestamp feeds into the full AL record and the CSV export as Date Observed.
 
-Each row shows:
-
-| Column | What it tells you |
-|--------|-------------------|
-| **#** | Position in the marathon sequence (1–110) |
-| **Object** | Messier designation — click to open the image lightbox |
-| **Type** | Object type with a colour-coded dot (11 types) |
-| **Con** | Constellation (IAU 3-letter abbreviation) |
-| **Mag** | Visual magnitude |
-| **RA / Dec** | J2000.0 coordinates |
-| **PSA Pg** | Page in *Pocket Sky Atlas* (Sinnott) |
-| **✓** | Observation checkbox |
-| **Field Notes** | Brief inline notes field + full-record button |
-
-A colour-coded legend panel below the toolbar identifies all 11 object types: spiral galaxy, elliptical galaxy, lenticular galaxy, irregular galaxy, open cluster, globular cluster, diffuse nebula, planetary nebula, supernova remnant, star cloud, and double star / asterism.
-
----
-
-## Progress Bar
-
-A bar at the top of the table shows your running count of observed objects (e.g. **47 / 110**). It fills and updates in real time as you check objects.
-
----
-
-## Filtering and Search
-
-Two controls above the table narrow what you see without losing your place:
-
-**Filter buttons** — click to show only one category:
-All · Galaxy · Open Cluster · Globular · Nebula · Unobserved
-
-**Search box** — type any fragment to filter by Messier number, object type, or constellation abbreviation. Clears instantly with the × button.
-
-Filters and search combine — e.g. "Globular" filter + "Sgr" in the search shows only globular clusters in Sagittarius.
-
----
-
-## Checkboxes and Field Notes
-
-Every object has a **checkbox** and a **notes field** in the same row.
-
-- Check the box when you have seen the object. The row dims slightly and the progress bar advances.
-- Type anything in the notes field — eyepiece used, sky conditions, a quick impression.
-- Both are saved automatically to browser storage and survive page refreshes and browser restarts. You never need to click Save.
-- When you check an object, an **observation timestamp** is silently recorded. It appears in the full observation record and in CSV exports, but never clutters the table.
-
-### Field Notes ↔ AL Description sync
-
-The Field Notes field and the Description field in the full AL record are kept in sync automatically:
-
-- **Opening the AL record** — if Field Notes has text, it seeds the Description field so you are not starting from scratch. If Field Notes is blank, the previously saved description (if any) is restored.
-- **Saving the AL record** — the Description is written back to Field Notes so the inline note always reflects your latest written observation.
-
-This means you can type a quick shorthand note in the field at the telescope, then expand it properly in the AL record form later — and the table will update to show the full text when you save.
+**Field Notes ↔ AL Description sync** — The inline field notes cell and the Description field in the full AL record modal are kept in two-way sync. Any text typed in the table seeds the Description when the form is opened; any text saved in the form writes back to the table.
 
 ---
 
 ## Image Lightbox
 
-Click any object's **M-number** in the table to open the lightbox modal. It shows:
+Click any Messier number in the Object column to open the lightbox for that object.
 
-**Left panel**
-- Object photograph (from a local `images/` folder; a placeholder is shown if the image is absent)
-- Image credit attribution (loaded from a paired text file)
+**Left panel** — Loads `images/M[n].jpg` from the local `images/` folder. Shows a styled placeholder if the file is absent.
 
-**Right sidebar**
-- Full catalog data: type, constellation, magnitude, RA, Dec, PSA page
-- **🗺 Finder Chart** button — opens a local chart image from `charts/M[n].png`
-- **🔭 Stellarium Web** button — opens the free online sky simulator centred on this object
+**Right sidebar** — Full catalog data: object name, type, constellation, magnitude, angular size (arcmin), right ascension, declination, PSA page reference.
 
-**Footer**
-- ← Prev / position indicator / Next → to step through all 110 objects
-- Keyboard shortcuts: ← → to navigate, Escape or click outside to close
+**Finder Chart button** — Opens `charts/M[n].png` from the local `charts/` folder in a new tab. A red-bordered warning notice is shown before the button, reminding the observer to enable a device red filter before viewing — charts are white-background images that will harm dark adaptation.
+
+**Stellarium Web button** — Opens the free online 3D sky simulator centred on the selected object (internet required).
+
+**Night mode image treatment** — In night mode, lightbox photos are automatically filtered (`sepia(100%) brightness(50%) hue-rotate(-50deg)`) to render as dim red-tinted images, preserving dark adaptation when viewing object photos at the telescope.
+
+**Night mode attribution** — Image attribution text overlaying the photo renders in `var(--red-bright)` in night mode.
+
+**Correct object in any sort mode** — The lightbox always loads the object whose M-number was clicked, regardless of whether the table is in Marathon or Numeric sort order.
+
+**Navigation** — ← / → footer buttons step through all 110 objects in order. Keyboard: arrow keys to navigate, Escape or click-outside to close.
 
 ---
 
-## Full AL Observation Records
+## Night / Day Mode
 
-For each object, a **✎** button sits at the right edge of the notes cell.
+The toggle in the top-right corner switches between two display themes. The preference is saved in `mm_theme` localStorage and restored on every page load.
 
-- **Outlined** (dim) — no full record saved yet
-- **Filled red** — a full record has been saved for this object
+**Night mode** — Near-black background, red-spectrum text and controls throughout.
 
-Click it to open the full observation record form capturing everything the AL requires:
+**Day mode** — Warm parchment background, dark ink, maroon accents.
 
-**When & Where** — date, time, observing site (pre-filled from observation timestamp and Session Setup)
+**UI icon system** — All icon buttons are wrapped in `<span class="ui-icon" data-night="[LABEL]">`. In night mode the emoji is hidden (`font-size: 0`) and a short ASCII label is shown via `::after { content: attr(data-night) }` in `var(--red-bright)` — so no bright or coloured emoji are ever displayed at the eyepiece:
 
-**Sky Conditions** — seeing (Antoniadi 1–5), transparency (1–5), limiting magnitude
+| Button | Day emoji | Night label |
+|--------|-----------|-------------|
+| Theme toggle (to night) | 🌙 | `[N]` |
+| Theme toggle (to day) | ☀ | `[D]` |
+| Generate AL Report | 📄 | `[RPT]` |
+| Session Setup | ⚙ | `[CFG]` |
+| GPS Locate | 📍 | `[GPS]` |
+| Finder Chart | 🗺 | `[MAP]` |
+| Stellarium Web | 🔭 | `[SKY]` |
+| Chart warning | ⚠ | `[!]` |
+| Image placeholder | ✦ | `[+]` |
+| User Guide link | 📖 | `[DOC]` |
 
-**Equipment** — telescope / instrument, aperture (mm), eyepiece, magnification
+**AL record button states** — The ✎ icon on each row shows in bright red when no record is saved. When a record exists, the button fills with a solid bright red background and dark foreground — a filled indicator visible at a glance across the whole table without needing to look closely.
 
-**Observation** — written description (required for AL certificate), sketch notes
+**Type symbols in night mode** — All type badge symbols switch to `var(--red-bright)` with a transparent background, matching all other night-mode elements.
 
-The hidden observation timestamp is displayed at the bottom of the modal for reference. All full records are saved automatically to `mm_fullnotes`.
+---
+
+## Themed Confirmation Dialogs
+
+All three destructive-action confirmations use a custom `showConfirm()` modal rather than the browser's native `window.confirm()`. The modal inherits all current CSS variables so it renders correctly in both night and day mode — no white browser dialog is ever shown at the telescope.
+
+| Action | Title |
+|--------|-------|
+| ☰ Log → Reset All Data | Reset Observation Data |
+| Session Setup → Clear Session | Clear Session Defaults |
+| Import AL Records (conflict) | Import AL Records |
+
+Each dialog shows a title, a summary of what data will be affected, an optional warning message, and labelled OK / Cancel buttons.
 
 ---
 
 ## Session Setup
 
-At the start of each observing session, open **☰ Log → Session Setup** to enter shared defaults that will auto-fill blank fields in every observation record you open that night.
+Open via **☰ Log → Session Setup**. Sets defaults that auto-fill blank fields in every full observation record opened during the session. Existing saved data is never overwritten.
 
-Fields available as session defaults: observing site, seeing, transparency, limiting magnitude, telescope / instrument, aperture, eyepiece, magnification.
+**Fields:** observing site, seeing (Antoniadi scale I–V), transparency (1–5), limiting magnitude, telescope/instrument, aperture (mm), eyepiece, magnification.
 
-Session values only fill gaps — any field with existing saved data is never overwritten.
+**GPS locate** — The 📍 Locate button requests GPS coordinates from the device. On success, coordinates are reverse-geocoded via OpenStreetMap Nominatim to produce a place name for the Site field. Raw coordinates are also stored in the session.
 
-**📍 Locate button** — requests GPS from the device, then reverse-geocodes to a place name via OpenStreetMap Nominatim (free, no API key). Raw coordinates are also stored in the session.
+**Session indicator** — A pulsing "Session active" badge in the toolbar shows while any session default is set.
 
-A pulsing **Session active** indicator appears in the toolbar while any default is set. **↺ Clear Session** removes all defaults without affecting saved records.
+**Clear Session** — Removes all defaults without affecting any saved observation records.
 
 ---
 
-## The Log Menu
+## Full AL Observation Records
 
-A single **☰ Log ▼** button opens a dropdown with all data management options:
+Click the **✎** button on any row to open the full record form. The button is outlined when no record is saved; it fills solid red when data exists.
 
-| Item | What it does |
-|------|--------------|
-| ⎙ Print | Opens the browser print dialog with a clean black-on-white stylesheet |
-| ⬇ Export CSV | Saves a complete observation log as a timestamped CSV |
-| ⬆ Import CSV | Loads a previously exported CSV; Merge or Overwrite choice |
-| ⬇ Export AL Records | Saves all full observation records as a timestamped JSON |
-| ⬆ Import AL Records | Loads a previously exported JSON; conflict count shown before confirming |
-| 📄 Generate AL Report… | Generates a formatted multi-page submission PDF in the browser |
+**Auto-fill priority:** existing saved data → session defaults → checkbox timestamp → current date/time. The Description pre-populates from any inline Field Notes text.
+
+**Fields:** Date, Time, Observing Site, Seeing (Antoniadi I–V), Transparency (1–5), Limiting Magnitude, Telescope/Instrument, Aperture (mm), Eyepiece, Magnification, Observation Description, Sketch Notes.
+
+---
+
+## Log Menu (☰ Log ▼)
+
+| Item | Function |
+|------|----------|
+| ⎙ Print | Clean black-on-white print stylesheet + browser print dialog |
+| ⬇ Export CSV | Timestamped CSV of all 110 rows — marathon order, catalog data, observed status, date, notes |
+| ⬆ Import CSV | Reads a previously exported CSV; offers Merge (fill blanks) or Overwrite (replace all) |
+| ⬇ Export AL Records | Timestamped JSON of all full records + observation timestamps |
+| ⬆ Import AL Records | Merges exported JSON back in; shows new-vs-conflict counts in a themed confirmation dialog |
+| 📄 Generate AL Report | Enter name/club, generate a multi-page PDF in the browser — cover, index, one page per record |
 | ⚙ Session Setup… | Opens the session defaults modal |
-| ↺ Reset All Data… | Clears all data with a confirmation dialog |
+| ↺ Reset All Data… | Shows counts of all saved data, then a themed confirmation before permanently clearing everything |
 
 ---
 
-## AL Report PDF Generator
+## Data Storage
 
-**☰ Log → Generate AL Report…** opens a small dialog where you enter your name and an optional club / location subtitle. Clicking **Generate PDF** produces a complete multi-page PDF in the browser — no internet connection needed — and saves it as `YYYY-MM-DD-HHmmss-al-report.pdf`.
-
-The PDF contains three sections:
-
-1. **Cover page** — title, observer name, subtitle, summary statistics (record count, date range)
-2. **Observation Index** — one compact row per object
-3. **Individual record pages** — one full page per saved record with all four sections in a formatted layout ready for submission
-
-A standalone Python version (`al_report.py`) is also available in the repository.
-
----
-
-## Resetting Data
-
-**☰ Log → Reset All Data…** shows a count of saved data before asking to confirm. Clears all `mm_*` localStorage keys permanently — export first.
-
----
-
-## Browser Storage
+All data is stored in `localStorage` — never transmitted to any server.
 
 | Key | Contents |
 |-----|----------|
-| `mm_checks` | Which objects you have observed |
-| `mm_notes` | Brief field notes (kept in sync with AL description) |
-| `mm_times` | Timestamps of each observation |
-| `mm_fullnotes` | Full AL observation records |
-| `mm_session` | Current session defaults |
+| `mm_checks` | Observed status per object |
+| `mm_notes` | Inline field notes per object |
+| `mm_times` | Observation timestamps per object (ISO string) |
+| `mm_fullnotes` | Full AL record data per object (structured JSON) |
+| `mm_session` | Session defaults including GPS coordinates |
 | `mm_theme` | Night or day mode preference |
-| `mm_visited` | Set when "Don't show again" is ticked in the Quick Start guide |
-
----
-
-## Works Offline
-
-After first load, the entire tool works without internet: table, checkboxes, notes, full record forms, lightbox, AL Report PDF generation, CSV/JSON export and import, and printing.
-
-Features that require network access: **📍 Locate** (OpenStreetMap), **🔭 Stellarium Web** (external link), and the jsPDF library on first load.
+| `mm_visited` | Set to `"1"` when "Don't show again" is ticked in the Quick Start |
 
 ---
 
 ## Site Pages
 
-| Page | Purpose |
-|------|---------|
-| `index.html` | Main observation log |
-| `faq.html` | Frequently asked questions |
-| `docs/user-guide.html` | Full in-depth user guide |
-| `resources.html` | Curated external links |
+| Page | Location | Purpose |
+|------|----------|---------|
+| Log | `index.html` | Main observation tool |
+| FAQ | `docs/faq.html` | Common questions about the marathon, AL program, and the log |
+| User Guide | `docs/user-guide.html` | Full usage documentation |
+| Resources | `docs/resources.html` | Curated external links |
+| About | `docs/about.html` | Project information, credits, acknowledgements |
 
-All pages share the theme toggle, font system, and `mm_theme` preference.
+All pages share the same font stack (Cinzel, Share Tech Mono, Crimson Pro), CSS design system (`css/mm-shared.css`), theme toggle, and hamburger navigation menu. The nav dropdown on every page includes a link back to the Log as the first item.
 
 ---
 
-*Messier Marathon Observer's Log — clear skies!*
+## File Structure
+
+```
+mmol/
+├── index.html              Main observation log
+├── CNAME                   mmol.thgnetworks.com
+├── css/
+│   └── mm-shared.css       Shared design tokens and layout
+├── fonts/                  Self-hosted TTF files (7 faces)
+├── images/                 Object photos — M1.jpg … M110.jpg
+├── charts/                 Finder charts — M1.png … M110.png
+└── docs/
+    ├── faq.html
+    ├── resources.html
+    ├── about.html
+    └── user-guide.html
+```

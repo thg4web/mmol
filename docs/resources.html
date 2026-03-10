@@ -2,7 +2,6 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>
-// Apply saved theme immediately to prevent flash of wrong theme
 (function(){var t=localStorage.getItem('mm_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 </script>
 <meta charset="UTF-8">
@@ -16,377 +15,110 @@
 @font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-Light.ttf") format("truetype"); font-weight: 300; font-display: swap; }
 @font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Crimson Pro"; src: url("../fonts/CrimsonPro-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
-/* ════════ EMBEDDED FROM mm-shared.css (self-contained for docs/ subdirectory) ════════ */
-.wrapper {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px 60px;
-}
-.wrapper-prose {
-  position: relative;
-  z-index: 1;
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 32px 20px 60px;
-}
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--header-line);
-  margin-bottom: 36px;
-  transition: border-color .3s;
-}
-.site-title {
-  font-family: 'Cinzel', serif;
-  font-size: 13px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-head);
-  transition: color .3s;
-}
-.site-title a { color: inherit; text-decoration: none; }
-.site-title a:hover { color: var(--text-data); }
-.page-subtitle {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 13px;
-  color: var(--text-meta);
-  margin-top: 4px;
-  letter-spacing: .04em;
-  transition: color .3s;
-}
-.theme-icon {
-  font-size: 14px;
-  line-height: 1;
-  user-select: none;
-  transition: opacity .3s;
-}
-.theme-icon.moon { opacity: .9; }
-.theme-icon.sun  { opacity: .35; }
-[data-theme="light"] .theme-icon.moon { opacity: .35; }
-[data-theme="light"] .theme-icon.sun  { opacity: .9; }
-.toggle-pill {
-  width: 44px;
-  height: 24px;
-  background: var(--red-faint);
-  border: 1.5px solid var(--border3);
-  border-radius: 12px;
-  position: relative;
-  cursor: pointer;
-  transition: background .3s, border-color .3s;
-  flex-shrink: 0;
-  outline: none;
-}
-.toggle-pill::after {
-  content: '';
-  position: absolute;
-  top: 3px; left: 3px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: var(--red-bright);
-  transition: transform .25s cubic-bezier(.4,0,.2,1), background .3s;
-}
-[data-theme="dark"]  .toggle-pill::after { box-shadow: 0 0 8px var(--red-bright); }
-[data-theme="light"] .toggle-pill::after { transform: translateX(20px); box-shadow: none; }
-.page-footer, .footer {
-  margin-top: 32px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border2);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-  transition: border-color .3s;
-}
-.footer-note {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 12.5px;
-  color: var(--text-meta);
-  max-width: 500px;
-  line-height: 1.65;
-  transition: color .3s;
-}
-.footer-sig {
-  font-family: 'Cinzel', serif;
-  font-size: 8.5px;
-  letter-spacing: .22em;
-  color: var(--text-dim);
-  text-align: right;
-  text-transform: uppercase;
-  transition: color .3s;
-}
-.footer-sig a { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--border3); }
-.footer-sig a:hover { color: var(--text-meta); }
-.nav-link {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  border-bottom: 1px dotted var(--border3);
-  transition: color .2s;
-}
-.nav-link:hover { color: var(--text-meta); }
-@media (max-width: 700px) {
-  .page-footer, .footer { flex-direction: column; align-items: flex-start; }
-  .page-header { flex-direction: column; gap: 14px; }
-}
-
 </style>
 <link rel="stylesheet" href="../css/mm-shared.css">
 <style>
 
-/* ════════ PAGE HEADINGS ════════ */
 .res-heading {
-  font-family: 'Cinzel', serif;
-  font-size: 22px;
-  letter-spacing: .14em;
-  color: var(--text-head);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  transition: color .3s;
+  font-family: 'Cinzel', serif; font-size: 22px; letter-spacing: .14em;
+  color: var(--text-head); text-transform: uppercase; margin-bottom: 6px; transition: color .3s;
 }
 .res-intro {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 14.5px;
-  color: var(--text-meta);
-  line-height: 1.7;
-  margin-bottom: 36px;
-  max-width: 660px;
-  transition: color .3s;
+  font-family: 'Crimson Pro', serif; font-style: italic; font-size: 14.5px;
+  color: var(--text-meta); line-height: 1.7; margin-bottom: 36px;
+  max-width: 660px; transition: color .3s;
 }
-
-/* ════════ SECTION TITLE ════════ */
-/* mirrors .section-title in mm-shared.css */
 .res-section-title {
-  font-family: 'Cinzel', serif;
-  font-size: 9.5px;
-  letter-spacing: .28em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin: 36px 0 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
+  font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .28em;
+  text-transform: uppercase; color: var(--text-dim); margin: 36px 0 0;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
   transition: color .3s, border-color .3s;
 }
-
-/* ════════ RESOURCE CARDS ════════ */
-.res-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 8px 0;
-}
+.res-list { list-style: none; padding: 0; margin: 0 0 8px 0; }
 .res-item {
-  display: grid;
-  grid-template-columns: 1fr;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--border);
-  transition: border-color .3s;
+  display: grid; grid-template-columns: 1fr;
+  padding: 18px 0; border-bottom: 1px solid var(--border); transition: border-color .3s;
 }
 .res-item:last-child { border-bottom: none; }
-
-.res-item-header {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  margin-bottom: 6px;
-}
-.res-name {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
+.res-item-header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 18px; margin-bottom: 6px; }
+.res-name { font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .res-name a {
-  color: var(--text-sub);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border2);
-  padding-bottom: 1px;
+  color: var(--text-sub); text-decoration: none;
+  border-bottom: 1px solid var(--border2); padding-bottom: 1px;
   transition: color .2s, border-color .2s;
 }
-.res-name a:hover {
-  color: var(--text-data);
-  border-bottom-color: var(--red-dim);
-}
-.res-url {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px;
-  letter-spacing: .08em;
-  color: var(--text-dim);
-  transition: color .3s;
-}
+.res-name a:hover { color: var(--text-data); border-bottom-color: var(--red-dim); }
+.res-url { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: .08em; color: var(--text-dim); transition: color .3s; }
 .res-desc {
-  font-family: 'Crimson Pro', serif;
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--text-meta);
-  max-width: 720px;
-  transition: color .3s;
+  font-family: 'Crimson Pro', serif; font-size: 14px; line-height: 1.75;
+  color: var(--text-meta); max-width: 720px; transition: color .3s;
 }
 .res-desc strong { color: var(--text-sub); font-weight: 600; }
 
-/* ════════ THIS SITE CALLOUT ════════ */
 .res-this-site {
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  padding: 14px 18px;
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  transition: all .3s;
-  margin: 18px 0;
+  border: 1px solid var(--border2); background: var(--bg2); padding: 14px 18px;
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 18px;
+  transition: all .3s; margin: 18px 0;
 }
-.res-this-site .res-name {
-  font-size: 11px;
-}
+.res-this-site .res-name { font-size: 11px; }
 .res-this-site-badge {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 8.5px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--red-dim);
-  border: 1px solid var(--border2);
-  padding: 2px 8px;
-  transition: color .3s, border-color .3s;
+  font-family: 'Share Tech Mono', monospace; font-size: 8.5px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--red-dim); border: 1px solid var(--border2);
+  padding: 2px 8px; transition: color .3s, border-color .3s;
 }
-.res-this-site .res-desc {
-  width: 100%;
-  margin-top: 4px;
-  font-size: 13.5px;
-}
+.res-this-site .res-desc { width: 100%; margin-top: 4px; font-size: 13.5px; }
 
-/* ════════ FEATURED VIDEO ════════ */
 .res-video-block {
-  margin-top: 36px;
-  padding: 20px 22px 18px;
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  max-width: 640px;
-  transition: all .3s;
+  margin-top: 36px; padding: 20px 22px 18px; border: 1px solid var(--border2);
+  background: var(--bg2); max-width: 640px; transition: all .3s;
 }
 .res-video-label {
-  font-family: 'Cinzel', serif;
-  font-size: 8px;
-  letter-spacing: .30em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-  transition: color .3s, border-color .3s;
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: .30em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border); transition: color .3s, border-color .3s;
 }
-.res-video-title {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11.5px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
+.res-video-title { font-family: 'Share Tech Mono', monospace; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
 .res-video-title a {
-  color: var(--text-sub);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border2);
-  padding-bottom: 1px;
-  transition: color .2s, border-color .2s;
+  color: var(--text-sub); text-decoration: none; border-bottom: 1px solid var(--border2); padding-bottom: 1px; transition: color .2s, border-color .2s;
 }
 .res-video-title a:hover { color: var(--text-data); border-bottom-color: var(--red-dim); }
 .res-video-desc {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 13.5px;
-  line-height: 1.7;
-  color: var(--text-meta);
-  transition: color .3s;
+  font-family: 'Crimson Pro', serif; font-style: italic; font-size: 13.5px;
+  line-height: 1.7; color: var(--text-meta); transition: color .3s;
 }
-.res-video-meta {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 8.5px;
-  letter-spacing: .1em;
-  color: var(--text-dim);
-  margin-top: 10px;
-  transition: color .3s;
-}
+.res-video-meta { font-family: 'Share Tech Mono', monospace; font-size: 8.5px; letter-spacing: .1em; color: var(--text-dim); margin-top: 10px; transition: color .3s; }
 
-/* ════════ FOOTER ════════ */
 .page-footer {
-  margin-top: 48px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border2);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-  transition: border-color .3s;
+  margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border2);
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 12px; transition: border-color .3s;
 }
 @media (max-width: 700px) { .page-footer { flex-direction: column; align-items: flex-start; } }
 
-
-
 /* ════════ HAMBURGER NAV MENU ════════ */
-.nav-menu-wrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 500;
-}
+.nav-menu-wrap { position: absolute; top: 0; left: 0; z-index: 500; }
 .nav-menu-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  opacity: .6;
-  transition: opacity .2s;
+  background: none; border: none; cursor: pointer; padding: 6px 8px;
+  display: flex; flex-direction: column; gap: 5px; opacity: .6; transition: opacity .2s;
 }
-.nav-menu-btn:hover,
-.nav-menu-btn.open { opacity: 1; }
+.nav-menu-btn:hover, .nav-menu-btn.open { opacity: 1; }
 .nav-menu-btn .bar {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--text-sub);
-  border-radius: 1px;
-  transition: background .3s, transform .2s, opacity .2s;
+  display: block; width: 20px; height: 2px; background: var(--text-sub);
+  border-radius: 1px; transition: background .3s, transform .2s, opacity .2s;
 }
 .nav-menu-btn.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-menu-btn.open .bar:nth-child(2) { opacity: 0; }
 .nav-menu-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 .nav-menu-dropdown {
-  display: none;
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  min-width: 180px;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  padding: 4px 0;
-  z-index: 600;
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  min-width: 180px; background: var(--bg2); border: 1px solid var(--border2);
+  padding: 4px 0; z-index: 600;
 }
 .nav-menu-dropdown.open { display: block; }
 .nav-menu-link {
-  display: block;
-  padding: 10px 18px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border);
-  transition: color .15s, background .15s;
+  display: block; padding: 10px 18px; font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-dim);
+  text-decoration: none; border-bottom: 1px solid var(--border); transition: color .15s, background .15s;
 }
 .nav-menu-link:last-child { border-bottom: none; }
 .nav-menu-link:hover { color: var(--text-data); background: var(--bg2); }
@@ -396,16 +128,10 @@
 <body>
 <div class="wrapper">
 
-
-
-  <!-- HEADER -->
-
   <!-- HAMBURGER NAV MENU -->
   <div class="nav-menu-wrap">
     <button class="nav-menu-btn" id="navMenuBtn" aria-label="Site navigation">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
       <a href="../index.html" class="nav-menu-link">Log</a>
@@ -427,14 +153,11 @@
     </div>
   </header>
 
-  <!-- INTRO -->
   <h1 class="res-heading">Resources</h1>
-  <p class="res-intro">The best external sites for the Messier catalog, organized by purpose — from authoritative historical databases and high-resolution imagery through to marathon planning tools and field logbooks.</p>
+  <p class="res-intro">The best external sites for the Messier catalog, organized by purpose, from authoritative historical databases and high-resolution imagery through to marathon planning tools and field logbooks.</p>
 
 
-  <!-- ══════════════════════════════════
-       PRIMARY DATABASES
-  ═══════════════════════════════════ -->
+  <!-- PRIMARY DATABASES -->
   <div class="res-section-title">Primary Databases &amp; Historical Research</div>
 
   <ul class="res-list">
@@ -444,7 +167,7 @@
         <span class="res-name"><a href="http://www.messier.seds.org/" target="_blank" rel="noopener">SEDS Messier Database</a></span>
         <span class="res-url">messier.seds.org</span>
       </div>
-      <p class="res-desc">Widely considered the gold standard for Messier information. Contains exhaustive historical notes, discovery dates, and technical data for every object. Also hosts the primary hub for Messier Marathon planning and results.</p>
+      <p class="res-desc">Widely considered the gold standard for Messier information. Contains exhaustive historical notes, discovery dates, angular size data, and technical data for every object. Also hosts the primary hub for Messier Marathon planning and results.</p>
     </li>
 
     <li class="res-item">
@@ -460,15 +183,13 @@
         <span class="res-name"><a href="https://en.wikipedia.org/wiki/Messier_object" target="_blank" rel="noopener">Wikipedia: List of Messier Objects</a></span>
         <span class="res-url">en.wikipedia.org</span>
       </div>
-      <p class="res-desc">An excellent quick-reference table including magnitudes, distances, and coordinates for all 110 objects. Particularly useful for comparing object types — globular clusters vs. spiral galaxies — at a glance.</p>
+      <p class="res-desc">An excellent quick-reference table including magnitudes, distances, and coordinates for all 110 objects. Particularly useful for comparing object types — globular clusters vs. spiral galaxies, at a glance.</p>
     </li>
 
   </ul>
 
 
-  <!-- ══════════════════════════════════
-       OBSERVING GUIDES
-  ═══════════════════════════════════ -->
+  <!-- OBSERVING GUIDES -->
   <div class="res-section-title">Observing Guides &amp; Planning Tools</div>
 
   <ul class="res-list">
@@ -486,7 +207,7 @@
         <span class="res-name"><a href="https://www.deepskywatch.com/messier-dso-sketches.html" target="_blank" rel="noopener">Deep Sky Watch — Messier Sketches</a></span>
         <span class="res-url">deepskywatch.com</span>
       </div>
-      <p class="res-desc">Essential for visual observers. Rather than glossy long-exposure photographs, this site features <strong>realistic hand-drawn sketches</strong> that accurately represent what you will actually see through various telescope apertures — invaluable when writing your AL description.</p>
+      <p class="res-desc">Essential for visual observers. Rather than glossy long-exposure photographs, this site features <strong>realistic hand-drawn sketches</strong> that accurately represent what you will actually see through various telescope apertures, invaluable when writing your AL eyepiece description.</p>
     </li>
 
     <li class="res-item">
@@ -494,16 +215,14 @@
         <span class="res-name"><a href="https://astropixels.com/messier/messiergallery.html" target="_blank" rel="noopener">AstroPixels Messier Gallery</a></span>
         <span class="res-url">astropixels.com</span>
       </div>
-      <p class="res-desc">Created by Fred Espenak, this gallery provides a very consistent photographic record of the entire catalog. Each image includes technical details about the equipment used, making it a useful benchmark for astrophotographers and a reference for visual observers.</p>
+      <p class="res-desc">Created by Fred Espenak, this gallery provides a consistent photographic record of the entire catalog. Each image includes technical details about the equipment used, making it a useful benchmark for astrophotographers and a reference for visual observers.</p>
     </li>
 
   </ul>
 
 
-  <!-- ══════════════════════════════════
-       MARATHON SPECIFICS
-  ═══════════════════════════════════ -->
-  <div class="res-section-title">🏃 Messier Marathon Specifics</div>
+  <!-- MARATHON SPECIFICS -->
+  <div class="res-section-title">Messier Marathon Specifics</div>
 
   <ul class="res-list">
 
@@ -512,7 +231,7 @@
         <span class="res-name"><a href="https://starwalk.space/en/news/messier-marathon-planner" target="_blank" rel="noopener">Star Walk — 2026 Marathon Planner</a></span>
         <span class="res-url">starwalk.space</span>
       </div>
-      <p class="res-desc">A highly practical guide updated for the 2026 season. Includes a suggested search order — crucial for catching objects before they set — and tips for securing the difficult early-evening targets like M74 and M77 in the west just after dusk.</p>
+      <p class="res-desc">A highly practical guide updated for the 2026 season. Includes a suggested search order, crucial for catching objects before they set, and tips for securing the difficult early-evening targets like M74 and M77 in the west just after dusk.</p>
     </li>
 
     <li class="res-item">
@@ -526,16 +245,14 @@
   </ul>
 
 
-  <!-- ══════════════════════════════════
-       LOGBOOKS & FIELD REFERENCE
-  ═══════════════════════════════════ -->
+  <!-- LOGBOOKS & FIELD REFERENCE -->
   <div class="res-section-title">Logbooks &amp; Field Reference</div>
 
   <!-- This site — highlighted callout -->
   <div class="res-this-site">
     <span class="res-name">Messier Marathon Observer's Log</span>
     <span class="res-this-site-badge">This Site</span>
-    <p class="res-desc">Browser-based observation log supporting both casual Messier checklists and full AL Messier Club certificate records. Night-vision mode, per-object AL record forms, session setup, CSV/JSON export, and one-click PDF report generation.</p>
+    <p class="res-desc">Browser-based observation log supporting both casual Messier checklists and full AL Messier Club certificate records. Night-vision mode with automatic ASCII icon fallbacks and red-filtered object photos; marathon and numeric sort modes; angular size column; monospace type symbols; per-object AL record forms with session auto-fill; themed confirmation dialogs; CSV/JSON export/import; and one-click in-browser PDF report generation. Works fully offline after first load.</p>
   </div>
 
   <ul class="res-list">
@@ -553,15 +270,13 @@
         <span class="res-name"><a href="https://www.deepskycorner.ch/objects.en.php/cat_m" target="_blank" rel="noopener">Deep Sky Corner</a></span>
         <span class="res-url">deepskycorner.ch</span>
       </div>
-      <p class="res-desc">A beautifully organised site — available in multiple languages — offering finder charts, descriptions, and detailed illustrations of how each object appears through the eyepiece. Particularly useful for European observers and anyone who prefers metric references.</p>
+      <p class="res-desc">A beautifully organised site, available in multiple languages, offering finder charts, descriptions, and detailed illustrations of how each object appears through the eyepiece. Particularly useful for European observers and anyone who prefers metric references.</p>
     </li>
 
   </ul>
 
 
-  <!-- ══════════════════════════════════
-       FEATURED VIDEO
-  ═══════════════════════════════════ -->
+  <!-- FEATURED VIDEOS -->
   <div class="res-video-block">
     <div class="res-video-label">Featured Video</div>
     <div class="res-video-title">
@@ -576,7 +291,7 @@
     <div class="res-video-title">
       <a href="https://www.youtube.com/watch?v=ejvffaYYB9Q" target="_blank" rel="noopener">Messier Majesties: Catalog of 110 Deep Sky Objects</a>
     </div>
-    <p class="res-video-desc">Messier objects are popular with amateur astronomers. Astronomy clubs host Messier Marathons where the goal is to find all 110 objects in a single night. All one needs is a good pair of binoculars or a modest 4–6 inch telescope, patience, and a keen eye. Presented in this video are Messier 1 through Messier 110.</p>
+    <p class="res-video-desc">A complete tour of all 110 Messier objects. Astronomy clubs host Messier Marathons where the goal is to find all 110 objects in a single night, presented here for reference and inspiration before your attempt.</p>
     <div class="res-video-meta">youtube.com</div>
   </div>
 
@@ -589,14 +304,15 @@
     <div class="footer-sig">
       <a href="../index.html" class="nav-link">← Back to Log</a> &nbsp;·&nbsp;
       <a href="faq.html" class="nav-link">FAQ</a> &nbsp;·&nbsp;
-      <a href="user-guide.html" class="nav-link">User Guide</a>
+      <a href="user-guide.html" class="nav-link">User Guide</a> &nbsp;·&nbsp;
+      <a href="about.html" class="nav-link">About</a>
     </div>
   </footer>
 
 </div><!-- /wrapper -->
 
 <script>
-// ── Theme persistence ──────────────────────────────────────────
+// ── Theme persistence ─────────────────────────────────────────
 const root   = document.documentElement;
 const toggle = document.getElementById('themeToggle');
 const saved  = localStorage.getItem('mm_theme');
@@ -607,7 +323,7 @@ toggle.addEventListener('click', () => {
   localStorage.setItem('mm_theme', next);
 });
 
-// ── Hamburger nav menu ────────────────────────────────────────────────────────
+// ── Hamburger nav menu ────────────────────────────────────────
 const navMenuBtn      = document.getElementById('navMenuBtn');
 const navMenuDropdown = document.getElementById('navMenuDropdown');
 navMenuBtn.addEventListener('click', function(e) {
@@ -620,9 +336,6 @@ document.addEventListener('click', function() {
   navMenuDropdown.classList.remove('open');
   navMenuBtn.classList.remove('open');
 });
-
-
-
 </script>
 </body>
 </html>
