@@ -214,7 +214,8 @@ td.col-mo-val  { color: var(--text-dim); font-size: 10.5px; text-align: right; p
 td.col-m-val   { color: var(--m-color); font-family: 'Cinzel', serif; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; transition: color .3s; }
 tr.checked td.col-m-val { text-decoration: line-through; text-decoration-color: var(--red-dim); }
 td.col-type-val { font-size: 11.5px; color: var(--text-data); transition: color .3s; }
-.type-badge { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
+.type-badge { display: inline-block; width: 1.2em; margin-right: 4px; vertical-align: middle; flex-shrink: 0; font-size: 13px; text-align: center; line-height: 1; font-family: 'Courier New', Courier, monospace; }
+[data-theme="dark"] .type-badge { color: var(--red-bright) !important; background: transparent !important; }
 td.col-con-val { font-size: 11.5px; color: var(--con-color); letter-spacing: .04em; font-weight: 600; text-align: center; transition: color .3s; }
 td.col-mag-val { text-align: right; font-size: 12px; color: var(--text-data); padding-right: 12px; font-variant-numeric: tabular-nums; transition: color .3s; }
 td.col-size-val { font-size: 11px; color: var(--text-data); opacity: .85; font-variant-numeric: tabular-nums; white-space: nowrap; transition: color .3s; }
@@ -310,6 +311,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   min-height: 300px; max-height: 520px; overflow: hidden; position: relative;
 }
 .lb-img-wrap img { max-width: 100%; max-height: 520px; object-fit: contain; display: block; }
+[data-theme="dark"] .lb-img-wrap img { filter: sepia(100%) brightness(50%) hue-rotate(-50deg); }
 .lb-attribution {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 4px 8px; background: rgba(0,0,0,.62);
@@ -318,6 +320,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   pointer-events: none; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
 }
 [data-theme="light"] .lb-attribution { background: rgba(255,255,255,.55); color: #666; }
+[data-theme="dark"] .lb-attribution { color: var(--red-bright); background: rgba(0,0,0,.75); }
 .lb-img-placeholder {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 12px; padding: 40px;
@@ -366,6 +369,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
 [data-theme="dark"] .lb-sky-btn:hover { box-shadow: 0 0 12px rgba(255,70,40,.12); }
 .lb-sky-btn .sky-icon { font-size: 13px; flex-shrink: 0; opacity: .75; }
 .lb-sky-links-label { font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1px; }
+.lb-chart-warn { font-size: 9.5px; color: var(--text-dim); line-height: 1.45; margin-top: 7px; padding: 5px 7px; border-left: 2px solid var(--red-bright); opacity: .8; }
 
 @media (max-width: 640px) {
   .lb-body { flex-direction: column; }
@@ -675,12 +679,14 @@ td.col-type-val {
 }
 .type-badge {
   display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  margin-right: 6px;
+  width: 1.2em;
+  margin-right: 4px;
   vertical-align: middle;
   flex-shrink: 0;
+  font-size: 13px;
+  text-align: center;
+  line-height: 1;
+  font-family: 'Courier New', Courier, monospace;
 }
 td.col-con-val {
   font-size: 11.5px;
@@ -961,18 +967,18 @@ td.col-note-val { min-width: 150px; }
 .rec-cancel-btn { border-color: var(--border2); color: var(--text-dim); }
 .rec-cancel-btn:hover { border-color: var(--border3); color: var(--text-meta); }
 
-/* TYPE BADGE COLORS */
-.badge-spiral    { background: #8040a0; }
-.badge-ellip     { background: #3a5aaa; }
-.badge-lenticular{ background: #2a7090; }
-.badge-irregular { background: #6040a0; }
-.badge-open      { background: #2a8a5a; }
-.badge-globular  { background: #aa7820; }
-.badge-nebula    { background: #aa3030; }
-.badge-planetary { background: #909020; }
-.badge-snr       { background: #cc4020; }
-.badge-starcloud { background: #207878; }
-.badge-double    { background: #606060; }
+/* TYPE BADGE COLORS — day mode: black for high contrast; night mode overridden to red below */
+.badge-spiral,
+.badge-ellip,
+.badge-lenticular,
+.badge-irregular,
+.badge-open,
+.badge-globular,
+.badge-nebula,
+.badge-planetary,
+.badge-snr,
+.badge-starcloud,
+.badge-double    { color: #000; background: transparent; }
 
 /* ════════ LEGEND ════════ */
 .legend {
@@ -1004,7 +1010,19 @@ td.col-note-val { min-width: 150px; }
   letter-spacing: .03em;
   transition: color .3s;
 }
-.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-dot { font-size: 13px; flex-shrink: 0; line-height: 1; width: 1.2em; text-align: center; font-family: 'Courier New', Courier, monospace; color: #000; background: transparent; }
+[data-theme="dark"] .legend-dot { color: var(--red-bright) !important; background: transparent !important; }
+
+/* Night-mode icon swap — emoji hidden, ASCII label shown via ::after */
+.ui-icon { display: inline-block; }
+[data-theme="dark"] .ui-icon { font-size: 0; line-height: 1; vertical-align: middle; }
+[data-theme="dark"] .ui-icon::after {
+  content: attr(data-night);
+  font-size: 11px;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--red-bright);
+  letter-spacing: .05em;
+}
 
 /* ════════ FOOTER ════════ */
 .footer {
@@ -1511,9 +1529,9 @@ tr.checked td.col-m-val a.m-link {
 
     <!-- THEME TOGGLE -->
     <div class="theme-toggle-wrap">
-      <span class="theme-icon moon">🌙</span>
+      <span class="theme-icon moon"><span class="ui-icon" data-night="[N]">🌙</span></span>
       <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
-      <span class="theme-icon sun">☀</span>
+      <span class="theme-icon sun"><span class="ui-icon" data-night="[D]">☀</span></span>
       <span class="toggle-label" id="toggleLabel">Night</span>
     </div>
 
@@ -1538,11 +1556,11 @@ tr.checked td.col-m-val a.m-link {
           <span class="log-menu-icon">⬆</span> Import AL Records
         </label>
         <button class="log-menu-item" id="dotsMenuReport">
-          <span class="log-menu-icon">📄</span> Generate AL Report…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[RPT]">📄</span></span> Generate AL Report…
         </button>
         <hr class="log-menu-divider">
         <button class="log-menu-item" id="dotsMenuSession">
-          <span class="log-menu-icon">⚙</span> Session Setup…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
         </button>
         <hr class="log-menu-divider">
         <a href="https://github.com/thg4web/mmol" target="_blank" rel="noopener" class="log-menu-item">
@@ -1607,11 +1625,11 @@ tr.checked td.col-m-val a.m-link {
           <span class="log-menu-icon">⬆</span> Import AL Records
         </label>
         <button class="log-menu-item" id="menuGenerateReport">
-          <span class="log-menu-icon">📄</span> Generate AL Report…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[RPT]">📄</span></span> Generate AL Report…
         </button>
         <hr class="log-menu-divider">
         <button class="log-menu-item" id="menuSession">
-          <span class="log-menu-icon">⚙</span> Session Setup…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
         </button>
         <hr class="log-menu-divider">
         <button class="log-menu-item danger" id="menuReset">
@@ -1656,17 +1674,17 @@ tr.checked td.col-m-val a.m-link {
   <!-- LEGEND -->
   <div class="legend">
     <div class="legend-title">Object Type Key</div>
-    <div class="legend-item"><div class="legend-dot badge-spiral"></div>Spiral Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-ellip"></div>Elliptical Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-lenticular"></div>Lenticular Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-irregular"></div>Irregular Galaxy</div>
-    <div class="legend-item"><div class="legend-dot badge-open"></div>Open Cluster</div>
-    <div class="legend-item"><div class="legend-dot badge-globular"></div>Globular Cluster</div>
-    <div class="legend-item"><div class="legend-dot badge-nebula"></div>Diffuse Nebula</div>
-    <div class="legend-item"><div class="legend-dot badge-planetary"></div>Planetary Nebula</div>
-    <div class="legend-item"><div class="legend-dot badge-snr"></div>Supernova Remnant</div>
-    <div class="legend-item"><div class="legend-dot badge-starcloud"></div>Star Cloud</div>
-    <div class="legend-item"><div class="legend-dot badge-double"></div>Double Star / Asterism</div>
+    <div class="legend-item"><span class="legend-dot badge-spiral">@</span>Spiral Galaxy</div>
+    <div class="legend-item"><span class="legend-dot badge-ellip">●</span>Elliptical Galaxy</div>
+    <div class="legend-item"><span class="legend-dot badge-lenticular">◑</span>Lenticular Galaxy</div>
+    <div class="legend-item"><span class="legend-dot badge-irregular">*</span>Irregular Galaxy</div>
+    <div class="legend-item"><span class="legend-dot badge-open">+</span>Open Cluster</div>
+    <div class="legend-item"><span class="legend-dot badge-globular">◎</span>Globular Cluster</div>
+    <div class="legend-item"><span class="legend-dot badge-nebula">~</span>Diffuse Nebula</div>
+    <div class="legend-item"><span class="legend-dot badge-planetary">○</span>Planetary Nebula</div>
+    <div class="legend-item"><span class="legend-dot badge-snr">✕</span>Supernova Remnant</div>
+    <div class="legend-item"><span class="legend-dot badge-starcloud">::</span>Star Cloud</div>
+    <div class="legend-item"><span class="legend-dot badge-double">·</span>Double Star / Asterism</div>
   </div>
 
   <!-- FOOTER -->
@@ -1776,7 +1794,89 @@ tr.checked td.col-m-val a.m-link {
   border-top: 1px solid var(--border2);
   margin: 18px 0 16px;
 }
+
+/* ── Custom Confirm Dialog ── */
+.conf-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.conf-overlay.open { display: flex; }
+.conf-box {
+  background: var(--modal-bg);
+  border: 1px solid var(--border3);
+  max-width: 400px;
+  width: 100%;
+  padding: 28px 26px 22px;
+  position: relative;
+}
+.conf-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--red-bright);
+  margin-bottom: 14px;
+}
+.conf-body {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-meta);
+  line-height: 1.75;
+  margin-bottom: 22px;
+  white-space: pre-wrap;
+}
+.conf-warning {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10.5px;
+  color: var(--red-bright);
+  border-left: 2px solid var(--red-bright);
+  padding: 6px 10px;
+  margin-bottom: 20px;
+  opacity: .85;
+}
+.conf-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.conf-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text-dim);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  padding: 7px 18px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all .2s;
+}
+.conf-btn:hover { border-color: var(--border3); color: var(--text-meta); }
+.conf-btn.conf-ok {
+  border-color: var(--red-bright);
+  color: var(--red-bright);
+}
+.conf-btn.conf-ok:hover { background: var(--filter-active-bg); }
 </style>
+
+<!-- CUSTOM CONFIRM DIALOG -->
+<div class="conf-overlay" id="confOverlay" role="alertdialog" aria-modal="true" aria-labelledby="confTitle">
+  <div class="conf-box">
+    <div class="conf-title" id="confTitle">Confirm</div>
+    <div class="conf-body" id="confBody"></div>
+    <div class="conf-warning" id="confWarning"></div>
+    <div class="conf-btns">
+      <button class="conf-btn" id="confCancelBtn">Cancel</button>
+      <button class="conf-btn conf-ok" id="confOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
 
 <div class="import-overlay" id="importOverlay" role="dialog" aria-modal="true" aria-label="Import options">
   <div class="import-dialog">
@@ -1963,6 +2063,15 @@ tr.checked td.col-m-val a.m-link {
   transition: all .2s;
 }
 .qs-guide-link:hover { border-color: var(--border3); color: var(--red-bright); background: var(--filter-active-bg); }
+.qs-screen-notice {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-right: auto;
+  opacity: .75;
+}
 </style>
 
 <div class="qs-overlay" id="qsOverlay" role="dialog" aria-modal="true" aria-label="Quick Start Guide">
@@ -2012,7 +2121,8 @@ tr.checked td.col-m-val a.m-link {
       <label class="qs-dont-show">
         <input type="checkbox" id="qsDontShow"> Don't show again
       </label>
-      <a class="qs-guide-link" href="docs/user-guide.html" target="_blank" rel="noopener">📖 Open User Guide</a>
+      <span class="qs-screen-notice">🖥 Best experienced on a laptop or tablet</span>
+      <a class="qs-guide-link" href="docs/user-guide.html" target="_blank" rel="noopener"><span class="ui-icon" data-night="[DOC]">📖</span> Open User Guide</a>
       <button class="rec-save-btn" id="qsDismissBtn">Get Started →</button>
     </div>
   </div>
@@ -2091,7 +2201,7 @@ tr.checked td.col-m-val a.m-link {
 
 <div class="rpt-overlay" id="rptOverlay" role="dialog" aria-modal="true" aria-label="Generate AL Report">
   <div class="rpt-box">
-    <div class="rpt-title">📄 Generate AL Report</div>
+    <div class="rpt-title"><span class="ui-icon" data-night="[RPT]">📄</span> Generate AL Report</div>
     <div class="rpt-subtitle">Produces a formatted PDF of all saved full observation records, ready for AL Messier Club certificate submission.</div>
     <button class="rpt-close" id="rptClose">✕</button>
 
@@ -2271,7 +2381,7 @@ tr.checked td.col-m-val a.m-link {
 
 <div class="sess-overlay" id="sessOverlay" role="dialog" aria-modal="true" aria-label="Session setup">
   <div class="sess-box">
-    <div class="sess-title">⚙ Session Setup</div>
+    <div class="sess-title"><span class="ui-icon" data-night="[CFG]">⚙</span> Session Setup</div>
     <div class="sess-subtitle">
       These defaults auto-fill blank fields in every observation record opened this session.
       Existing saved data is never overwritten — session values only fill gaps.
@@ -2285,7 +2395,7 @@ tr.checked td.col-m-val a.m-link {
         <input class="rec-input" type="text" id="sessSite"
                placeholder="e.g. Jordan Lake SRA, NC — Bortle 4">
         <button class="sess-geo-btn" id="sessGeoBtn" title="Get location from device">
-          📍 Locate
+          <span class="ui-icon" data-night="[GPS]">📍</span> Locate
         </button>
       </div>
       <div class="sess-geo-status" id="sessGeoStatus"></div>
@@ -2514,11 +2624,12 @@ tr.checked td.col-m-val a.m-link {
         <div class="lb-sky-links">
           <span class="lb-sky-links-label">Sky Charts</span>
           <a class="lb-sky-btn" id="lbLocalChart" href="#" target="_blank" rel="noopener">
-            <span class="sky-icon">🗺</span>Finder Chart
+            <span class="sky-icon"><span class="ui-icon" data-night="[MAP]">🗺</span></span>Finder Chart
           </a>
           <a class="lb-sky-btn" id="lbStellarium" href="#" target="_blank" rel="noopener">
-            <span class="sky-icon">🔭</span>Stellarium Web
+            <span class="sky-icon"><span class="ui-icon" data-night="[SKY]">🔭</span></span>Stellarium Web
           </a>
+          <p class="lb-chart-warn"><span class="ui-icon" data-night="[!]">⚠</span> Charts are white-background. Enable your device's <strong>red filter</strong> before opening to protect night vision.</p>
         </div>
       </div>
     </div>
@@ -2531,6 +2642,31 @@ tr.checked td.col-m-val a.m-link {
 </div>
 
 <script>
+/* ── Custom themed confirm dialog ─────────────────────────────── */
+function showConfirm({ title = "Confirm", body = "", warning = "", okLabel = "Confirm", cancelLabel = "Cancel" } = {}, onOk) {
+  const overlay  = document.getElementById("confOverlay");
+  const titleEl  = document.getElementById("confTitle");
+  const bodyEl   = document.getElementById("confBody");
+  const warnEl   = document.getElementById("confWarning");
+  const okBtn    = document.getElementById("confOkBtn");
+  const cancelBtn= document.getElementById("confCancelBtn");
+
+  titleEl.textContent  = title;
+  bodyEl.textContent   = body;
+  warnEl.textContent   = warning;
+  warnEl.style.display = warning ? "block" : "none";
+  okBtn.textContent    = okLabel;
+  cancelBtn.textContent= cancelLabel;
+
+  overlay.classList.add("open");
+
+  const close = () => overlay.classList.remove("open");
+  const cleanup = () => { okBtn.onclick = null; cancelBtn.onclick = null; };
+
+  okBtn.onclick = () => { cleanup(); close(); onOk(); };
+  cancelBtn.onclick = () => { cleanup(); close(); };
+}
+
 const DATA = [
   [1,"M77","Spiral Gal","Cet",8.9,"7×6","02 42.7","-00 01","4, 6"],
   [2,"M74","Spiral Gal","Psc",9.4,"10×9.5","01 36.7","+15 47","4, 5"],
@@ -2657,6 +2793,19 @@ function getTypeClass(type) {
   if (type.includes("Star Cloud"))  return "badge-starcloud";
   return "badge-double";
 }
+function getTypeSymbol(type) {
+  if (type.includes("Spiral"))      return "@";
+  if (type.includes("Elliptical"))  return "●";
+  if (type.includes("Lenticular"))  return "◑";
+  if (type.includes("Irregular"))   return "*";
+  if (type.includes("Open"))        return "+";
+  if (type.includes("Globular"))    return "◎";
+  if (type.includes("Diffuse"))     return "~";
+  if (type.includes("Planetary"))   return "○";
+  if (type.includes("Supernova"))   return "✕";
+  if (type.includes("Star Cloud"))  return "::";
+  return "·";
+}
 function matchesFilterType(type, filter) {
   if (filter === "all")            return true;
   if (filter === "Galaxy")         return type.includes("Gal");
@@ -2707,7 +2856,7 @@ function renderTable() {
     tr.innerHTML = `
       <td class="col-mo-val">${mo}</td>
       <td class="col-m-val"><a class="m-link" data-idx="${dataIdx}" href="#">${m}</a></td>
-      <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}"></span>${type}</td>
+      <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}">${getTypeSymbol(type)}</span>${type}</td>
       <td class="col-con-val">${con}</td>
       <td class="col-mag-val">${mag}</td>
       <td class="col-size-val">${size}</td>
@@ -2968,7 +3117,7 @@ function populateLightbox(idx) {
   const placeholder = () => {
     wrap.innerHTML = `
       <div class="lb-img-placeholder">
-        <div class="ph-icon">✦</div>
+        <div class="ph-icon"><span class="ui-icon" data-night="[+]">✦</span></div>
         <div class="ph-text">${imgKey(m)}<br>Image not yet loaded</div>
       </div>`;
   };
@@ -3352,9 +3501,13 @@ document.getElementById("btnImportALFile").addEventListener("change", function (
     if (payload.exported)  msg += `\nFile exported: ${new Date(payload.exported).toLocaleString()}`;
     msg += "\n\nImport and merge all records?";
 
-    if (!confirm(msg)) { e.target.value = ""; return; }
-
-    // Merge records — incoming overwrites any conflicts
+    showConfirm({
+      title: "Import AL Records",
+      body: msg,
+      okLabel: "Import",
+      cancelLabel: "Cancel"
+    }, () => {
+      // Merge records — incoming overwrites any conflicts
     Object.assign(SAVED_FULLNOTES, incoming);
 
     // Also restore observation timestamps if the file includes them
@@ -3370,6 +3523,7 @@ document.getElementById("btnImportALFile").addEventListener("change", function (
     });
 
     alert(`AL Records imported — ${incomingKeys.length} record${incomingKeys.length !== 1 ? "s" : ""} loaded.`);
+    }); // end showConfirm — import
     e.target.value = "";
   };
   reader.readAsText(file);
@@ -3523,11 +3677,18 @@ document.getElementById("sessOverlay").addEventListener("click", function(e) {
   if (e.target === this) closeSessionModal();
 });
 document.getElementById("sessClearBtn").addEventListener("click", function () {
-  if (!confirm("Clear all session defaults?\n\nThis will not affect any saved observation records.")) return;
-  SESSION = {};
-  saveSession();
-  updateSessionIndicator();
-  closeSessionModal();
+  showConfirm({
+    title: "Clear Session Defaults",
+    body: "Clear all session defaults?",
+    warning: "This will not affect any saved observation records.",
+    okLabel: "Clear",
+    cancelLabel: "Cancel"
+  }, () => {
+    SESSION = {};
+    saveSession();
+    updateSessionIndicator();
+    closeSessionModal();
+  });
 });
 
 const logMenuBtn      = document.getElementById("btnLogMenu");
@@ -3608,11 +3769,14 @@ document.getElementById("menuReset").addEventListener("click", function() {
   if (done > 0)  msg += `  • ${done} object${done  > 1 ? "s" : ""} marked observed\n`;
   if (noted > 0) msg += `  • ${noted} field note${noted > 1 ? "s" : ""}\n`;
   if (done === 0 && noted === 0) msg += "  (no data currently recorded)\n";
-  msg += "\nThis cannot be undone.";
-
-  if (!confirm(msg)) return;
-
-  // Clear all data
+  showConfirm({
+    title: "Reset Observation Data",
+    body: msg,
+    warning: "This cannot be undone.",
+    okLabel: "Reset",
+    cancelLabel: "Cancel"
+  }, () => {
+    // Clear all data
   Object.keys(SAVED_CHECKS).forEach(k    => delete SAVED_CHECKS[k]);
   Object.keys(SAVED_NOTES).forEach(k     => delete SAVED_NOTES[k]);
   Object.keys(SAVED_TIMES).forEach(k     => delete SAVED_TIMES[k]);
@@ -3624,9 +3788,10 @@ document.getElementById("menuReset").addEventListener("click", function() {
     localStorage.removeItem("mm_fullnotes");
   } catch(e) {}
 
-  renderTable();
-  updateProgress();
-  applyFilter();
+    renderTable();
+    updateProgress();
+    applyFilter();
+  }); // end showConfirm — reset
 });
 
 /* THEME */
