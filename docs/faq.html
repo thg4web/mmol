@@ -164,6 +164,7 @@
       <span class="bar"></span>
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
+      <a href="../index.html" class="nav-menu-link">Log</a>
       <a href="resources.html" class="nav-menu-link">Resources</a>
       <a href="user-guide.html" class="nav-menu-link">User Guide</a>
       <a href="about.html" class="nav-menu-link">About</a>
@@ -376,23 +377,6 @@ document.addEventListener('click', function() {
   navMenuDropdown.classList.remove('open');
   navMenuBtn.classList.remove('open');
 });
-
-// ── Hamburger nav menu ────────────────────────────────────────────────────────
-(function() {
-  var btn = document.getElementById('navMenuBtn');
-  var dd  = document.getElementById('navMenuDropdown');
-  if (!btn || !dd) return;
-  btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    var open = dd.classList.toggle('open');
-    btn.classList.toggle('open', open);
-  });
-  dd.addEventListener('click', function(e) { e.stopPropagation(); });
-  document.addEventListener('click', function() {
-    dd.classList.remove('open');
-    btn.classList.remove('open');
-  });
-})();
 
 </script>
 </body>
