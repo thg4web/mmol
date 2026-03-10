@@ -287,11 +287,12 @@ h1 {
   text-shadow: 0 0 50px rgba(255,70,40,.35), 0 0 100px rgba(255,70,40,.12);
 }
 .subtitle {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: 15px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(21px, 3.75vw, 40.5px);
+  font-weight: 400;
   color: var(--text-sub);
-  letter-spacing: .06em;
+  letter-spacing: .08em;
+  line-height: 1.55;
   margin-bottom: 18px;
   transition: color .3s;
 }
