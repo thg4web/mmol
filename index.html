@@ -147,6 +147,7 @@ colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
 colgroup col.col-mag  { width: 46px; }
+colgroup col.col-size { width: 68px; }
 colgroup col.col-ra   { width: 76px; }
 colgroup col.col-dec  { width: 72px; }
 colgroup col.col-psa  { width: 86px; }
@@ -175,6 +176,22 @@ th {
 }
 th:last-child { border-right: none; }
 th.center     { text-align: center; }
+th.col-obj-sort {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color .15s, background .3s, border-color .3s;
+}
+th.col-obj-sort:hover { color: var(--text-data); }
+th.col-obj-sort .sort-arrow {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 8px;
+  opacity: .5;
+  vertical-align: middle;
+  transition: opacity .15s;
+}
+th.col-obj-sort:hover .sort-arrow { opacity: 1; }
 
 tbody tr.data-row {
   border-bottom: 1px solid var(--border);
@@ -200,6 +217,7 @@ td.col-type-val { font-size: 11.5px; color: var(--text-data); transition: color 
 .type-badge { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
 td.col-con-val { font-size: 11.5px; color: var(--con-color); letter-spacing: .04em; font-weight: 600; text-align: center; transition: color .3s; }
 td.col-mag-val { text-align: right; font-size: 12px; color: var(--text-data); padding-right: 12px; font-variant-numeric: tabular-nums; transition: color .3s; }
+td.col-size-val { font-size: 11px; color: var(--text-data); opacity: .85; font-variant-numeric: tabular-nums; white-space: nowrap; transition: color .3s; }
 td.col-ra-val, td.col-dec-val { font-size: 11.5px; color: var(--text-data); font-variant-numeric: tabular-nums; opacity: .9; transition: color .3s; }
 td.col-psa-val { font-size: 11px; color: var(--text-sub); transition: color .3s; }
 td.col-chk-val { text-align: center; }
@@ -582,6 +600,7 @@ colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
 colgroup col.col-mag  { width: 46px; }
+colgroup col.col-size { width: 68px; }
 colgroup col.col-ra   { width: 76px; }
 colgroup col.col-dec  { width: 72px; }
 colgroup col.col-psa  { width: 86px; }
@@ -1612,16 +1631,17 @@ tr.checked td.col-m-val a.m-link {
     <table id="mainTable">
       <colgroup>
         <col class="col-mo"><col class="col-m"><col class="col-type">
-        <col class="col-con"><col class="col-mag"><col class="col-ra">
+        <col class="col-con"><col class="col-mag"><col class="col-size"><col class="col-ra">
         <col class="col-dec"><col class="col-psa"><col class="col-chk"><col class="col-note">
       </colgroup>
       <thead>
         <tr>
           <th class="center">#</th>
-          <th>Object</th>
+          <th id="objSortTh" class="col-obj-sort" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
           <th>Type</th>
           <th class="center">Con</th>
           <th class="center">Mag</th>
+          <th>Size</th>
           <th>RA</th>
           <th>Dec</th>
           <th>PSA Pg</th>
@@ -2508,116 +2528,116 @@ tr.checked td.col-m-val a.m-link {
 
 <script>
 const DATA = [
-  [1,"M77","Spiral Gal","Cet",8.9,"02 42.7","-00 01","4, 6"],
-  [2,"M74","Spiral Gal","Psc",9.4,"01 36.7","+15 47","4, 5"],
-  [3,"M33","Spiral Gal","Tri",5.7,"01 33.9","+30 39","2, 3, 4, 5"],
-  [4,"M31","Spiral Gal","And",3.4,"00 42.7","+41 16","3, 72"],
-  [5,"M32","Elliptical Gal","And",8.1,"00 42.7","+40 52","3, 72"],
-  [6,"M110","Elliptical Gal","And",8.5,"00 40.4","+41 41","3, 72"],
-  [7,"M52","Open Cluster","Cas",7.3,"23 24.2","+61 35","3, 71, 72"],
-  [8,"M103","Open Cluster","Cas",7.4,"01 33.2","+60 42","1, 2, 3, 72"],
-  [9,"M76","Planetary Neb","Per",10.1,"01 42.4","+51 34","2, 13"],
-  [10,"M34","Open Cluster","Per",5.5,"02 42.0","+42 47","2, 13"],
-  [11,"M45","Open Cluster","Tau",1.6,"03 47.0","+24 07","13, 15, A"],
-  [12,"M79","Globular Clust","Lep",7.7,"05 24.5","-24 33","16, 18"],
-  [13,"M42","Diffuse Neb","Ori",4.0,"05 35.4","-05 27","16, B"],
-  [14,"M43","Diffuse Neb","Ori",9.0,"05 35.6","-05 16","16, B"],
-  [15,"M78","Diffuse Neb","Ori",8.3,"05 46.7","+00 03","14, 16"],
-  [16,"M1","Supernova Rem","Tau",8.4,"05 34.5","+22 01","14"],
-  [17,"M35","Open Cluster","Gem",5.3,"06 08.9","+24 20","12, 14, 23, 25"],
-  [18,"M37","Open Cluster","Aur",6.2,"05 52.4","+32 33","12, 14, 23, 25"],
-  [19,"M36","Open Cluster","Aur",6.3,"05 36.1","+34 08","12, 14"],
-  [20,"M38","Open Cluster","Aur",7.4,"05 28.4","+35 50","12, 14"],
-  [21,"M41","Open Cluster","CMa",4.6,"06 46.0","-20 44","27"],
-  [22,"M93","Open Cluster","Pup",6.0,"07 44.6","-23 52","26, 28"],
-  [23,"M47","Open Cluster","Pup",5.2,"07 36.6","-14 30","26, 27"],
-  [24,"M46","Open Cluster","Pup",6.0,"07 41.8","-14 49","26, 27"],
-  [25,"M50","Open Cluster","Mon",6.3,"07 03.2","-08 20","27"],
-  [26,"M48","Open Cluster","Hya",5.5,"08 13.8","-05 48","26"],
-  [27,"M44","Open Cluster","Cnc",3.7,"08 40.1","+19 59","24, 35"],
-  [28,"M67","Open Cluster","Cnc",6.1,"08 50.4","+11 49","24, 35"],
-  [29,"M95","Spiral Gal","Leo",9.7,"10 44.0","+11 42","34"],
-  [30,"M96","Spiral Gal","Leo",9.2,"10 46.8","+11 49","34"],
-  [31,"M105","Elliptical Gal","Leo",9.3,"10 47.8","+12 35","34"],
-  [32,"M65","Spiral Gal","Leo",9.3,"11 18.9","+13 05","34, G"],
-  [33,"M66","Spiral Gal","Leo",8.9,"11 20.2","+12 59","34, G"],
-  [34,"M81","Spiral Gal","UMa",6.9,"09 55.6","+69 04","21, 31"],
-  [35,"M82","Irregular Gal","UMa",8.4,"09 55.8","+69 41","21, 31"],
-  [36,"M97","Planetary Neb","UMa",9.9,"11 14.8","+55 01","32, 43, F"],
-  [37,"M108","Spiral Gal","UMa",10.0,"11 11.5","+55 40","31, 32, 33, 43, F"],
-  [38,"M109","Spiral Gal","UMa",9.8,"11 57.6","+53 23","32, 43, F"],
-  [39,"M40","Double Star","UMa",8.4,"12 22.4","+58 05","32, 41, 43, F"],
-  [40,"M106","Spiral Gal","CVn",8.4,"12 19.0","+47 18","32, 43"],
-  [41,"M94","Spiral Gal","CVn",8.2,"12 50.9","+41 07","32, 43"],
-  [42,"M63","Spiral Gal","CVn",8.6,"13 15.8","+42 02","32, 43"],
-  [43,"M51","Spiral Gal","CVn",8.4,"13 29.9","+47 12","32, 43"],
-  [44,"M101","Spiral Gal","UMa",7.9,"14 03.2","+54 21","32, 42, 53"],
-  [45,"M102","Lenticular Gal","Dra",9.9,"15 06.5","+55 46","52"],
-  [46,"M53","Globular Clust","Com",7.6,"13 12.9","+18 10","45"],
-  [47,"M64","Spiral Gal","Com",8.5,"12 56.7","+21 41","45"],
-  [48,"M3","Globular Clust","CVn",6.2,"13 42.2","+28 23","43, 44"],
-  [49,"M98","Spiral Gal","Com",10.1,"12 13.8","+14 54","34, 45, C"],
-  [50,"M99","Spiral Gal","Com",9.9,"12 18.8","+14 25","45, C"],
-  [51,"M100","Spiral Gal","Com",9.3,"12 22.9","+15 49","45, C"],
-  [52,"M85","Lenticular Gal","Com",9.1,"12 25.4","+18 11","45, C"],
-  [53,"M84","Lenticular Gal","Vir",9.1,"12 25.1","+12 53","45, C"],
-  [54,"M86","Lenticular Gal","Vir",8.9,"12 26.2","+12 57","45, C"],
-  [55,"M87","Elliptical Gal","Vir",8.6,"12 30.8","+12 24","45, C"],
-  [56,"M89","Elliptical Gal","Vir",9.8,"12 35.7","+12 33","45, C"],
-  [57,"M90","Spiral Gal","Vir",9.5,"12 36.8","+13 10","45, C"],
-  [58,"M88","Spiral Gal","Com",9.6,"12 32.0","+14 25","45, C"],
-  [59,"M91","Spiral Gal","Com",10.2,"12 35.4","+14 30","45, C"],
-  [60,"M58","Spiral Gal","Vir",9.7,"12 37.7","+11 49","45, C"],
-  [61,"M59","Elliptical Gal","Vir",9.6,"12 42.0","+11 39","45, C"],
-  [62,"M60","Elliptical Gal","Vir",8.8,"12 43.7","+11 33","45, C"],
-  [63,"M49","Elliptical Gal","Vir",8.4,"12 29.8","+08 00","45, C"],
-  [64,"M61","Spiral Gal","Vir",9.7,"12 21.9","+04 28","45, 47"],
-  [65,"M104","Spiral Gal","Vir",8.0,"12 40.0","-11 37","47"],
-  [66,"M68","Globular Clust","Hya",7.8,"12 39.5","-26 45","47, 49"],
-  [67,"M83","Spiral Gal","Hya",7.6,"13 37.0","-29 52","46, 47, 48"],
-  [68,"M5","Globular Clust","Ser",5.6,"15 18.6","+02 05","55, 57"],
-  [69,"M13","Globular Clust","Her",5.8,"16 41.7","+36 28","52"],
-  [70,"M92","Globular Clust","Her",6.4,"17 17.1","+43 08","52, 63"],
-  [71,"M57","Planetary Neb","Lyr",8.8,"18 53.6","+33 02","63, 65"],
-  [72,"M56","Globular Clust","Lyr",8.3,"19 16.6","+30 11","63, 65"],
-  [73,"M29","Open Cluster","Cyg",7.1,"20 23.9","+38 32","62, 73"],
-  [74,"M39","Open Cluster","Cyg",4.6,"21 32.2","+48 26","62, 73"],
-  [75,"M27","Planetary Neb","Vul",7.4,"19 59.6","+22 43","62, 64"],
-  [76,"M71","Globular Clust","Sge",8.2,"19 53.8","+18 47","64"],
-  [77,"M107","Globular Clust","Oph",7.9,"16 32.5","-13 03","56"],
-  [78,"M12","Globular Clust","Oph",6.7,"16 47.2","-01 57","54, 56"],
-  [79,"M10","Globular Clust","Oph",6.6,"16 57.1","-04 06","54, 56"],
-  [80,"M14","Globular Clust","Oph",7.6,"17 37.6","-03 15","54, 56, 67"],
-  [81,"M9","Globular Clust","Oph",7.7,"17 19.2","-18 31","56"],
-  [82,"M4","Globular Clust","Sco",5.6,"16 23.6","-26 32","56, 58"],
-  [83,"M80","Globular Clust","Sco",7.3,"16 17.0","-22 59","56"],
-  [84,"M19","Globular Clust","Oph",6.8,"17 02.6","-26 16","56, 58"],
-  [85,"M62","Globular Clust","Oph",6.5,"17 01.2","-30 07","56, 58"],
-  [86,"M6","Open Cluster","Sco",5.3,"17 40.1","-32 13","56, 58, 67, 69, J"],
-  [87,"M7","Open Cluster","Sco",4.1,"17 53.9","-34 49","58, 67, 69, J"],
-  [88,"M11","Open Cluster","Sct",6.3,"18 51.1","-06 16","65, 67"],
-  [89,"M26","Open Cluster","Sct",8.0,"18 45.2","-09 24","67"],
-  [90,"M16","Open Cluster","Ser",6.4,"18 18.8","-13 47","67, I"],
-  [91,"M17","Diffuse Neb","Sgr",7.0,"18 20.8","-16 11","67, I"],
-  [92,"M18","Open Cluster","Sgr",7.5,"18 19.9","-17 08","67"],
-  [93,"M24","Star Cloud","Sgr",4.6,"18 16.9","-18 29","67, I"],
-  [94,"M25","Open Cluster","Sgr",6.5,"18 31.6","-19 15","67, I"],
-  [95,"M23","Open Cluster","Sgr",6.9,"17 56.8","-19 01","67, I"],
-  [96,"M21","Open Cluster","Sgr",6.5,"18 04.6","-22 30","67, 69, I"],
-  [97,"M20","Diffuse Neb","Sgr",9.0,"18 02.6","-23 02","67, 69, I"],
-  [98,"M8","Diffuse Neb","Sgr",6.0,"18 03.8","-24 23","67, 69, I"],
-  [99,"M28","Globular Clust","Sgr",6.8,"18 24.5","-24 52","67, 69, I"],
-  [100,"M22","Globular Clust","Sgr",5.1,"18 36.4","-23 54","67, 69, I"],
-  [101,"M69","Globular Clust","Sgr",7.6,"18 31.4","-32 21","67, 69, I"],
-  [102,"M70","Globular Clust","Sgr",7.9,"18 43.2","-32 18","67, 69, I"],
-  [103,"M54","Globular Clust","Sgr",7.6,"18 55.1","-30 29","67, 69"],
-  [104,"M55","Globular Clust","Sgr",6.3,"19 40.0","-30 58","66, 68"],
-  [105,"M75","Globular Clust","Sgr",8.5,"20 06.1","-21 55","66"],
-  [106,"M15","Globular Clust","Peg",6.2,"21 30.0","+12 10","75"],
-  [107,"M2","Globular Clust","Aqr",6.5,"21 33.5","-00 49","75, 77"],
-  [108,"M72","Globular Clust","Aqr",9.3,"20 53.5","-12 32","66, 77"],
-  [109,"M73","Asterism","Aqr",9.0,"20 58.9","-12 38","66, 77"],
-  [110,"M30","Globular Clust","Cap",7.2,"21 40.4","-23 11","77"],
+  [1,"M77","Spiral Gal","Cet",8.9,"7×6","02 42.7","-00 01","4, 6"],
+  [2,"M74","Spiral Gal","Psc",9.4,"10×9.5","01 36.7","+15 47","4, 5"],
+  [3,"M33","Spiral Gal","Tri",5.7,"73×45","01 33.9","+30 39","2, 3, 4, 5"],
+  [4,"M31","Spiral Gal","And",3.4,"178×63","00 42.7","+41 16","3, 72"],
+  [5,"M32","Elliptical Gal","And",8.1,"8×6","00 42.7","+40 52","3, 72"],
+  [6,"M110","Elliptical Gal","And",8.5,"17×10","00 40.4","+41 41","3, 72"],
+  [7,"M52","Open Cluster","Cas",7.3,"13'","23 24.2","+61 35","3, 71, 72"],
+  [8,"M103","Open Cluster","Cas",7.4,"6'","01 33.2","+60 42","1, 2, 3, 72"],
+  [9,"M76","Planetary Neb","Per",10.1,"2.7×1.8","01 42.4","+51 34","2, 13"],
+  [10,"M34","Open Cluster","Per",5.5,"35'","02 42.0","+42 47","2, 13"],
+  [11,"M45","Open Cluster","Tau",1.6,"110'","03 47.0","+24 07","13, 15, A"],
+  [12,"M79","Globular Clust","Lep",7.7,"8.7'","05 24.5","-24 33","16, 18"],
+  [13,"M42","Diffuse Neb","Ori",4.0,"85×60","05 35.4","-05 27","16, B"],
+  [14,"M43","Diffuse Neb","Ori",9.0,"20×15","05 35.6","-05 16","16, B"],
+  [15,"M78","Diffuse Neb","Ori",8.3,"8×6","05 46.7","+00 03","14, 16"],
+  [16,"M1","Supernova Rem","Tau",8.4,"6×4","05 34.5","+22 01","14"],
+  [17,"M35","Open Cluster","Gem",5.3,"28'","06 08.9","+24 20","12, 14, 23, 25"],
+  [18,"M37","Open Cluster","Aur",6.2,"24'","05 52.4","+32 33","12, 14, 23, 25"],
+  [19,"M36","Open Cluster","Aur",6.3,"12'","05 36.1","+34 08","12, 14"],
+  [20,"M38","Open Cluster","Aur",7.4,"21'","05 28.4","+35 50","12, 14"],
+  [21,"M41","Open Cluster","CMa",4.6,"38'","06 46.0","-20 44","27"],
+  [22,"M93","Open Cluster","Pup",6.0,"22'","07 44.6","-23 52","26, 28"],
+  [23,"M47","Open Cluster","Pup",5.2,"30'","07 36.6","-14 30","26, 27"],
+  [24,"M46","Open Cluster","Pup",6.0,"27'","07 41.8","-14 49","26, 27"],
+  [25,"M50","Open Cluster","Mon",6.3,"16'","07 03.2","-08 20","27"],
+  [26,"M48","Open Cluster","Hya",5.5,"54'","08 13.8","-05 48","26"],
+  [27,"M44","Open Cluster","Cnc",3.7,"95'","08 40.1","+19 59","24, 35"],
+  [28,"M67","Open Cluster","Cnc",6.1,"30'","08 50.4","+11 49","24, 35"],
+  [29,"M95","Spiral Gal","Leo",9.7,"4.4×3.3","10 44.0","+11 42","34"],
+  [30,"M96","Spiral Gal","Leo",9.2,"6×4","10 46.8","+11 49","34"],
+  [31,"M105","Elliptical Gal","Leo",9.3,"2'","10 47.8","+12 35","34"],
+  [32,"M65","Spiral Gal","Leo",9.3,"8×1.5","11 18.9","+13 05","34, G"],
+  [33,"M66","Spiral Gal","Leo",8.9,"8×2.5","11 20.2","+12 59","34, G"],
+  [34,"M81","Spiral Gal","UMa",6.9,"21×10","09 55.6","+69 04","21, 31"],
+  [35,"M82","Irregular Gal","UMa",8.4,"9×4","09 55.8","+69 41","21, 31"],
+  [36,"M97","Planetary Neb","UMa",9.9,"3.4×3.3","11 14.8","+55 01","32, 43, F"],
+  [37,"M108","Spiral Gal","UMa",10.0,"8×1","11 11.5","+55 40","31, 32, 33, 43, F"],
+  [38,"M109","Spiral Gal","UMa",9.8,"7×4","11 57.6","+53 23","32, 43, F"],
+  [39,"M40","Double Star","UMa",8.4,"0.8'","12 22.4","+58 05","32, 41, 43, F"],
+  [40,"M106","Spiral Gal","CVn",8.4,"19×8","12 19.0","+47 18","32, 43"],
+  [41,"M94","Spiral Gal","CVn",8.2,"7×3","12 50.9","+41 07","32, 43"],
+  [42,"M63","Spiral Gal","CVn",8.6,"10×6","13 15.8","+42 02","32, 43"],
+  [43,"M51","Spiral Gal","CVn",8.4,"11×7","13 29.9","+47 12","32, 43"],
+  [44,"M101","Spiral Gal","UMa",7.9,"22'","14 03.2","+54 21","32, 42, 53"],
+  [45,"M102","Lenticular Gal","Dra",9.9,"5.2×2.3","15 06.5","+55 46","52"],
+  [46,"M53","Globular Clust","Com",7.6,"12.6'","13 12.9","+18 10","45"],
+  [47,"M64","Spiral Gal","Com",8.5,"9.3×5.4","12 56.7","+21 41","45"],
+  [48,"M3","Globular Clust","CVn",6.2,"16.2'","13 42.2","+28 23","43, 44"],
+  [49,"M98","Spiral Gal","Com",10.1,"9.5×3.2","12 13.8","+14 54","34, 45, C"],
+  [50,"M99","Spiral Gal","Com",9.9,"5.4×4.8","12 18.8","+14 25","45, C"],
+  [51,"M100","Spiral Gal","Com",9.3,"7×6","12 22.9","+15 49","45, C"],
+  [52,"M85","Lenticular Gal","Com",9.1,"7.1×5.2","12 25.4","+18 11","45, C"],
+  [53,"M84","Lenticular Gal","Vir",9.1,"5'","12 25.1","+12 53","45, C"],
+  [54,"M86","Lenticular Gal","Vir",8.9,"7.5×5.5","12 26.2","+12 57","45, C"],
+  [55,"M87","Elliptical Gal","Vir",8.6,"7'","12 30.8","+12 24","45, C"],
+  [56,"M89","Elliptical Gal","Vir",9.8,"4'","12 35.7","+12 33","45, C"],
+  [57,"M90","Spiral Gal","Vir",9.5,"9.5×4.5","12 36.8","+13 10","45, C"],
+  [58,"M88","Spiral Gal","Com",9.6,"7×4","12 32.0","+14 25","45, C"],
+  [59,"M91","Spiral Gal","Com",10.2,"5.4×4.4","12 35.4","+14 30","45, C"],
+  [60,"M58","Spiral Gal","Vir",9.7,"5.5×4.5","12 37.7","+11 49","45, C"],
+  [61,"M59","Elliptical Gal","Vir",9.6,"5×3.5","12 42.0","+11 39","45, C"],
+  [62,"M60","Elliptical Gal","Vir",8.8,"7×6","12 43.7","+11 33","45, C"],
+  [63,"M49","Elliptical Gal","Vir",8.4,"9×7.5","12 29.8","+08 00","45, C"],
+  [64,"M61","Spiral Gal","Vir",9.7,"6×5.5","12 21.9","+04 28","45, 47"],
+  [65,"M104","Spiral Gal","Vir",8.0,"9×4","12 40.0","-11 37","47"],
+  [66,"M68","Globular Clust","Hya",7.8,"12'","12 39.5","-26 45","47, 49"],
+  [67,"M83","Spiral Gal","Hya",7.6,"11×10","13 37.0","-29 52","46, 47, 48"],
+  [68,"M5","Globular Clust","Ser",5.6,"17.4'","15 18.6","+02 05","55, 57"],
+  [69,"M13","Globular Clust","Her",5.8,"16.6'","16 41.7","+36 28","52"],
+  [70,"M92","Globular Clust","Her",6.4,"11.2'","17 17.1","+43 08","52, 63"],
+  [71,"M57","Planetary Neb","Lyr",8.8,"1.4×1.0","18 53.6","+33 02","63, 65"],
+  [72,"M56","Globular Clust","Lyr",8.3,"7.1'","19 16.6","+30 11","63, 65"],
+  [73,"M29","Open Cluster","Cyg",7.1,"7'","20 23.9","+38 32","62, 73"],
+  [74,"M39","Open Cluster","Cyg",4.6,"32'","21 32.2","+48 26","62, 73"],
+  [75,"M27","Planetary Neb","Vul",7.4,"8×5.7","19 59.6","+22 43","62, 64"],
+  [76,"M71","Globular Clust","Sge",8.2,"7.2'","19 53.8","+18 47","64"],
+  [77,"M107","Globular Clust","Oph",7.9,"10'","16 32.5","-13 03","56"],
+  [78,"M12","Globular Clust","Oph",6.7,"14.5'","16 47.2","-01 57","54, 56"],
+  [79,"M10","Globular Clust","Oph",6.6,"15.1'","16 57.1","-04 06","54, 56"],
+  [80,"M14","Globular Clust","Oph",7.6,"11.7'","17 37.6","-03 15","54, 56, 67"],
+  [81,"M9","Globular Clust","Oph",7.7,"9.3'","17 19.2","-18 31","56"],
+  [82,"M4","Globular Clust","Sco",5.6,"26.3'","16 23.6","-26 32","56, 58"],
+  [83,"M80","Globular Clust","Sco",7.3,"8.9'","16 17.0","-22 59","56"],
+  [84,"M19","Globular Clust","Oph",6.8,"13.5'","17 02.6","-26 16","56, 58"],
+  [85,"M62","Globular Clust","Oph",6.5,"14.1'","17 01.2","-30 07","56, 58"],
+  [86,"M6","Open Cluster","Sco",5.3,"25'","17 40.1","-32 13","56, 58, 67, 69, J"],
+  [87,"M7","Open Cluster","Sco",4.1,"80'","17 53.9","-34 49","58, 67, 69, J"],
+  [88,"M11","Open Cluster","Sct",6.3,"14'","18 51.1","-06 16","65, 67"],
+  [89,"M26","Open Cluster","Sct",8.0,"15'","18 45.2","-09 24","67"],
+  [90,"M16","Open Cluster","Ser",6.4,"7'","18 18.8","-13 47","67, I"],
+  [91,"M17","Diffuse Neb","Sgr",7.0,"11'","18 20.8","-16 11","67, I"],
+  [92,"M18","Open Cluster","Sgr",7.5,"9'","18 19.9","-17 08","67"],
+  [93,"M24","Star Cloud","Sgr",4.6,"90'","18 16.9","-18 29","67, I"],
+  [94,"M25","Open Cluster","Sgr",6.5,"40'","18 31.6","-19 15","67, I"],
+  [95,"M23","Open Cluster","Sgr",6.9,"27'","17 56.8","-19 01","67, I"],
+  [96,"M21","Open Cluster","Sgr",6.5,"13'","18 04.6","-22 30","67, 69, I"],
+  [97,"M20","Diffuse Neb","Sgr",9.0,"28'","18 02.6","-23 02","67, 69, I"],
+  [98,"M8","Diffuse Neb","Sgr",6.0,"90×40","18 03.8","-24 23","67, 69, I"],
+  [99,"M28","Globular Clust","Sgr",6.8,"11.2'","18 24.5","-24 52","67, 69, I"],
+  [100,"M22","Globular Clust","Sgr",5.1,"24'","18 36.4","-23 54","67, 69, I"],
+  [101,"M69","Globular Clust","Sgr",7.6,"7.1'","18 31.4","-32 21","67, 69, I"],
+  [102,"M70","Globular Clust","Sgr",7.9,"7.8'","18 43.2","-32 18","67, 69, I"],
+  [103,"M54","Globular Clust","Sgr",7.6,"9.1'","18 55.1","-30 29","67, 69"],
+  [104,"M55","Globular Clust","Sgr",6.3,"19'","19 40.0","-30 58","66, 68"],
+  [105,"M75","Globular Clust","Sgr",8.5,"6'","20 06.1","-21 55","66"],
+  [106,"M15","Globular Clust","Peg",6.2,"12.3'","21 30.0","+12 10","75"],
+  [107,"M2","Globular Clust","Aqr",6.5,"12.9'","21 33.5","-00 49","75, 77"],
+  [108,"M72","Globular Clust","Aqr",9.3,"5.9'","20 53.5","-12 32","66, 77"],
+  [109,"M73","Asterism","Aqr",9.0,"2.8'","20 58.9","-12 38","66, 77"],
+  [110,"M30","Globular Clust","Cap",7.2,"11'","21 40.4","-23 11","77"],
 ];
 
 function getTypeClass(type) {
@@ -2667,7 +2687,13 @@ function saveState() {
 function renderTable() {
   const tbody = document.getElementById("tableBody");
   tbody.innerHTML = "";
-  DATA.forEach(([mo,m,type,con,mag,ra,dec,psa], idx) => {
+
+  // Sort a copy of DATA based on current sortMode
+  const rows = sortMode === "numeric"
+    ? [...DATA].sort((a, b) => parseInt(a[1].replace("M","")) - parseInt(b[1].replace("M","")))
+    : DATA; // marathon order is the native array order
+
+  rows.forEach(([mo,m,type,con,mag,size,ra,dec,psa], idx) => {
     const id = m.replace(/\s/g,"");
     const tr = document.createElement("tr");
     tr.className = "data-row";
@@ -2679,6 +2705,7 @@ function renderTable() {
       <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}"></span>${type}</td>
       <td class="col-con-val">${con}</td>
       <td class="col-mag-val">${mag}</td>
+      <td class="col-size-val">${size}</td>
       <td class="col-ra-val">${ra}</td>
       <td class="col-dec-val">${dec}</td>
       <td class="col-psa-val">${psa}</td>
@@ -2991,7 +3018,7 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = `${(done/DATA.length)*100}%`;
 }
 
-let activeFilter = "all", searchTerm = "";
+let activeFilter = "all", searchTerm = "", sortMode = "marathon";
 function applyFilter() {
   document.querySelectorAll("tr.data-row").forEach(tr => {
     const { type, id, m, con, mo } = tr.dataset;
@@ -3010,6 +3037,29 @@ document.querySelectorAll(".filter-btn").forEach(btn => btn.addEventListener("cl
 document.getElementById("searchInput").addEventListener("input", function() {
   searchTerm = this.value.trim().toLowerCase(); applyFilter();
 });
+
+/* ── OBJECT COLUMN SORT ─────────────────────────────────────────── */
+function updateObjSortHeader() {
+  const th = document.getElementById("objSortTh");
+  if (!th) return;
+  if (sortMode === "numeric") {
+    th.innerHTML = 'Numeric <span class="sort-arrow">▲</span>';
+  } else {
+    th.innerHTML = 'Marathon <span class="sort-arrow">▲</span>';
+  }
+  th.title = sortMode === "numeric"
+    ? "Sorted by Messier Number — click for Marathon Order"
+    : "Sorted by Marathon Order — click for Numeric Order";
+}
+
+document.getElementById("objSortTh").addEventListener("click", function() {
+  sortMode = sortMode === "marathon" ? "numeric" : "marathon";
+  updateObjSortHeader();
+  renderTable();
+  applyFilter();
+});
+
+updateObjSortHeader();
 
 /* ── EXPORT ─────────────────────────────────────────────────────── */
 // ── CSV helpers ─────────────────────────────────────────────────────
