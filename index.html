@@ -2494,6 +2494,10 @@ tr.checked td.col-m-val a.m-link {
           <span class="lb-stat-val" id="lbSideMag">—</span>
         </div>
         <div class="lb-stat">
+          <span class="lb-stat-label">Size (arcmin)</span>
+          <span class="lb-stat-val" id="lbSideSize">—</span>
+        </div>
+        <div class="lb-stat">
           <span class="lb-stat-label">Right Ascension</span>
           <span class="lb-stat-val" id="lbSideRA">—</span>
         </div>
@@ -2693,7 +2697,8 @@ function renderTable() {
     ? [...DATA].sort((a, b) => parseInt(a[1].replace("M","")) - parseInt(b[1].replace("M","")))
     : DATA; // marathon order is the native array order
 
-  rows.forEach(([mo,m,type,con,mag,size,ra,dec,psa], idx) => {
+  rows.forEach(([mo,m,type,con,mag,size,ra,dec,psa]) => {
+    const dataIdx = DATA.findIndex(d => d[1] === m);
     const id = m.replace(/\s/g,"");
     const tr = document.createElement("tr");
     tr.className = "data-row";
@@ -2701,7 +2706,7 @@ function renderTable() {
     if (SAVED_CHECKS[id]) tr.classList.add("checked");
     tr.innerHTML = `
       <td class="col-mo-val">${mo}</td>
-      <td class="col-m-val"><a class="m-link" data-idx="${idx}" href="#">${m}</a></td>
+      <td class="col-m-val"><a class="m-link" data-idx="${dataIdx}" href="#">${m}</a></td>
       <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}"></span>${type}</td>
       <td class="col-con-val">${con}</td>
       <td class="col-mag-val">${mag}</td>
@@ -2923,7 +2928,7 @@ function buildLocalChartURL(m) {
 }
 
 function populateLightbox(idx) {
-  const [mo, m, type, con, mag, ra, dec, psa] = DATA[idx];
+  const [mo, m, type, con, mag, size, ra, dec, psa] = DATA[idx];
 
   // Header
   document.getElementById("lbTitleM").textContent    = m;
@@ -2937,6 +2942,7 @@ function populateLightbox(idx) {
   document.getElementById("lbSideType").textContent = type;
   document.getElementById("lbSideCon").textContent  = con;
   document.getElementById("lbSideMag").textContent  = mag;
+  document.getElementById("lbSideSize").textContent = size;
   document.getElementById("lbSideRA").textContent   = ra;
   document.getElementById("lbSideDec").textContent  = dec;
   document.getElementById("lbSidePSA").textContent  = psa;
