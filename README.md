@@ -36,7 +36,7 @@ Both use cases share the same interface.
 
 ## Telescope Requirements
 
-We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortable marathon experience. Most objects are within theoretical reach of a 4-inch (101 mm) telescope under extremely good conditions, but the fainter Virgo cluster galaxies and small planetary nebulae will be difficult or invisible at smaller apertures. More aperture makes the night considerably more comfortable across the board.
+We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortable marathon experience. 
 
 ---
 
