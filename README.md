@@ -63,9 +63,6 @@ mmol/
 ├── fonts/                  Self-hosted TTF files (not in repo — see below)
 ├── images/                 Object photos (not in repo — download separately)
 ├── charts/                 Finder charts (not in repo — generate with script)
-├── scripts/
-│   ├── download_images.sh  Batch image downloader (SEDS)
-│   └── generate_charts.py  Night-vision finder chart generator
 └── docs/
     ├── faq.html
     ├── resources.html
