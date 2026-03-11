@@ -1,132 +1,168 @@
-#  Messier Marathon — Observation Log
+# Messier Marathon Observer's Log
 
-A beautifully designed, fully self-contained HTML observation log for the **Messier Marathon** — the challenge of observing all 110 Messier objects in a single night. Built for use in the field with red night-vision mode, real-time sky chart links, and persistent session tracking.
+A browser-based observation log for Charles Messier's catalog of 110 deep-sky objects — designed for the field, built around the Astronomical League Messier Club certificate, and distributed as open-source software.
 
-![Night Mode](https://img.shields.io/badge/Night%20Mode-Red%20Vision-cc3322?style=flat-square)
-![Objects](https://img.shields.io/badge/Objects-110%20Messier-gold?style=flat-square)
-![Self Contained](https://img.shields.io/badge/Self--Contained-Single%20HTML%20File-4a9a6a?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
+**Live site:** [mmol.thgnetworks.com](https://mmol.thgnetworks.com)
+
+---
+
+## What it is
+
+The log presents all 110 Messier objects in **marathon search order** (the Don Machholz sequence — west to east, objects that set first after dusk through objects that rise last before dawn). It serves two kinds of observers:
+
+- **Casual checklist** — tick objects as you observe them, add brief eyepiece notes, watch the progress bar. Export as CSV at any time.
+- **AL Messier Club certificate** — full per-object forms capturing every field required for the Astronomical League Messier Observing Program submission. Generate a formatted multi-page PDF report directly in the browser.
+
+Both use cases share the same interface.
 
 ---
 
 ## Features
 
-- **Red night-vision mode** — deep black background with full red-spectrum text to preserve your dark adaptation
-- **Day / Night toggle** — switch between a warm parchment atlas (day) and red-on-black (night) with a single click; preference is saved between sessions
-- **110 Messier objects** — listed in optimal marathon search order, west to east
-- **Object image lightbox** — click any M# to open a modal with the object photo, full data sidebar, and navigation
-- **Live sky chart links** — each object links directly to:
-  - [Stellarium Web](https://stellarium-web.org) — full 3D sky simulation centred on the object
-  - [Sky-Map.org](https://www.sky-map.org) — coordinate-precise finder chart with constellation lines
-- **Check off objects** — checkbox per object with strikethrough; checked state persists in `localStorage`
-- **Field notes** — inline text input per object for logging time, seeing, eyepiece, comments, etc.
-- **Progress bar** — live count of observed vs. total objects
-- **Filter buttons** — quickly narrow to Galaxies, Open Clusters, Globulars, Nebulae, or Unobserved
-- **Search** — filter by M#, object type, or constellation abbreviation
-- **Object type legend** — colour-coded dot key for all 11 object types
-- **Print-ready** — clean black-on-white print stylesheet, no wasted ink on dark backgrounds
-- **No dependencies** — single HTML file, works entirely offline (except for sky chart links and Google Fonts)
-- **Pocket Sky Atlas** - The PSA field denotes the objects chart number for fast looksups on your Pocket Sky Atals 
+- **Night vision mode** — deep black background, red-spectrum text. All emoji icons automatically swap to short ASCII labels in night mode so no bright or coloured symbols appear at the eyepiece. Object photos in the lightbox are automatically red-filtered.
+- **110 objects in marathon order** — with a clickable toggle to numeric (M-number) order for cross-reference
+- **Angular size column** — apparent dimensions in arcminutes for every object
+- **Monospace type symbols** — each object type has a distinct ASCII symbol that reads clearly in red-only night mode (see [features.md](features.md) for the full symbol map)
+- **Image lightbox** — click any M-number for the object photo, full catalog data, finder chart link, and Stellarium Web link; images are red-filtered in night mode
+- **Session Setup** — set location (with optional GPS), sky conditions, and equipment once per night; values auto-fill every record opened during the session
+- **Full AL observation records** — date, time, site, seeing (Antoniadi scale), transparency, limiting magnitude, scope, eyepiece, description, and sketch notes
+- **AL Report PDF** — multi-page submission document (cover, index, one page per record) generated entirely in the browser — no internet required
+- **Themed confirmation dialogs** — all destructive actions use a custom modal that follows the current night/day theme, so no browser-native white dialog ever appears at the telescope
+- **CSV and JSON export / import** — back up and restore all data; move between devices; merge records without overwriting
+- **Works offline** — after first load, every core feature works without internet
+- **Best on laptop or tablet** — the table has 10+ columns and is designed for larger screens
+
+---
+
+## Telescope Requirements
+
+We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortable marathon experience. Most objects are within theoretical reach of a 4-inch (101 mm) telescope under extremely good conditions, but the fainter Virgo cluster galaxies and small planetary nebulae will be difficult or invisible at smaller apertures. More aperture makes the night considerably more comfortable across the board.
 
 ---
 
 ## Quick Start
 
-1. Download `index.html`
-2. Open it in any modern browser
-3. Optionally add object images (see [Adding Photos](#adding-photos) below)
-
-No server, no install, no build step required.
+1. Clone or download the repository and open `index.html` in a browser — no build step, no server, no installation required.
+2. Add media files to `images/` and `charts/` for the lightbox (optional but recommended — see below).
+3. Place font TTF files in `fonts/` (optional — the site falls back to system fonts).
+4. At the telescope, switch to **Night Mode** using the toggle in the top-right corner.
+5. Use **☰ Log → Session Setup** to set your location and equipment once for the night.
+6. Check off objects as you observe them. Click the **✎** button for a full AL record.
+7. Export your data from **☰ Log → Export AL Records** (JSON) after every session.
 
 ---
 
-## Optional: Adding Photos
-
-The lightbox supports local object images. Place JPEGs in an `images/` folder alongside the HTML file, named in lowercase:
+## Repository Structure
 
 ```
-messier_marathon.html
-images/
-  m1.jpg
-  m2.jpg
-  ...
-  m110.jpg
+mmol/
+├── index.html              Main observation log
+├── CNAME                   mmol.thgnetworks.com
+├── css/
+│   └── mm-shared.css       Shared design tokens and layout
+├── fonts/                  Self-hosted TTF files (not in repo — see below)
+├── images/                 Object photos (not in repo — download separately)
+├── charts/                 Finder charts (not in repo — generate with script)
+├── scripts/
+│   ├── download_images.sh  Batch image downloader (SEDS)
+│   └── generate_charts.py  Night-vision finder chart generator
+└── docs/
+    ├── faq.html
+    ├── resources.html
+    ├── about.html
+    └── user-guide.html
 ```
 
-If an image is missing, the lightbox shows a graceful placeholder — the log works fine with a partial or empty `images/` folder.
+---
+
+## Setting Up Media Files
+
+### Object photos (optional)
+
+Place JPEG images in an `images/` folder named `M1.jpg` through `M110.jpg`. The SEDS Messier Catalog at [messier.seds.org](http://www.messier.seds.org/) is the recommended source. The `scripts/download_images.sh` script automates the batch download.
+
+In night mode, all lightbox photos are automatically red-filtered via CSS — no separate night-mode image set is needed.
+
+### Finder charts (optional)
+
+Place PNG charts in a `charts/` folder named `M1.png` through `M110.png`. The `scripts/generate_charts.py` script produces red-on-black night-vision charts for all 110 objects using matplotlib and astropy.
+
+### Fonts
+
+Place the following seven TTF files in a `fonts/` folder. All are available from Google Fonts.
+
+| File | Font | Weight |
+|------|------|--------|
+| `Cinzel-Regular.ttf` | Cinzel | 400 |
+| `Cinzel-SemiBold.ttf` | Cinzel | 600 |
+| `Cinzel-Bold.ttf` | Cinzel | 700 |
+| `ShareTechMono-Regular.ttf` | Share Tech Mono | 400 |
+| `CrimsonPro-Light.ttf` | Crimson Pro | 300 |
+| `CrimsonPro-Regular.ttf` | Crimson Pro | 400 |
+| `CrimsonPro-LightItalic.ttf` | Crimson Pro | 300 italic |
 
 ---
 
-## Sky Chart Links
+## Data and Privacy
 
-Each object's lightbox sidebar contains two live sky chart buttons:
+All observation data is stored in your browser's `localStorage` — a private, local database on your own device. Nothing is ever sent to any server.
 
-| Button | Service | How it works |
-|--------|---------|--------------|
-| Stellarium Web | [stellarium-web.org](https://stellarium-web.org) | Deep-links by Messier name (e.g. `/skysource/M42`). Opens a real-time 3D sky simulation centred on the object. Set your location and date/time for an accurate view. |
-| Sky-Map.org | [sky-map.org](https://www.sky-map.org) | Deep-links by precise RA/Dec coordinates converted from the catalog data. Opens with constellation lines, grid, and a position indicator pre-enabled. |
+| localStorage key | Contents |
+|-----------------|----------|
+| `mm_checks` | Observed status per object |
+| `mm_notes` | Inline field notes per object |
+| `mm_times` | Observation timestamps (ISO string) |
+| `mm_fullnotes` | Full AL record data (JSON) |
+| `mm_session` | Session defaults and GPS coordinates |
+| `mm_theme` | Night or day mode preference |
+| `mm_visited` | Quick Start "don't show again" flag |
 
----
-
-## Object Search Order
-
-Objects are listed in **marathon search order** — the sequence that gives the best chance of observing all 110 in one night, starting with western objects visible just after dusk and ending with eastern objects visible just before dawn. The marathon is typically attempted in late March when this ordering is optimal from mid-northern latitudes.
-
----
-
-## Data Fields
-
-| Column | Description |
-|--------|-------------|
-| **#** | Marathon search order (1–110) |
-| **Object** | Messier designation (M1–M110); click to open lightbox |
-| **Type** | Object type with colour-coded dot |
-| **Con** | Constellation abbreviation |
-| **Mag** | Visual magnitude |
-| **RA** | Right Ascension (J2000.0) |
-| **Dec** | Declination (J2000.0) |
-| **PSA Pg** | *Pocket Sky Atlas* page reference (Roger Sinnott) |
-| **✓** | Observation checkbox |
-| **Field Notes** | Free-text notes input |
+**Important:** localStorage is tied to one browser on one device and is cleared by browser data resets or private/incognito mode. Use **☰ Log → Export AL Records** (JSON) after every observing session. Use **Import AL Records** to restore on a new device or browser.
 
 ---
 
-## Object Types
+## Deployment (GitHub Pages)
 
-| Colour | Type |
-|--------|------|
-| 🟣 Purple | Spiral Galaxy |
-| 🔵 Blue | Elliptical Galaxy |
-| 🩵 Teal | Lenticular Galaxy |
-| 🟣 Violet | Irregular Galaxy |
-| 🟢 Green | Open Cluster |
-| 🟡 Gold | Globular Cluster |
-| 🔴 Red | Diffuse Nebula |
-| 🟡 Yellow | Planetary Nebula |
-| 🟠 Orange | Supernova Remnant |
-| 🩵 Cyan | Star Cloud |
-| ⚫ Grey | Double Star / Asterism |
+See [Github_Subdomain_Configuration.md](Github_Subdomain_Configuration.md) for the full guide. Summary:
+
+1. Push the repo to `github.com/thg4web/mmol` (must be public)
+2. Settings → Pages → Branch: `main` / `(root)` → Custom domain: `mmol.thgnetworks.com`
+3. DNS: add a CNAME record `mmol` → `thg4web.github.io` at your registrar
+4. Enforce HTTPS once DNS propagates (~15 minutes to a few hours)
+
+The `CNAME` file must be present on every push, or the custom domain will need to be re-entered.
 
 ---
 
-## Browser Compatibility
+## Documentation
 
-Tested in current versions of Chrome, Firefox, Safari, and Edge. Requires a browser with `localStorage` support for note and checkbox persistence.
+| File | Purpose |
+|------|---------|
+| `README.md` | This file — setup and overview |
+| `features.md` | Complete feature reference |
+| `project-design-summary.md` | Architecture and technical design notes |
+| `docs/user-guide.html` | End-user documentation |
+| `docs/faq.html` | Common questions |
+| `docs/resources.html` | Curated external links |
+| `docs/about.html` | Project information and credits |
 
 ---
 
-## Acknowledgements
+## References
 
-- Many thnaks to Don Machholz (October 7, 1952 - August 9, 2022) for first coming up with the Mesier Marathon
-- Many thnaks to the other groups and individuals who provided images to Wikipedia Messier Objecs and are noted with attribution
-- Object data based on the **Messier Catalog** (Charles Messier, 1771)
-- Marathon search order adapted from standard community observing resources
-- PSA page references: *Pocket Sky Atlas* by Roger Sinnott (Sky & Telescope) - Get this now!, It's awesome!
-- Sky chart links: [Stellarium Web](https://stellarium-web.org) and [freestarcharts.com](https://freestarcharts.com)
-- Object photos (non-copyright images): [SEDS Messier Catalog](http://www.messier.seds.org)
+- **Marathon sequence:** Don Machholz, *Messier Marathon Observer's Guide*
+- **Object data:** [SEDS Messier Database](http://www.messier.seds.org/) (Hartmut Frommert & Christine Kronberg)
+- **Sky atlas references:** Roger Sinnott, *Pocket Sky Atlas* (Sky & Telescope)
+- **AL program:** [Astronomical League Messier Observing Program](https://www.astroleague.org/messier-observing-program/)
 
 ---
 
 ## License
 
-MIT — free to use, share, and modify. Clear skies!
+GPLv3 — free to use, share, and modify.
+
+---
+
+## Contact
+
+Questions, feedback, or bug reports: mmol [at] thgnetworks [dot] com
