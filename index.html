@@ -2398,12 +2398,28 @@ tr.checked td.col-m-val a.m-link {
       <div class="sess-loc-row">
         <input class="rec-input" type="text" id="sessSite"
                placeholder="e.g. Jordan Lake SRA, NC — Bortle 4">
-        <button class="sess-geo-btn" id="sessGeoBtn" title="Get location from device">
+        <button class="sess-geo-btn" id="sessGeoBtn" title="Get location from device GPS">
           <span class="ui-icon" data-night="[GPS]">📍</span> Locate
         </button>
       </div>
       <div class="sess-geo-status" id="sessGeoStatus"></div>
-      <div class="sess-coords"    id="sessCoords"></div>
+    </div>
+    <div class="rec-grid-3">
+      <div class="rec-field">
+        <label class="rec-label">Latitude</label>
+        <input class="rec-input" type="text" id="sessLat"
+               placeholder="e.g. 35.87320" inputmode="decimal">
+      </div>
+      <div class="rec-field">
+        <label class="rec-label">Longitude</label>
+        <input class="rec-input" type="text" id="sessLon"
+               placeholder="e.g. -79.07280" inputmode="decimal">
+      </div>
+      <div class="rec-field">
+        <label class="rec-label">Time Zone</label>
+        <input class="rec-input" type="text" id="sessTZ"
+               placeholder="e.g. America/New_York">
+      </div>
     </div>
 
     <div class="rec-section">Sky Conditions</div>
@@ -2969,6 +2985,9 @@ function closeRecModal() {
 
 function saveRecModal() {
   if (!recCurrentId) return;
+  // Preserve any previously-saved location snapshot so it is never silently
+  // cleared if the user re-opens and re-saves a record after clearing the session.
+  const _prev = SAVED_FULLNOTES[recCurrentId] || {};
   SAVED_FULLNOTES[recCurrentId] = {
     date:         document.getElementById("recDate").value,
     time:         document.getElementById("recTime").value,
@@ -2982,6 +3001,11 @@ function saveRecModal() {
     mag:          document.getElementById("recMag").value,
     description:  document.getElementById("recDescription").value,
     sketch:       document.getElementById("recSketch").value,
+    // Location snapshot: prefer live SESSION values, fall back to whatever was
+    // previously saved on this record so data is never lost on re-save.
+    lat: SESSION.lat != null ? SESSION.lat : (_prev.lat != null ? _prev.lat : null),
+    lon: SESSION.lon != null ? SESSION.lon : (_prev.lon != null ? _prev.lon : null),
+    tz:  (SESSION.tz  && SESSION.tz.trim())  ? SESSION.tz  : (_prev.tz  || null),
   };
 
   // Check if any field has content
@@ -3260,7 +3284,8 @@ document.getElementById("menuExport").addEventListener("click", function () {
 
   // CSV header — all fields quoted
   const header = ["Marathon Order","Object","Type","Constellation","Magnitude",
-                  "RA (J2000)","Dec (J2000)","PSA Page","Observed","Date Observed","Field Notes"]
+                  "RA (J2000)","Dec (J2000)","PSA Page","Observed","Date Observed",
+                  "Latitude","Longitude","Time Zone","Field Notes"]
                   .map(csvField).join(",");
   const rows = [header];
 
@@ -3271,7 +3296,14 @@ document.getElementById("menuExport").addEventListener("click", function () {
     const timestamp = SAVED_TIMES[m]
       ? new Date(SAVED_TIMES[m]).toLocaleString()
       : "";
-    rows.push([mo, m, type, con, mag, ra, dec, psa, observed, timestamp, notes].map(csvField).join(","));
+    // Only include location data for objects that have been observed or have any content
+    const rec      = SAVED_FULLNOTES[m] || {};
+    const hasEntry = SAVED_CHECKS[m] || notes || SAVED_FULLNOTES[m];
+    const lat  = hasEntry ? (rec.lat != null ? rec.lat : (SESSION.lat != null ? SESSION.lat : "")) : "";
+    const lon  = hasEntry ? (rec.lon != null ? rec.lon : (SESSION.lon != null ? SESSION.lon : "")) : "";
+    const tz   = hasEntry ? (rec.tz  || SESSION.tz || "") : "";
+    rows.push([mo, m, type, con, mag, ra, dec, psa, observed, timestamp,
+               lat, lon, tz, notes].map(csvField).join(","));
   });
 
   const csv  = rows.join("\r\n");
@@ -3453,9 +3485,18 @@ document.getElementById("menuExportAL").addEventListener("click", function () {
   // Include the hidden observation timestamps so the PDF generator and any future
   // tools can access the exact moment each object was checked off, even if the user
   // never manually filled the date field in the full record form.
+  // Each record already carries its own lat/lon/tz snapshot from save time.
+  // The session block captures current session location as a top-level reference.
+  const sessionMeta = {};
+  if (SESSION.lat != null) sessionMeta.lat = SESSION.lat;
+  if (SESSION.lon != null) sessionMeta.lon = SESSION.lon;
+  if (SESSION.tz)          sessionMeta.tz  = SESSION.tz;
+  if (SESSION.site)        sessionMeta.site = SESSION.site;
+
   const payload = {
     exported:   now.toISOString(),
     version:    1,
+    session:    Object.keys(sessionMeta).length ? sessionMeta : undefined,
     records:    SAVED_FULLNOTES,
     timestamps: SAVED_TIMES       // mm_times: { "M1": "2026-03-22T02:15:00.000Z", ... }
   };
@@ -3567,16 +3608,25 @@ function openSessionModal() {
   document.getElementById("sessEyepiece").value     = SESSION.eyepiece     || "";
   document.getElementById("sessMag").value          = SESSION.mag          || "";
 
-  const coordEl = document.getElementById("sessCoords");
-  const statEl  = document.getElementById("sessGeoStatus");
-  if (SESSION.lat && SESSION.lon) {
-    coordEl.textContent = `${SESSION.lat.toFixed(5)}°, ${SESSION.lon.toFixed(5)}°`;
-    statEl.textContent  = "Location previously obtained from device.";
-    statEl.className    = "sess-geo-status ok";
+  document.getElementById("sessLat").value = SESSION.lat != null ? SESSION.lat : "";
+  document.getElementById("sessLon").value = SESSION.lon != null ? SESSION.lon : "";
+  document.getElementById("sessTZ").value  = SESSION.tz  || Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+
+  const statEl = document.getElementById("sessGeoStatus");
+  const geoBtn = document.getElementById("sessGeoBtn");
+
+  if (!navigator.geolocation) {
+    statEl.textContent = "GPS not available on this device — enter coordinates manually.";
+    statEl.className   = "sess-geo-status err";
+    geoBtn.disabled    = true;
+  } else if (SESSION.lat && SESSION.lon) {
+    statEl.textContent = "Coordinates previously obtained from device GPS.";
+    statEl.className   = "sess-geo-status ok";
+    geoBtn.disabled    = false;
   } else {
-    coordEl.textContent = "";
-    statEl.textContent  = "";
-    statEl.className    = "sess-geo-status";
+    statEl.textContent = "";
+    statEl.className   = "sess-geo-status";
+    geoBtn.disabled    = false;
   }
 
   document.getElementById("sessOverlay").classList.add("open");
@@ -3589,6 +3639,10 @@ function closeSessionModal() {
 }
 
 function saveSessionModal() {
+  const latRaw = document.getElementById("sessLat").value.trim();
+  const lonRaw = document.getElementById("sessLon").value.trim();
+  const lat = latRaw !== "" ? parseFloat(latRaw) : null;
+  const lon = lonRaw !== "" ? parseFloat(lonRaw) : null;
   SESSION = {
     site:         document.getElementById("sessSite").value.trim(),
     seeing:       document.getElementById("sessSeeing").value,
@@ -3598,8 +3652,9 @@ function saveSessionModal() {
     aperture:     document.getElementById("sessAperture").value.trim(),
     eyepiece:     document.getElementById("sessEyepiece").value.trim(),
     mag:          document.getElementById("sessMag").value.trim(),
-    lat: SESSION.lat || null,
-    lon: SESSION.lon || null,
+    lat: !isNaN(lat) ? lat : null,
+    lon: !isNaN(lon) ? lon : null,
+    tz:  document.getElementById("sessTZ").value.trim() || null,
   };
   saveSession();
   updateSessionIndicator();
@@ -3607,21 +3662,22 @@ function saveSessionModal() {
 }
 
 document.getElementById("sessGeoBtn").addEventListener("click", function () {
-  const btn     = this;
-  const statEl  = document.getElementById("sessGeoStatus");
-  const coordEl = document.getElementById("sessCoords");
-  const siteEl  = document.getElementById("sessSite");
+  const btn    = this;
+  const statEl = document.getElementById("sessGeoStatus");
+  const latEl  = document.getElementById("sessLat");
+  const lonEl  = document.getElementById("sessLon");
+  const siteEl = document.getElementById("sessSite");
 
   if (!navigator.geolocation) {
-    statEl.textContent = "Geolocation is not supported by this browser.";
+    statEl.textContent = "GPS not available on this device — enter coordinates manually.";
     statEl.className   = "sess-geo-status err";
+    btn.disabled = true;
     return;
   }
 
-  btn.disabled        = true;
-  statEl.textContent  = "Requesting location…";
-  statEl.className    = "sess-geo-status";
-  coordEl.textContent = "";
+  btn.disabled       = true;
+  statEl.textContent = "Requesting location from device…";
+  statEl.className   = "sess-geo-status";
 
   navigator.geolocation.getCurrentPosition(
     function (pos) {
@@ -3629,9 +3685,10 @@ document.getElementById("sessGeoBtn").addEventListener("click", function () {
       const lon = pos.coords.longitude;
       SESSION.lat = lat;
       SESSION.lon = lon;
-      coordEl.textContent = `${lat.toFixed(5)}°, ${lon.toFixed(5)}°`;
-      statEl.textContent  = "Got coordinates — looking up place name…";
-      statEl.className    = "sess-geo-status ok";
+      latEl.value = lat.toFixed(5);
+      lonEl.value = lon.toFixed(5);
+      statEl.textContent = "Got coordinates — looking up place name…";
+      statEl.className   = "sess-geo-status ok";
 
       fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
         .then(r => r.json())
@@ -3657,11 +3714,11 @@ document.getElementById("sessGeoBtn").addEventListener("click", function () {
     },
     function (err) {
       const msgs = {
-        1: "Permission denied — allow location access in your browser settings.",
-        2: "Position unavailable — device could not determine location.",
-        3: "Timed out waiting for location."
+        1: "Permission denied — allow location access in your browser or device settings, or enter coordinates manually.",
+        2: "Position unavailable — device could not determine location. Enter coordinates manually.",
+        3: "Timed out waiting for GPS fix. Try again or enter coordinates manually."
       };
-      statEl.textContent = msgs[err.code] || "Could not get location.";
+      statEl.textContent = msgs[err.code] || "Could not get location. Enter coordinates manually.";
       statEl.className   = "sess-geo-status err";
       btn.disabled = false;
     },
@@ -4042,6 +4099,13 @@ updateSessionIndicator();
       ["Objects with descriptions", String(nDesc)],
     ];
     if (dr) rows.push(["Observation dates", dr]);
+    if (SESSION.site) rows.push(["Observing site", SESSION.site]);
+    if (SESSION.lat != null && SESSION.lon != null) {
+      const latStr = Math.abs(SESSION.lat).toFixed(5) + "° " + (SESSION.lat >= 0 ? "N" : "S");
+      const lonStr = Math.abs(SESSION.lon).toFixed(5) + "° " + (SESSION.lon >= 0 ? "E" : "W");
+      rows.push(["Coordinates", latStr + ",  " + lonStr]);
+    }
+    if (SESSION.tz) rows.push(["Time zone", SESSION.tz]);
     rows.push(["Generated", new Date().toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})]);
     rows.push(["Submitted for", "AL Messier Club Observing Certificate"]);
 
@@ -4209,6 +4273,20 @@ updateSessionIndicator();
     const whenStr = [dateStr, timeStr].filter(Boolean).join(" at ") || "—";
     fieldRow([["Date / Time", whenStr], ["RA (J2000)", cat.ra||"—"], ["Dec (J2000)", cat.dec||"—"]]);
     fieldRow([["Observing Site", rec.site||"—"], ["PSA Page", cat.psa||"—"], ["Magnitude", cat.mag||"—"]]);
+
+    // Coordinates / TZ row — only shown if any value is present
+    const hasLat = SESSION.lat != null && SESSION.lon != null;
+    const hasTZ  = SESSION.tz && SESSION.tz.trim();
+    if (hasLat || hasTZ) {
+      const coordStr = hasLat
+        ? Math.abs(SESSION.lat).toFixed(5) + "° " + (SESSION.lat >= 0 ? "N" : "S")
+        + ",  " + Math.abs(SESSION.lon).toFixed(5) + "° " + (SESSION.lon >= 0 ? "E" : "W")
+        : "—";
+      fieldRow([
+        ["Coordinates (Lat / Lon)", coordStr],
+        ["Time Zone", hasTZ ? SESSION.tz : "—"],
+      ]);
+    }
     y += 2;
 
     // ── Sky Conditions ───────────────────────────────────────────
