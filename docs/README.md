@@ -1,6 +1,6 @@
 # Messier Marathon Observer's Log
 
-A browser-based observation log for Charles Messier's catalog of 110 deep-sky objects, designed for the field, built around the Astronomical League Messier Club certificate, and distributed as open-source software.
+A browser-based observation log for Charles Messier's catalog of 110 deep-sky objects — designed for the field, built around the Astronomical League Messier Club certificate, and distributed as open-source software.
 
 **Live site:** [mmol.thgnetworks.com](https://mmol.thgnetworks.com)
 
@@ -8,7 +8,7 @@ A browser-based observation log for Charles Messier's catalog of 110 deep-sky ob
 
 ## What it is
 
-The log presents all 110 Messier objects in **marathon search order** (the Don Machholz sequence, west to east, objects that set first after dusk through objects that rise last before dawn). It serves two kinds of observers:
+The log presents all 110 Messier objects in **marathon search order** (the Don Machholz sequence — west to east, objects that set first after dusk through objects that rise last before dawn). It serves two kinds of observers:
 
 - **Casual checklist** — tick objects as you observe them, add brief eyepiece notes, watch the progress bar. Export as CSV at any time.
 - **AL Messier Club certificate** — full per-object forms capturing every field required for the Astronomical League Messier Observing Program submission. Generate a formatted multi-page PDF report directly in the browser.
@@ -26,7 +26,7 @@ Both use cases share the same interface.
 - **Image lightbox** — click any M-number for the object photo, full catalog data, finder chart link, and Stellarium Web link; images are red-filtered in night mode
 - **Session Setup** — set location (with optional GPS), sky conditions, and equipment once per night; values auto-fill every record opened during the session
 - **Full AL observation records** — date, time, site, seeing (Antoniadi scale), transparency, limiting magnitude, scope, eyepiece, description, and sketch notes
-- **AL Report PDF** — multi-page submission document (cover, index, one page per record) generated entirely in the browser, no internet required
+- **AL Report PDF** — multi-page submission document (cover, index, one page per record) generated entirely in the browser — no internet required
 - **Themed confirmation dialogs** — all destructive actions use a custom modal that follows the current night/day theme, so no browser-native white dialog ever appears at the telescope
 - **CSV and JSON export / import** — back up and restore all data; move between devices; merge records without overwriting
 - **Works offline** — after first load, every core feature works without internet
@@ -42,9 +42,9 @@ We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortab
 
 ## Quick Start
 
-1. Clone or download the repository and open `index.html` in a browser, no build step, no server, no installation required.
-2. Add media files to `images/` and `charts/` for the lightbox (optional but recommended, see below).
-3. Place font TTF files in `fonts/` (optional, the site falls back to system fonts).
+1. Clone or download the repository and open `index.html` in a browser — no build step, no server, no installation required.
+2. Add media files to `images/` and `charts/` for the lightbox (optional but recommended — see below).
+3. Place font TTF files in `fonts/` (optional — the site falls back to system fonts).
 4. At the telescope, switch to **Night Mode** using the toggle in the top-right corner.
 5. Use **☰ Log → Session Setup** to set your location and equipment once for the night.
 6. Check off objects as you observe them. Click the **✎** button for a full AL record.
@@ -60,9 +60,12 @@ mmol/
 ├── CNAME                   mmol.thgnetworks.com
 ├── css/
 │   └── mm-shared.css       Shared design tokens and layout
-├── fonts/                  Self-hosted TTF files
-├── images/                 Self-hosted jpg and png files 
-├── charts/                 Finder charts from freestarcharts.com
+├── fonts/                  Self-hosted TTF files (not in repo — see below)
+├── images/                 Object photos (not in repo — download separately)
+├── charts/                 Finder charts (not in repo — generate with script)
+├── scripts/
+│   ├── download_images.sh  Batch image downloader (SEDS)
+│   └── generate_charts.py  Night-vision finder chart generator
 └── docs/
     ├── faq.html
     ├── resources.html
@@ -78,7 +81,7 @@ mmol/
 
 Place JPEG images in an `images/` folder named `M1.jpg` through `M110.jpg`. The SEDS Messier Catalog at [messier.seds.org](http://www.messier.seds.org/) is the recommended source. The `scripts/download_images.sh` script automates the batch download.
 
-In night mode, all lightbox photos are automatically red-filtered via CSS, no separate night-mode image set is needed.
+In night mode, all lightbox photos are automatically red-filtered via CSS — no separate night-mode image set is needed.
 
 ### Finder charts (optional)
 
@@ -102,7 +105,7 @@ Place the following seven TTF files in a `fonts/` folder. All are available from
 
 ## Data and Privacy
 
-All observation data is stored in your browser's `localStorage`, a private, local database on your own device. Nothing is ever sent to any server.
+All observation data is stored in your browser's `localStorage` — a private, local database on your own device. Nothing is ever sent to any server.
 
 | localStorage key | Contents |
 |-----------------|----------|
@@ -156,7 +159,7 @@ The `CNAME` file must be present on every push, or the custom domain will need t
 
 ## License
 
-GPL Version 3, 29 June 2007
+GPLv3 — free to use, share, and modify.
 
 ---
 
