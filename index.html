@@ -542,7 +542,13 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
 @media print {
   body { background: #fff !important; color: #000 !important; }
   body::before { display: none; }
-  .controls, .btn-print, .theme-toggle-wrap { display: none; }
+  .controls, .btn-print, .theme-toggle-wrap, .nav-menu-wrap,
+  .top-right-controls, .dev-notice, .session-indicator,
+  .rec-btn, .search-clear, .sync-overlay, .conf-overlay,
+  .sess-overlay, .rpt-overlay, .qs-overlay { display: none !important; }
+  /* Full-width page layout for print */
+  .wrapper, .wrapper-prose { max-width: none !important; padding: 8px 12px 20px !important; margin: 0 !important; }
+  .table-outer { overflow: visible !important; width: 100% !important; }
   .table-outer, .legend { border-color: #bbb; background: #fff; }
   th { background: #eee !important; color: #333; border-color: #ccc; }
   td { color: #111; border-color: #ddd; }
@@ -554,7 +560,42 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   .subtitle, .progress-label, .footer-note, .footer-sig { color: #555; }
   .legend-title, .legend-item { color: #444; }
   .progress-count { color: #800; }
+  /* ── Checklist print mode ─────────────────────────────────────── */
+  /* Hide: thumbnail, #, mobile-obj, size, ra, dec, psa              */
+  /* Show: M#, type, con, mag, checkbox, notes                       */
+  body.print-checklist th.col-thn,
+  body.print-checklist td.col-thn-val,
+  body.print-checklist th.col-mo,
+  body.print-checklist td.col-mo-val,
+  body.print-checklist th.col-mobile-obj,
+  body.print-checklist td.col-mobile-obj,
+  body.print-checklist th.col-size,
+  body.print-checklist td.col-size-val,
+  body.print-checklist th.col-ra,
+  body.print-checklist td.col-ra-val,
+  body.print-checklist th.col-dec,
+  body.print-checklist td.col-dec-val,
+  body.print-checklist th.col-psa,
+  body.print-checklist td.col-psa-val     { display: none !important; }
+  /* Table layout for visible columns: M# · type · con · mag · ✓ · notes */
+  body.print-checklist table              { table-layout: fixed !important; width: 100% !important; font-size: 10px; }
+  body.print-checklist th.col-m,
+  body.print-checklist td.col-m-val       { width: 52px; }
+  body.print-checklist th.col-type,
+  body.print-checklist td.col-type-val    { width: 110px; }
+  body.print-checklist th.col-con,
+  body.print-checklist td.col-con-val     { width: 42px; }
+  body.print-checklist th.col-mag,
+  body.print-checklist td.col-mag-val     { width: 42px; }
+  body.print-checklist th.col-chk,
+  body.print-checklist td.col-chk-val     { width: 32px; text-align: center; }
+  body.print-checklist td                 { padding: 4px 6px; }
+  body.print-checklist .note-input        { font-size: 9px; width: 100%; background: none !important; border: none; border-bottom: 1px solid #ccc; color: #111; }
+  body.print-checklist .rec-btn           { display: none !important; }
+  body.print-checklist td.col-chk-val input[type=checkbox] { width: 12px; height: 12px; }
+  body.print-checklist tbody tr:nth-child(even) td { background: #f8f8f8 !important; }
 }
+.print-checklist-header { display: none; }
 .progress-wrap {
   display: flex;
   align-items: center;
@@ -1315,6 +1356,16 @@ td.col-note-val { min-width: 150px; }
   text-transform: uppercase;
   transition: color .3s;
 }
+.app-version {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .18em;
+  color: var(--text-meta);
+  opacity: .6;
+  text-transform: uppercase;
+}
 
 /* M# clickable link */
 td.col-m-val a.m-link {
@@ -1646,7 +1697,12 @@ tr.checked td.col-m-val a.m-link {
 @media print {
   body { background: #fff !important; color: #000 !important; }
   body::before { display: none; }
-  .controls, .log-menu-wrap, .btn-import-input, .theme-toggle-wrap { display: none; }
+  .controls, .log-menu-wrap, .btn-import-input, .theme-toggle-wrap,
+  .nav-menu-wrap, .top-right-controls, .dev-notice, .session-indicator,
+  .rec-btn, .search-clear, .sync-overlay, .conf-overlay,
+  .sess-overlay, .rpt-overlay, .qs-overlay { display: none !important; }
+  .wrapper, .wrapper-prose { max-width: none !important; padding: 8px 12px 20px !important; margin: 0 !important; }
+  .table-outer { overflow: visible !important; width: 100% !important; }
   .table-outer, .legend { border-color: #bbb; background: #fff; }
   th { background: #eee !important; color: #333; border-color: #ccc; }
   td { color: #111; border-color: #ddd; }
@@ -1658,6 +1714,37 @@ tr.checked td.col-m-val a.m-link {
   .subtitle, .progress-label, .footer-note, .footer-sig { color: #555; }
   .legend-title, .legend-item { color: #444; }
   .progress-count { color: #800; }
+  /* ── Checklist print mode ─────────────────────────────────────── */
+  body.print-checklist th.col-thn,
+  body.print-checklist td.col-thn-val,
+  body.print-checklist th.col-mo,
+  body.print-checklist td.col-mo-val,
+  body.print-checklist th.col-mobile-obj,
+  body.print-checklist td.col-mobile-obj,
+  body.print-checklist th.col-size,
+  body.print-checklist td.col-size-val,
+  body.print-checklist th.col-ra,
+  body.print-checklist td.col-ra-val,
+  body.print-checklist th.col-dec,
+  body.print-checklist td.col-dec-val,
+  body.print-checklist th.col-psa,
+  body.print-checklist td.col-psa-val     { display: none !important; }
+  body.print-checklist table              { table-layout: fixed !important; width: 100% !important; font-size: 10px; }
+  body.print-checklist th.col-m,
+  body.print-checklist td.col-m-val       { width: 52px; }
+  body.print-checklist th.col-type,
+  body.print-checklist td.col-type-val    { width: 110px; }
+  body.print-checklist th.col-con,
+  body.print-checklist td.col-con-val     { width: 42px; }
+  body.print-checklist th.col-mag,
+  body.print-checklist td.col-mag-val     { width: 42px; }
+  body.print-checklist th.col-chk,
+  body.print-checklist td.col-chk-val     { width: 32px; text-align: center; }
+  body.print-checklist td                 { padding: 4px 6px; }
+  body.print-checklist .note-input        { font-size: 9px; width: 100%; background: none !important; border: none; border-bottom: 1px solid #ccc; color: #111; }
+  body.print-checklist .rec-btn           { display: none !important; }
+  body.print-checklist td.col-chk-val input[type=checkbox] { width: 12px; height: 12px; }
+  body.print-checklist tbody tr:nth-child(even) td { background: #f8f8f8 !important; }
 }
 
 /* ════════ TOP RIGHT CONTROLS ════════ */
@@ -1802,7 +1889,7 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
 }
 
 /* ── Gear icon button ── */
-.dots-menu-btn { font-size: 32px; letter-spacing: 0; }
+.dots-menu-btn { font-size: 26px; letter-spacing: 0; }
 
 /* ── Sync modals (Save / Import / Export) ── */
 .sync-overlay {
@@ -1963,6 +2050,9 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
         <button class="log-menu-item" id="gearSave">
           <span class="log-menu-icon">⬇</span> Save…
         </button>
+        <button class="log-menu-item" id="gearRestore">
+          <span class="log-menu-icon">⬆</span> Restore…
+        </button>
         <button class="log-menu-item" id="gearImport">
           <span class="log-menu-icon">⬆</span> Import…
         </button>
@@ -2031,6 +2121,7 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
     <input type="file" id="btnImportALFile" class="btn-import-input" accept=".json">
     <input type="file" id="btnImportEqFile" class="btn-import-input" accept=".csv">
     <input type="file" id="btnImportLocFile" class="btn-import-input" accept=".csv">
+    <input type="file" id="btnRestoreFile" class="btn-import-input" accept=".json">
     <div class="session-indicator" id="sessionIndicator">
       <span class="session-dot"></span> Session active
     </div>
@@ -2092,7 +2183,10 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
         <a href="docs/faq.html" class="nav-link">FAQ</a>
         <a href="docs/user-guide.html" class="nav-link">User Guide</a>
         <a href="docs/resources.html" class="nav-link">Resources</a>
-      </span></div>
+      </span>
+      <!-- APP VERSION — update this string to change the displayed version -->
+      <span class="app-version">Beta v2.5.2</span>
+    </div>
   </footer>
 
 </div><!-- /wrapper -->
@@ -3055,18 +3149,34 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
 <!-- ── SAVE MODAL ──────────────────────────────────────────────── -->
 <div class="sync-overlay" id="saveOverlay" role="dialog" aria-modal="true" aria-label="Save data">
   <div class="sync-box">
-    <div class="sync-title">⬇ Save Records</div>
+    <div class="sync-title">⬇ Save Backup</div>
     <button class="sync-close" id="saveClose" aria-label="Close">✕</button>
     <div class="sync-row">
       <div class="sync-file-row">
         <label class="sync-label" for="saveFilename">File name</label>
-        <input class="sync-input" type="text" id="saveFilename" placeholder="al-records">
+        <input class="sync-input" type="text" id="saveFilename" placeholder="mmol-backup">
         <span class="sync-label" style="opacity:.6; margin-top:2px;">.json will be appended</span>
       </div>
+      <div class="sync-label" style="opacity:.7; margin-top:4px;">Saves all observations, notes, equipment, locations, and settings.</div>
     </div>
     <div class="sync-btns">
       <button class="sync-btn" id="saveCancelBtn">Cancel</button>
-      <button class="sync-btn primary" id="saveConfirmBtn">Save</button>
+      <button class="sync-btn primary" id="saveConfirmBtn">Save Backup</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESTORE MODAL ───────────────────────────────────────────── -->
+<div class="sync-overlay" id="restoreOverlay" role="dialog" aria-modal="true" aria-label="Restore data">
+  <div class="sync-box">
+    <div class="sync-title">⬆ Restore Backup</div>
+    <button class="sync-close" id="restoreClose" aria-label="Close">✕</button>
+    <div class="sync-row">
+      <div class="sync-label" style="opacity:.7; line-height:1.6;">Choose a backup file (.json) previously saved from this app. All current data will be replaced.</div>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="restoreCancelBtn">Cancel</button>
+      <button class="sync-btn primary" id="restoreConfirmBtn">Choose File…</button>
     </div>
   </div>
 </div>
@@ -3137,6 +3247,34 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
     <div class="sync-btns">
       <button class="sync-btn" id="exportCancelBtn">Cancel</button>
       <button class="sync-btn primary" id="exportConfirmBtn">Export</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRINT MODAL ─────────────────────────────────────────────── -->
+<div class="sync-overlay" id="printOverlay" role="dialog" aria-modal="true" aria-label="Print">
+  <div class="sync-box">
+    <div class="sync-title">⎙ Print</div>
+    <button class="sync-close" id="printModalClose" aria-label="Close">✕</button>
+    <div class="sync-row">
+      <label class="sync-check-item">
+        <input type="radio" name="printMode" id="printModeChecklist" value="checklist" checked style="accent-color:var(--red-bright);width:14px;height:14px;cursor:pointer;">
+        <div>
+          <div>Observation Checklist</div>
+          <div class="sync-check-desc">Compact table — M#, type, constellation, magnitude, checkbox, notes line. Scope-ready.</div>
+        </div>
+      </label>
+      <label class="sync-check-item">
+        <input type="radio" name="printMode" id="printModeReport" value="report" style="accent-color:var(--red-bright);width:14px;height:14px;cursor:pointer;">
+        <div>
+          <div>Full AL Report</div>
+          <div class="sync-check-desc">Complete observation data including all recorded fields. AL submission quality.</div>
+        </div>
+      </label>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="printModalCancelBtn">Cancel</button>
+      <button class="sync-btn primary" id="printModalConfirmBtn">Print…</button>
     </div>
   </div>
 </div>
@@ -4395,8 +4533,9 @@ document.getElementById("navMenuReset").addEventListener("click", function() {
 });
 
 // ── Gear menu: Data Sync ─────────────────────────────────────────────────────
-document.getElementById("gearSave").addEventListener("click",   function() { closeAllMenus(); openSaveModal(); });
-document.getElementById("gearImport").addEventListener("click", function() { closeAllMenus(); openImportModal(); });
+document.getElementById("gearSave").addEventListener("click",    function() { closeAllMenus(); openSaveModal(); });
+document.getElementById("gearRestore").addEventListener("click", function() { closeAllMenus(); openRestoreModal(); });
+document.getElementById("gearImport").addEventListener("click",  function() { closeAllMenus(); openImportModal(); });
 document.getElementById("gearExport").addEventListener("click", function() { closeAllMenus(); openExportModal(); });
 
 // ── Gear menu: Reports ───────────────────────────────────────────────────────
@@ -4405,8 +4544,129 @@ document.getElementById("gearCSV").addEventListener("click",   function() { clos
 document.getElementById("gearPrint").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuPrint").click(); });
 
 document.getElementById("menuPrint").addEventListener("click", function() {
-  window.print();
+  openPrintModal();
 });
+
+/* ── PRINT MODAL ─────────────────────────────────────────────────── */
+function openPrintModal()  { document.getElementById("printOverlay").classList.add("open"); }
+function closePrintModal() { document.getElementById("printOverlay").classList.remove("open"); }
+
+document.getElementById("printModalClose").addEventListener("click", closePrintModal);
+document.getElementById("printModalCancelBtn").addEventListener("click", closePrintModal);
+document.getElementById("printOverlay").addEventListener("click", function(e) { if (e.target === this) closePrintModal(); });
+
+document.getElementById("printModalConfirmBtn").addEventListener("click", function() {
+  const mode = document.querySelector("input[name='printMode']:checked").value;
+  closePrintModal();
+
+  if (mode === "checklist") {
+    printChecklist();
+  } else {
+    document.getElementById("menuGenerateReport").click();
+  }
+});
+
+function printChecklist() {
+  // Build rows from the live table
+  const rows = [];
+  document.querySelectorAll("#mainTable tbody tr").forEach(function(tr) {
+    if (tr.style.display === "none") return; // respect current filter
+    const mCell   = tr.querySelector("td.col-m-val a");
+    const typeCell = tr.querySelector("td.col-type-val");
+    const conCell  = tr.querySelector("td.col-con-val");
+    const magCell  = tr.querySelector("td.col-mag-val");
+    const chkInput = tr.querySelector("td.col-chk-val input[type=checkbox]");
+    const noteInput= tr.querySelector("td.col-note-val .note-input");
+    if (!mCell) return;
+    rows.push({
+      m:      mCell.textContent.trim(),
+      type:   typeCell  ? typeCell.textContent.trim()  : "",
+      con:    conCell   ? conCell.textContent.trim()   : "",
+      mag:    magCell   ? magCell.textContent.trim()   : "",
+      checked:chkInput  ? chkInput.checked             : false,
+      note:   noteInput ? noteInput.value.trim()       : ""
+    });
+  });
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+  const observed = rows.filter(r => r.checked).length;
+
+  const tableRows = rows.map(function(r) {
+    const strikeStyle = r.checked ? "text-decoration:line-through;opacity:.5;" : "";
+    const chkHtml = r.checked
+      ? "<span style='font-size:14px;color:#8b0000;'>&#10003;</span>"
+      : "<span style='display:inline-block;width:12px;height:12px;border:1px solid #888;vertical-align:middle;'></span>";
+    return `<tr>
+      <td style="${strikeStyle}font-family:'Cinzel',serif;color:#8b0000;font-size:10px;font-weight:600;">${r.m}</td>
+      <td style="${strikeStyle}">${r.type}</td>
+      <td style="${strikeStyle}color:#5a3a00;font-weight:bold;">${r.con}</td>
+      <td style="${strikeStyle}text-align:center;">${r.mag}</td>
+      <td style="text-align:center;">${chkHtml}</td>
+      <td style="font-size:9px;">${r.note || ""}</td>
+    </tr>`;
+  }).join("");
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Messier Marathon — Observation Checklist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Share+Tech+Mono&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #111; background: #fff; padding: 14px 18px; }
+  h1 { font-family: 'Cinzel', serif; font-size: 16px; color: #8b0000; letter-spacing: .06em; margin-bottom: 2px; }
+  .subtitle { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: #555; margin-bottom: 10px; }
+  .meta { font-size: 9px; color: #555; margin-bottom: 12px; display: flex; gap: 24px; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  col.col-m    { width: 52px; }
+  col.col-type { width: 110px; }
+  col.col-con  { width: 42px; }
+  col.col-mag  { width: 42px; }
+  col.col-chk  { width: 30px; }
+  col.col-note { /* fills remaining */ }
+  thead tr { background: #eee; }
+  th { font-size: 8px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 6px; border: 1px solid #ccc; text-align: left; color: #333; }
+  td { padding: 4px 6px; border: 1px solid #ddd; vertical-align: middle; }
+  tbody tr:nth-child(even) td { background: #f8f8f8; }
+  tbody tr:hover td { background: #f0f0f0; }
+  @media print {
+    body { padding: 8px 10px; }
+    thead { display: table-header-group; }
+    tr { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<h1>Messier Marathon</h1>
+<div class="subtitle">Observation Checklist</div>
+<div class="meta">
+  <span>Date: ${dateStr}</span>
+  <span>Observed: ${observed} / ${rows.length}</span>
+</div>
+<table>
+  <colgroup>
+    <col class="col-m"><col class="col-type"><col class="col-con">
+    <col class="col-mag"><col class="col-chk"><col class="col-note">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>M #</th><th>Type</th><th>Con</th><th>Mag</th><th>&#10003;</th><th>Field Notes</th>
+    </tr>
+  </thead>
+  <tbody>${tableRows}</tbody>
+</table>
+</body>
+</html>`;
+
+  const win = window.open("", "_blank", "width=900,height=700");
+  if (!win) { alert("Pop-up blocked — please allow pop-ups for this page to use checklist print."); return; }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.onload = function() { win.focus(); win.print(); };
+}
 
 /* ── RESET ──────────────────────────────────────────────────────── */
 document.getElementById("menuReset").addEventListener("click", function() {
@@ -4508,12 +4768,12 @@ document.getElementById("navMenuTheme").addEventListener("click", function() {
   _applyTheme();
 });
 
-/* ── SAVE MODAL ──────────────────────────────────────────────────── */
+/* ── SAVE MODAL (full backup) ────────────────────────────────────── */
 function openSaveModal() {
   const now = new Date();
   const pad = n => String(n).padStart(2, "0");
   const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-  document.getElementById("saveFilename").value = `${stamp}-al-records`;
+  document.getElementById("saveFilename").value = `mmol-backup-${stamp}`;
   document.getElementById("saveOverlay").classList.add("open");
 }
 function closeSaveModal() { document.getElementById("saveOverlay").classList.remove("open"); }
@@ -4522,22 +4782,27 @@ document.getElementById("saveClose").addEventListener("click", closeSaveModal);
 document.getElementById("saveCancelBtn").addEventListener("click", closeSaveModal);
 document.getElementById("saveOverlay").addEventListener("click", function(e) { if (e.target === this) closeSaveModal(); });
 document.getElementById("saveConfirmBtn").addEventListener("click", function() {
-  let filename = (document.getElementById("saveFilename").value || "al-records").trim();
+  let filename = (document.getElementById("saveFilename").value || "mmol-backup").trim();
   if (!filename.endsWith(".json")) filename += ".json";
 
   const now = new Date();
-  const sessionMeta = {};
-  if (SESSION.lat != null) sessionMeta.lat = SESSION.lat;
-  if (SESSION.lon != null) sessionMeta.lon = SESSION.lon;
-  if (SESSION.tz)          sessionMeta.tz  = SESSION.tz;
-  if (SESSION.site)        sessionMeta.site = SESSION.site;
 
+  // Build full backup payload — every localStorage key the app uses
   const payload = {
-    exported:   now.toISOString(),
-    version:    1,
-    session:    Object.keys(sessionMeta).length ? sessionMeta : undefined,
-    records:    SAVED_FULLNOTES,
-    timestamps: SAVED_TIMES
+    app:      "mmol",
+    version:  2,
+    exported: now.toISOString(),
+    data: {
+      mm_checks:    SAVED_CHECKS,
+      mm_notes:     SAVED_NOTES,
+      mm_times:     SAVED_TIMES,
+      mm_fullnotes: SAVED_FULLNOTES,
+      mm_equipment: EQUIPMENT,
+      mm_locations: LOCATIONS,
+      mm_session:   Object.keys(SESSION).length ? SESSION : undefined,
+      mm_mode:      _mode,
+      mm_theme:     _theme
+    }
   };
 
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -4547,6 +4812,94 @@ document.getElementById("saveConfirmBtn").addEventListener("click", function() {
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   closeSaveModal();
+});
+
+/* ── RESTORE MODAL ───────────────────────────────────────────────── */
+function openRestoreModal()  { document.getElementById("restoreOverlay").classList.add("open"); }
+function closeRestoreModal() { document.getElementById("restoreOverlay").classList.remove("open"); }
+
+document.getElementById("restoreClose").addEventListener("click", closeRestoreModal);
+document.getElementById("restoreCancelBtn").addEventListener("click", closeRestoreModal);
+document.getElementById("restoreOverlay").addEventListener("click", function(e) { if (e.target === this) closeRestoreModal(); });
+document.getElementById("restoreConfirmBtn").addEventListener("click", function() {
+  closeRestoreModal();
+  document.getElementById("btnRestoreFile").click();
+});
+
+document.getElementById("btnRestoreFile").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    let payload;
+    try { payload = JSON.parse(evt.target.result); } catch {
+      alert("Could not read the file — make sure it's an mmol backup (.json).");
+      e.target.value = ""; return;
+    }
+
+    // Accept both v2 (full backup) and legacy v1 (records-only) formats
+    const isFullBackup = payload.app === "mmol" && payload.data;
+    const isLegacy     = payload.version === 1 && payload.records;
+
+    if (!isFullBackup && !isLegacy) {
+      alert("Unrecognised file format — this doesn't look like an mmol backup.");
+      e.target.value = ""; return;
+    }
+
+    const exported = payload.exported ? new Date(payload.exported).toLocaleString() : "unknown date";
+    const msg = isFullBackup
+      ? `Restore full backup from ${exported}?\n\nThis will replace all current observations, notes, equipment, locations, and settings.`
+      : `Restore legacy records backup from ${exported}?\n\nThis will replace all current observations and notes.`;
+
+    showConfirm({
+      title:        "Restore Backup",
+      body:         msg,
+      warning:      "This cannot be undone. Consider saving a backup first.",
+      okLabel:      "Restore",
+      cancelLabel:  "Cancel"
+    }, () => {
+      if (isFullBackup) {
+        const d = payload.data;
+
+        // Observations
+        if (d.mm_checks)    { Object.keys(SAVED_CHECKS).forEach(k => delete SAVED_CHECKS[k]);       Object.assign(SAVED_CHECKS,    d.mm_checks);    }
+        if (d.mm_notes)     { Object.keys(SAVED_NOTES).forEach(k => delete SAVED_NOTES[k]);         Object.assign(SAVED_NOTES,     d.mm_notes);     }
+        if (d.mm_times)     { Object.keys(SAVED_TIMES).forEach(k => delete SAVED_TIMES[k]);         Object.assign(SAVED_TIMES,     d.mm_times);     }
+        if (d.mm_fullnotes) { Object.keys(SAVED_FULLNOTES).forEach(k => delete SAVED_FULLNOTES[k]); Object.assign(SAVED_FULLNOTES, d.mm_fullnotes); }
+
+        // Equipment & Locations
+        if (Array.isArray(d.mm_equipment)) { EQUIPMENT.length = 0; EQUIPMENT.push(...d.mm_equipment); try { localStorage.setItem("mm_equipment", JSON.stringify(EQUIPMENT)); } catch(err){} }
+        if (Array.isArray(d.mm_locations)) { LOCATIONS.length = 0; LOCATIONS.push(...d.mm_locations); try { localStorage.setItem("mm_locations", JSON.stringify(LOCATIONS)); } catch(err){} }
+
+        // Session
+        if (d.mm_session && typeof d.mm_session === "object") {
+          Object.keys(SESSION).forEach(k => delete SESSION[k]);
+          Object.assign(SESSION, d.mm_session);
+          saveSession();
+        }
+
+        // Theme / mode
+        if (d.mm_mode  === "day"   || d.mm_mode  === "night") setMode(d.mm_mode);
+        if (d.mm_theme === "light" || d.mm_theme === "dark")  setTheme(d.mm_theme);
+
+      } else {
+        // Legacy v1: records + timestamps only
+        const incoming = payload.records || payload;
+        Object.keys(SAVED_FULLNOTES).forEach(k => delete SAVED_FULLNOTES[k]);
+        Object.assign(SAVED_FULLNOTES, incoming);
+        if (payload.timestamps) { Object.keys(SAVED_TIMES).forEach(k => delete SAVED_TIMES[k]); Object.assign(SAVED_TIMES, payload.timestamps); }
+      }
+
+      saveState();
+      renderTable();
+      updateProgress();
+      updateSessionIndicator();
+      alert("Backup restored successfully.");
+    });
+
+    e.target.value = "";
+  };
+  reader.readAsText(file);
 });
 
 /* ── IMPORT MODAL ────────────────────────────────────────────────── */
