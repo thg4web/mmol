@@ -44,6 +44,97 @@
 </style>
 <link rel="stylesheet" href="css/mm-shared.css">
 <style>
+/* ════════════════════════════════════════════
+   NIGHT MODE — night-vision red overrides
+   (mm-shared.css :root provides these by default;
+    this block makes the selector explicit for JS toggling)
+   ════════════════════════════════════════════ */
+[data-theme="night"] {
+  --bg:               #030305;
+  --bg2:              #07070d;
+  --bg3:              #0c0b14;
+  --bg-row-alt:       #0a0912;
+  --dim:              #181625;
+  --red-bright:       #ff4f38;
+  --red-mid:          #c03328;
+  --red-dim:          #8a2a1c;
+  --red-faint:        #3c1210;
+  --amber:            #d04030;
+  --text-data:        #e87060;
+  --text-head:        #ff4f38;
+  --text-sub:         #c03830;
+  --text-meta:        #904030;
+  --text-dim:         #4a1e18;
+  --con-color:        #ff6048;
+  --m-color:          #ff5540;
+  --border:           #251512;
+  --border2:          #3e1f18;
+  --border3:          #5a2820;
+  --chk-border:       #aa3020;
+  --chk-tick:         #ff5540;
+  --note-border:      #3e1f18;
+  --note-focus:       rgba(180,40,20,.08);
+  --progress-bg:      #1a1020;
+  --starfield:        rgba(255,90,60,.38);
+  --filter-text:      #aa3828;
+  --filter-active-bg: #3c1210;
+  --search-bg:        #07070d;
+  --thead-bg:         #0c0b14;
+  --header-line:      #5a2820;
+  --row-hover:        rgba(200,50,30,.09);
+  --modal-bg:         #07070d;
+  --modal-border:     #5a2820;
+  --modal-overlay:    rgba(0,0,0,.88);
+  --modal-meta:       #904030;
+  --modal-close-hover:rgba(255,70,40,.15);
+}
+
+/* ════════════════════════════════════════════
+   DAY / DARK THEME — space terminal
+   Pure black, white text, no red effects,
+   full-colour images, no glows
+   ════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --bg:               #000000;
+  --bg2:              #0d0d0d;
+  --bg3:              #111111;
+  --bg-row-alt:       #080808;
+  --dim:              #1a1a1a;
+  --red-bright:       #ffffff;
+  --red-mid:          #cccccc;
+  --red-dim:          #666666;
+  --red-faint:        #1a1a1a;
+  --amber:            #aaaaaa;
+  --text-data:        #ffffff;
+  --text-head:        #ffffff;
+  --text-sub:         #cccccc;
+  --text-meta:        #999999;
+  --text-dim:         #555555;
+  --con-color:        #dddddd;
+  --m-color:          #ffffff;
+  --border:           #202020;
+  --border2:          #2a2a2a;
+  --border3:          #383838;
+  --chk-border:       #888888;
+  --chk-tick:         #ffffff;
+  --note-border:      #2a2a2a;
+  --note-focus:       rgba(255,255,255,.04);
+  --progress-bg:      #111111;
+  --starfield:        rgba(255,255,255,.18);
+  --filter-text:      #aaaaaa;
+  --filter-active-bg: #181818;
+  --search-bg:        #0d0d0d;
+  --thead-bg:         #111111;
+  --header-line:      #333333;
+  --row-hover:        rgba(255,255,255,.04);
+  --modal-bg:         #0d0d0d;
+  --modal-border:     #333333;
+  --modal-overlay:    rgba(0,0,0,.92);
+  --modal-meta:       #888888;
+  --modal-close-hover:rgba(255,255,255,.08);
+}
+</style>
+<style>
 
 /* ════════ PROGRESS ════════ */
 .progress-wrap {
@@ -76,7 +167,7 @@
   transition: width .45s ease;
   border-radius: 3px;
 }
-[data-theme="dark"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
+[data-theme="night"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
 .progress-count {
   font-size: 12px;
   color: var(--red-bright);
@@ -111,7 +202,44 @@
   color: var(--red-bright);
   background: var(--filter-active-bg);
 }
-[data-theme="dark"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+[data-theme="night"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+
+/* Filter-by-type dropdown */
+.filter-type-wrap { position: relative; display: inline-flex; align-items: center; }
+.filter-type-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--filter-active-bg);
+  border: 1px solid var(--border2);
+  color: var(--filter-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  padding: 5px 28px 5px 13px;
+  cursor: pointer;
+  transition: all .18s;
+  text-transform: uppercase;
+  outline: none;
+}
+.filter-type-select:hover { border-color: var(--border3); color: var(--red-bright); }
+.filter-type-select.active {
+  border-color: var(--red-mid);
+  color: var(--red-bright);
+  background: var(--filter-active-bg);
+}
+.filter-type-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+  font-size: 10px;
+  color: var(--filter-text);
+  transition: color .18s;
+}
+.filter-type-wrap:hover::after,
+.filter-type-select.active ~ .filter-type-wrap::after { color: var(--red-bright); }
+.filter-type-select.active + .filter-type-wrap::after,
+.filter-type-wrap:has(.filter-type-select.active)::after { color: var(--red-bright); }
 
 .search-wrap { margin-left: auto; position: relative; }
 .search-wrap input {
@@ -143,6 +271,7 @@
 }
 table { width: 100%; border-collapse: collapse; }
 colgroup col.col-mo   { width: 44px; }
+col.col-mo, th.col-mo, td.col-mo-val { display: none; }
 colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
@@ -215,7 +344,7 @@ td.col-m-val   { color: var(--m-color); font-family: 'Cinzel', serif; font-size:
 tr.checked td.col-m-val { text-decoration: line-through; text-decoration-color: var(--red-dim); }
 td.col-type-val { font-size: 11.5px; color: var(--text-data); transition: color .3s; }
 .type-badge { display: inline-block; width: 1.2em; margin-right: 4px; vertical-align: middle; flex-shrink: 0; font-size: 13px; text-align: center; line-height: 1; font-family: 'Courier New', Courier, monospace; }
-[data-theme="dark"] .type-badge { color: var(--red-bright) !important; background: transparent !important; }
+[data-theme="night"] .type-badge { color: var(--red-bright) !important; background: transparent !important; }
 td.col-con-val { font-size: 11.5px; color: var(--con-color); letter-spacing: .04em; font-weight: 600; text-align: center; transition: color .3s; }
 td.col-mag-val { text-align: right; font-size: 12px; color: var(--text-data); padding-right: 12px; font-variant-numeric: tabular-nums; transition: color .3s; }
 td.col-size-val { font-size: 11px; color: var(--text-data); opacity: .85; font-variant-numeric: tabular-nums; white-space: nowrap; transition: color .3s; }
@@ -230,9 +359,9 @@ td.col-chk-val input[type=checkbox] {
   position: relative; transition: all .15s;
 }
 td.col-chk-val input[type=checkbox]:hover { border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:hover { box-shadow: 0 0 8px rgba(255,70,40,.3); }
+[data-theme="night"] td.col-chk-val input[type=checkbox]:hover { box-shadow: 0 0 8px rgba(255,70,40,.3); }
 td.col-chk-val input[type=checkbox]:checked { background: var(--filter-active-bg); border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:checked { box-shadow: 0 0 10px rgba(255,70,40,.4); }
+[data-theme="night"] td.col-chk-val input[type=checkbox]:checked { box-shadow: 0 0 10px rgba(255,70,40,.4); }
 td.col-chk-val input[type=checkbox]:checked::after {
   content: '✓'; position: absolute; top: -2px; left: 1px;
   font-size: 12px; color: var(--chk-tick); line-height: 1; font-weight: 700;
@@ -285,7 +414,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700;
   color: var(--red-bright); letter-spacing: .06em; line-height: 1;
 }
-[data-theme="dark"] .lb-title-m { text-shadow: 0 0 30px rgba(255,70,40,.3); }
+[data-theme="night"] .lb-title-m { text-shadow: 0 0 30px rgba(255,70,40,.3); }
 .lb-title-type {
   font-family: 'Share Tech Mono', monospace; font-size: 10px;
   letter-spacing: .2em; text-transform: uppercase; color: var(--modal-meta);
@@ -311,7 +440,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   min-height: 300px; max-height: 520px; overflow: hidden; position: relative;
 }
 .lb-img-wrap img { max-width: 100%; max-height: 520px; object-fit: contain; display: block; }
-[data-theme="dark"] .lb-img-wrap img { filter: sepia(100%) brightness(50%) hue-rotate(-50deg); }
+[data-theme="night"] .lb-img-wrap img { filter: sepia(100%) brightness(50%) hue-rotate(-50deg); }
 .lb-attribution {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 4px 8px; background: rgba(0,0,0,.62);
@@ -320,7 +449,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   pointer-events: none; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
 }
 [data-theme="light"] .lb-attribution { background: rgba(255,255,255,.55); color: #666; }
-[data-theme="dark"] .lb-attribution { color: var(--red-bright); background: rgba(0,0,0,.75); }
+[data-theme="night"] .lb-attribution { color: var(--red-bright); background: rgba(0,0,0,.75); }
 .lb-img-placeholder {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 12px; padding: 40px;
@@ -366,11 +495,11 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   text-decoration: none; cursor: pointer; transition: all .18s; width: 100%;
 }
 .lb-sky-btn:hover { border-color: var(--border3); color: var(--red-bright); background: var(--modal-close-hover); }
-[data-theme="dark"] .lb-sky-btn:hover { box-shadow: 0 0 12px rgba(255,70,40,.12); }
+[data-theme="night"] .lb-sky-btn:hover { box-shadow: 0 0 12px rgba(255,70,40,.12); }
 .lb-sky-btn .sky-icon { font-size: 13px; flex-shrink: 0; opacity: .75; }
 .lb-sky-links-label { font-size: 8px; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1px; }
 .lb-chart-warn { font-size: 9.5px; color: var(--text-dim); line-height: 1.45; margin-top: 7px; padding: 5px 7px; border-left: 2px solid var(--red-bright); opacity: .8; }
-[data-theme="dark"] .lb-chart-warn { color: var(--red-bright); opacity: 1; }
+[data-theme="night"] .lb-chart-warn { color: var(--red-bright); opacity: 1; }
 
 @media (max-width: 640px) {
   .lb-body { flex-direction: column; }
@@ -429,7 +558,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   transition: width .45s ease;
   border-radius: 3px;
 }
-[data-theme="dark"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
+[data-theme="night"] .progress-fill { box-shadow: 0 0 10px rgba(255,70,40,.5); }
 .progress-count {
   font-size: 12px;
   color: var(--red-bright);
@@ -467,7 +596,31 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   color: var(--red-bright);
   background: var(--filter-active-bg);
 }
-[data-theme="dark"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+[data-theme="night"] .filter-btn.active { box-shadow: 0 0 10px rgba(200,50,30,.18); }
+
+.filter-type-wrap { position: relative; display: inline-flex; align-items: center; }
+.filter-type-select {
+  appearance: none; -webkit-appearance: none;
+  background: var(--filter-active-bg);
+  border: 1px solid var(--border2);
+  color: var(--filter-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  padding: 5px 28px 5px 13px;
+  cursor: pointer;
+  transition: all .18s;
+  text-transform: uppercase;
+  outline: none;
+}
+.filter-type-select:hover { border-color: var(--border3); color: var(--red-bright); }
+.filter-type-select.active { border-color: var(--red-mid); color: var(--red-bright); }
+.filter-type-wrap::after {
+  content: '▾'; position: absolute; right: 10px;
+  pointer-events: none; font-size: 10px; color: var(--filter-text); transition: color .18s;
+}
+.filter-type-wrap:hover::after { color: var(--red-bright); }
+.filter-type-wrap:has(.filter-type-select.active)::after { color: var(--red-bright); }
 
 .search-wrap { margin-left: auto; position: relative; }
 .search-wrap input {
@@ -601,6 +754,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
 table { width: 100%; border-collapse: collapse; }
 
 colgroup col.col-mo   { width: 44px; }
+col.col-mo, th.col-mo, td.col-mo-val { display: none; }
 colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
@@ -610,6 +764,14 @@ colgroup col.col-ra   { width: 76px; }
 colgroup col.col-dec  { width: 72px; }
 colgroup col.col-psa  { width: 86px; }
 colgroup col.col-chk  { width: 40px; }
+
+/* ── Mobile: hide detail columns, keep Object / Type / Con / Mag / ✓ / Notes ── */
+html.is-mobile col.col-size, html.is-mobile th.col-size, html.is-mobile td.col-size-val,
+html.is-mobile col.col-ra,   html.is-mobile th.col-ra,   html.is-mobile td.col-ra-val,
+html.is-mobile col.col-dec,  html.is-mobile th.col-dec,  html.is-mobile td.col-dec-val,
+html.is-mobile col.col-psa,  html.is-mobile th.col-psa,  html.is-mobile td.col-psa-val { display: none; }
+html.is-mobile td.col-note-val { min-width: 80px; }
+html.is-mobile .search-wrap input { width: 130px; }
 
 /* THEAD */
 thead tr {
@@ -730,14 +892,14 @@ td.col-chk-val input[type=checkbox] {
   transition: all .15s;
 }
 td.col-chk-val input[type=checkbox]:hover { border-color: var(--red-bright); }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:hover {
+[data-theme="night"] td.col-chk-val input[type=checkbox]:hover {
   box-shadow: 0 0 8px rgba(255,70,40,.3);
 }
 td.col-chk-val input[type=checkbox]:checked {
   background: var(--filter-active-bg);
   border-color: var(--red-bright);
 }
-[data-theme="dark"] td.col-chk-val input[type=checkbox]:checked {
+[data-theme="night"] td.col-chk-val input[type=checkbox]:checked {
   box-shadow: 0 0 10px rgba(255,70,40,.4);
 }
 td.col-chk-val input[type=checkbox]:checked::after {
@@ -804,9 +966,9 @@ td.col-note-val { min-width: 150px; }
   border-color: var(--red-bright);
   color: #fff;
 }
-[data-theme="dark"] .rec-btn { color: var(--red-bright); border-color: var(--red-dim); }
-[data-theme="dark"] .rec-btn.has-rec { background: var(--red-bright); border-color: var(--red-bright); color: var(--bg); }
-[data-theme="dark"] .rec-btn.has-rec:hover { background: var(--red-mid); border-color: var(--red-bright); color: #fff; }
+[data-theme="night"] .rec-btn { color: var(--red-bright); border-color: var(--red-dim); }
+[data-theme="night"] .rec-btn.has-rec { background: var(--red-bright); border-color: var(--red-bright); color: var(--bg); }
+[data-theme="night"] .rec-btn.has-rec:hover { background: var(--red-mid); border-color: var(--red-bright); color: #fff; }
 
 /* ── Full record modal ── */
 .rec-overlay {
@@ -1015,18 +1177,39 @@ td.col-note-val { min-width: 150px; }
   transition: color .3s;
 }
 .legend-dot { font-size: 13px; flex-shrink: 0; line-height: 1; width: 1.2em; text-align: center; font-family: 'Courier New', Courier, monospace; color: #000; background: transparent; }
-[data-theme="dark"] .legend-dot { color: var(--red-bright) !important; background: transparent !important; }
+[data-theme="night"] .legend-dot { color: var(--red-bright) !important; background: transparent !important; }
 
 /* Night-mode icon swap — emoji hidden, ASCII label shown via ::after */
 .ui-icon { display: inline-block; }
-[data-theme="dark"] .ui-icon { font-size: 0; line-height: 1; vertical-align: middle; }
-[data-theme="dark"] .ui-icon::after {
+[data-theme="night"] .ui-icon { font-size: 0; line-height: 1; vertical-align: middle; }
+[data-theme="night"] .ui-icon::after {
   content: attr(data-night);
   font-size: 11px;
   font-family: 'Share Tech Mono', monospace;
   color: var(--red-bright);
   letter-spacing: .05em;
 }
+
+/* ════════ DAY/DARK — neutralise all night-specific red effects ════════
+   Images show full colour. No glows. No text-shadows. Icons stay emoji. */
+/* Toggle pill — also move right in day/dark mode */
+[data-theme="dark"] .toggle-pill::after,
+.mode-day .toggle-pill::after { transform: translateX(20px); box-shadow: none; }
+[data-theme="dark"] .lb-img-wrap img         { filter: none; }
+[data-theme="dark"] .progress-fill           { box-shadow: none; }
+[data-theme="dark"] .filter-btn.active       { box-shadow: none; }
+[data-theme="dark"] td.col-chk-val input[type=checkbox]:hover   { box-shadow: none; }
+[data-theme="dark"] td.col-chk-val input[type=checkbox]:checked { box-shadow: none; }
+[data-theme="dark"] .lb-title-m              { text-shadow: none; }
+[data-theme="dark"] .lb-sky-btn:hover        { box-shadow: none; }
+[data-theme="dark"] .lb-attribution          { background: rgba(0,0,0,.65); color: #aaa; }
+[data-theme="dark"] .lb-chart-warn           { color: var(--text-meta); opacity: .85; }
+[data-theme="dark"] h1                       { text-shadow: none; }
+[data-theme="dark"] .type-badge              { color: var(--text-data) !important; background: var(--filter-active-bg) !important; }
+[data-theme="dark"] .legend-dot              { color: var(--text-data) !important; background: transparent !important; }
+[data-theme="dark"] .rec-btn                 { color: var(--text-meta); border-color: var(--border2); }
+[data-theme="dark"] .rec-btn.has-rec         { background: var(--text-head); border-color: var(--border3); color: var(--bg); }
+[data-theme="dark"] .rec-btn.has-rec:hover   { background: var(--text-sub); border-color: var(--border3); color: var(--bg); }
 
 /* ════════ FOOTER ════════ */
 .footer {
@@ -1125,7 +1308,7 @@ tr.checked td.col-m-val a.m-link {
   letter-spacing: .06em;
   line-height: 1;
 }
-[data-theme="dark"] .lb-title-m {
+[data-theme="night"] .lb-title-m {
   text-shadow: 0 0 30px rgba(255,70,40,.3);
 }
 .lb-title-type {
@@ -1369,7 +1552,7 @@ tr.checked td.col-m-val a.m-link {
   color: var(--red-bright);
   background: var(--modal-close-hover);
 }
-[data-theme="dark"] .lb-sky-btn:hover {
+[data-theme="night"] .lb-sky-btn:hover {
   box-shadow: 0 0 12px rgba(255,70,40,.12);
 }
 .lb-sky-btn .sky-icon {
@@ -1531,10 +1714,10 @@ tr.checked td.col-m-val a.m-link {
   <!-- TOP RIGHT CONTROLS (theme toggle + three-dot menu) -->
   <div class="top-right-controls">
 
-    <!-- THEME TOGGLE -->
+    <!-- MODE TOGGLE (Night / Day) -->
     <div class="theme-toggle-wrap">
       <span class="theme-icon moon"><span class="ui-icon" data-night="[N]">🌙</span></span>
-      <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle light/dark mode" tabindex="0"></div>
+      <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle Night/Day mode" tabindex="0"></div>
       <span class="theme-icon sun"><span class="ui-icon" data-night="[D]">☀</span></span>
       <span class="toggle-label" id="toggleLabel">Night</span>
     </div>
@@ -1546,30 +1729,39 @@ tr.checked td.col-m-val a.m-link {
         <button class="log-menu-item" id="dotsMenuPrint">
           <span class="log-menu-icon">⎙</span> Print
         </button>
-        <button class="log-menu-item" id="dotsMenuExport">
-          <span class="log-menu-icon">⬇</span> Export CSV
-        </button>
-        <label class="log-menu-item" for="btnImportFile">
-          <span class="log-menu-icon">⬆</span> Import CSV
-        </label>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="dotsMenuExportAL">
-          <span class="log-menu-icon">⬇</span> Export AL Records
+        <button class="log-menu-item" id="dotsMenuExportRecords">
+          <span class="log-menu-icon">⬇</span> Export Records
         </button>
         <label class="log-menu-item" for="btnImportALFile">
-          <span class="log-menu-icon">⬆</span> Import AL Records
+          <span class="log-menu-icon">⬆</span> Import Records
         </label>
         <button class="log-menu-item" id="dotsMenuReport">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[RPT]">📄</span></span> Generate AL Report…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[PDF]">📄</span></span> Generate PDF…
+        </button>
+        <button class="log-menu-item" id="dotsMenuCSV">
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[CSV]">📊</span></span> Generate CSV…
         </button>
         <hr class="log-menu-divider">
         <button class="log-menu-item" id="dotsMenuSession">
           <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
         </button>
+        <button class="log-menu-item" id="dotsMenuTheme">
+          <span class="log-menu-icon" id="dotsMenuThemeIcon">◑</span> <span id="dotsMenuThemeLabel">Dark Theme</span>
+        </button>
         <hr class="log-menu-divider">
-        <a href="https://github.com/thg4web/mmol" target="_blank" rel="noopener" class="log-menu-item">
-          <span class="log-menu-icon">⌂</span> Project Home
-        </a>
+        <button class="log-menu-item" id="dotsMenuEqTemplate">
+          <span class="log-menu-icon">⬇</span> Export Equipment
+        </button>
+        <label class="log-menu-item" for="btnImportEqFile">
+          <span class="log-menu-icon">⬆</span> Import Equipment CSV
+        </label>
+        <button class="log-menu-item" id="dotsMenuLocTemplate">
+          <span class="log-menu-icon">⬇</span> Export Locations
+        </button>
+        <label class="log-menu-item" for="btnImportLocFile">
+          <span class="log-menu-icon">⬆</span> Import Locations CSV
+        </label>
+        <hr class="log-menu-divider">
         <a href="docs/about.html" class="log-menu-item">
           <span class="log-menu-icon">◎</span> About
         </a>
@@ -1597,12 +1789,17 @@ tr.checked td.col-m-val a.m-link {
 
   <!-- CONTROLS -->
   <div class="controls">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="Galaxy">Galaxy</button>
-    <button class="filter-btn" data-filter="Open Cluster">Open Cluster</button>
-    <button class="filter-btn" data-filter="Globular Clust">Globular</button>
-    <button class="filter-btn" data-filter="Nebula">Nebula</button>
-    <button class="filter-btn" data-filter="unchecked">Unobserved</button>
+    <button class="filter-btn active" data-filter="all" id="filterAll">All</button>
+    <div class="filter-type-wrap">
+      <select class="filter-type-select" id="filterTypeSelect">
+        <option value="">Filter By Type</option>
+        <option value="Galaxy">Galaxy</option>
+        <option value="Open Cluster">Open Cluster</option>
+        <option value="Globular Clust">Globular</option>
+        <option value="Nebula">Nebula</option>
+      </select>
+    </div>
+    <button class="filter-btn" data-filter="unchecked" id="filterUnobserved">Unobserved</button>
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
       <input type="text" id="searchInput" placeholder="Search M#, type, con…">
@@ -1615,34 +1812,44 @@ tr.checked td.col-m-val a.m-link {
         <button class="log-menu-item" id="menuPrint">
           <span class="log-menu-icon">⎙</span> Print
         </button>
-        <button class="log-menu-item" id="menuExport">
-          <span class="log-menu-icon">⬇</span> Export CSV
-        </button>
-        <label class="log-menu-item" for="btnImportFile">
-          <span class="log-menu-icon">⬆</span> Import CSV
-        </label>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="menuExportAL">
-          <span class="log-menu-icon">⬇</span> Export AL Records
+        <button class="log-menu-item" id="menuExportRecords">
+          <span class="log-menu-icon">⬇</span> Export Records
         </button>
         <label class="log-menu-item" for="btnImportALFile">
-          <span class="log-menu-icon">⬆</span> Import AL Records
+          <span class="log-menu-icon">⬆</span> Import Records
         </label>
         <button class="log-menu-item" id="menuGenerateReport">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[RPT]">📄</span></span> Generate AL Report…
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[PDF]">📄</span></span> Generate PDF…
+        </button>
+        <button class="log-menu-item" id="menuGenerateCSV">
+          <span class="log-menu-icon"><span class="ui-icon" data-night="[CSV]">📊</span></span> Generate CSV…
         </button>
         <hr class="log-menu-divider">
         <button class="log-menu-item" id="menuSession">
           <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
         </button>
         <hr class="log-menu-divider">
+        <button class="log-menu-item" id="menuEqTemplate">
+          <span class="log-menu-icon">⬇</span> Export Equipment
+        </button>
+        <label class="log-menu-item" for="btnImportEqFile">
+          <span class="log-menu-icon">⬆</span> Import Equipment CSV
+        </label>
+        <button class="log-menu-item" id="menuLocTemplate">
+          <span class="log-menu-icon">⬇</span> Export Locations
+        </button>
+        <label class="log-menu-item" for="btnImportLocFile">
+          <span class="log-menu-icon">⬆</span> Import Locations CSV
+        </label>
+        <hr class="log-menu-divider">
         <button class="log-menu-item danger" id="menuReset">
           <span class="log-menu-icon">↺</span> Reset All Data…
         </button>
       </div>
     </div>
-    <input type="file" id="btnImportFile"   class="btn-import-input" accept=".csv">
     <input type="file" id="btnImportALFile" class="btn-import-input" accept=".json">
+    <input type="file" id="btnImportEqFile" class="btn-import-input" accept=".csv">
+    <input type="file" id="btnImportLocFile" class="btn-import-input" accept=".csv">
     <div class="session-indicator" id="sessionIndicator">
       <span class="session-dot"></span> Session active
     </div>
@@ -1658,7 +1865,7 @@ tr.checked td.col-m-val a.m-link {
       </colgroup>
       <thead>
         <tr>
-          <th class="center">#</th>
+          <th class="center col-mo">#</th>
           <th id="objSortTh" class="col-obj-sort" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
           <th>Type</th>
           <th class="center">Con</th>
@@ -1878,26 +2085,6 @@ tr.checked td.col-m-val a.m-link {
     <div class="conf-btns">
       <button class="conf-btn" id="confCancelBtn">Cancel</button>
       <button class="conf-btn conf-ok" id="confOkBtn">Confirm</button>
-    </div>
-  </div>
-</div>
-
-<div class="import-overlay" id="importOverlay" role="dialog" aria-modal="true" aria-label="Import options">
-  <div class="import-dialog">
-    <div class="import-dialog-title">⬆ Import Observing Log</div>
-    <div class="import-dialog-body" id="importSummary"></div>
-    <div id="importConflictSection" style="display:none">
-      <div class="import-conflict-label">Conflicts — objects with data in both the page and the file</div>
-      <div class="import-conflict-box" id="importConflictList"></div>
-    </div>
-    <hr class="import-divider">
-    <div class="import-dialog-body" style="font-size:13px;margin-bottom:14px">
-      How would you like to proceed?
-    </div>
-    <div class="import-dialog-btns">
-      <button class="import-btn cancel" id="importCancelBtn">Cancel</button>
-      <button class="import-btn" id="importMergeBtn">Merge — keep existing where file is blank</button>
-      <button class="import-btn primary" id="importOverwriteBtn">Overwrite — replace all with file data</button>
     </div>
   </div>
 </div>
@@ -2203,9 +2390,9 @@ tr.checked td.col-m-val a.m-link {
 }
 </style>
 
-<div class="rpt-overlay" id="rptOverlay" role="dialog" aria-modal="true" aria-label="Generate AL Report">
+<div class="rpt-overlay" id="rptOverlay" role="dialog" aria-modal="true" aria-label="Generate PDF">
   <div class="rpt-box">
-    <div class="rpt-title"><span class="ui-icon" data-night="[RPT]">📄</span> Generate AL Report</div>
+    <div class="rpt-title"><span class="ui-icon" data-night="[PDF]">📄</span> Generate PDF</div>
     <div class="rpt-subtitle">Produces a formatted PDF of all saved full observation records, ready for AL Messier Club certificate submission.</div>
     <button class="rpt-close" id="rptClose">✕</button>
 
@@ -2394,6 +2581,12 @@ tr.checked td.col-m-val a.m-link {
 
     <div class="rec-section">Location</div>
     <div class="rec-field">
+      <label class="rec-label">Saved Locations</label>
+      <select class="rec-select" id="sessLocPreset">
+        <option value="">— select a saved location —</option>
+      </select>
+    </div>
+    <div class="rec-field">
       <label class="rec-label">Observing Site</label>
       <div class="sess-loc-row">
         <input class="rec-input" type="text" id="sessSite"
@@ -2453,6 +2646,20 @@ tr.checked td.col-m-val a.m-link {
     </div>
 
     <div class="rec-section">Equipment</div>
+    <div class="rec-grid">
+      <div class="rec-field">
+        <label class="rec-label">Saved Telescopes</label>
+        <select class="rec-select" id="sessScopePreset">
+          <option value="">— select a saved telescope —</option>
+        </select>
+      </div>
+      <div class="rec-field">
+        <label class="rec-label">Saved Eyepieces</label>
+        <select class="rec-select" id="sessEpPreset">
+          <option value="">— select a saved eyepiece —</option>
+        </select>
+      </div>
+    </div>
     <div class="rec-grid">
       <div class="rec-field">
         <label class="rec-label">Telescope / Instrument</label>
@@ -2662,6 +2869,17 @@ tr.checked td.col-m-val a.m-link {
 </div>
 
 <script>
+/* ── Mobile detection ──────────────────────────────────────────── */
+(function detectMobile() {
+  // True phone: narrow viewport AND touch AND mobile UA
+  const isMobile = (
+    window.innerWidth <= 768 &&
+    navigator.maxTouchPoints > 0 &&
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  );
+  if (isMobile) document.documentElement.classList.add("is-mobile");
+})();
+
 /* ── Custom themed confirm dialog ─────────────────────────────── */
 function showConfirm({ title = "Confirm", body = "", warning = "", okLabel = "Confirm", cancelLabel = "Cancel" } = {}, onOk) {
   const overlay  = document.getElementById("confOverlay");
@@ -3211,12 +3429,40 @@ function applyFilter() {
   });
 }
 
-document.querySelectorAll(".filter-btn").forEach(btn => btn.addEventListener("click", function() {
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+document.getElementById("filterAll").addEventListener("click", function() {
+  activeFilter = "all";
   this.classList.add("active");
-  activeFilter = this.dataset.filter;
+  document.getElementById("filterUnobserved").classList.remove("active");
+  const sel = document.getElementById("filterTypeSelect");
+  sel.value = "";
+  sel.classList.remove("active");
   applyFilter();
-}));
+});
+
+document.getElementById("filterUnobserved").addEventListener("click", function() {
+  activeFilter = "unchecked";
+  this.classList.add("active");
+  document.getElementById("filterAll").classList.remove("active");
+  const sel = document.getElementById("filterTypeSelect");
+  sel.value = "";
+  sel.classList.remove("active");
+  applyFilter();
+});
+
+document.getElementById("filterTypeSelect").addEventListener("change", function() {
+  if (this.value) {
+    activeFilter = this.value;
+    this.classList.add("active");
+    document.getElementById("filterAll").classList.remove("active");
+    document.getElementById("filterUnobserved").classList.remove("active");
+  } else {
+    activeFilter = "all";
+    this.classList.remove("active");
+    document.getElementById("filterAll").classList.add("active");
+    document.getElementById("filterUnobserved").classList.remove("active");
+  }
+  applyFilter();
+});
 document.getElementById("searchInput").addEventListener("input", function() {
   searchTerm = this.value.trim().toLowerCase(); applyFilter();
 });
@@ -3272,202 +3518,8 @@ function parseCSVLine(line) {
   return fields;
 }
 
-/* ── EXPORT ─────────────────────────────────────────────────────── */
-document.getElementById("menuExport").addEventListener("click", function () {
-
-  // Build timestamp: YYYY-MM-DD-HHmmss
-  const now = new Date();
-  const pad = n => String(n).padStart(2, "0");
-  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`
-              + `-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-  const filename = `${stamp}-observing-log.csv`;
-
-  // CSV header — all fields quoted
-  const header = ["Marathon Order","Object","Type","Constellation","Magnitude",
-                  "RA (J2000)","Dec (J2000)","PSA Page","Observed","Date Observed",
-                  "Latitude","Longitude","Time Zone","Field Notes"]
-                  .map(csvField).join(",");
-  const rows = [header];
-
-  // One row per object — every field quoted so commas inside PSA pages are safe
-  DATA.forEach(([mo, m, type, con, mag, ra, dec, psa]) => {
-    const observed  = SAVED_CHECKS[m] ? "Yes" : "No";
-    const notes     = SAVED_NOTES[m] || "";
-    const timestamp = SAVED_TIMES[m]
-      ? new Date(SAVED_TIMES[m]).toLocaleString()
-      : "";
-    // Only include location data for objects that have been observed or have any content
-    const rec      = SAVED_FULLNOTES[m] || {};
-    const hasEntry = SAVED_CHECKS[m] || notes || SAVED_FULLNOTES[m];
-    const lat  = hasEntry ? (rec.lat != null ? rec.lat : (SESSION.lat != null ? SESSION.lat : "")) : "";
-    const lon  = hasEntry ? (rec.lon != null ? rec.lon : (SESSION.lon != null ? SESSION.lon : "")) : "";
-    const tz   = hasEntry ? (rec.tz  || SESSION.tz || "") : "";
-    rows.push([mo, m, type, con, mag, ra, dec, psa, observed, timestamp,
-               lat, lon, tz, notes].map(csvField).join(","));
-  });
-
-  const csv  = rows.join("\r\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href     = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
-
-/* ── IMPORT ─────────────────────────────────────────────────────── */
-let _pendingImport = null;  // holds parsed rows until user confirms
-
-function openImportDialog(parsed, conflicts) {
-  const overlay = document.getElementById("importOverlay");
-  const summary = document.getElementById("importSummary");
-  const conflictSection = document.getElementById("importConflictSection");
-  const conflictList = document.getElementById("importConflictList");
-
-  const total    = parsed.length;
-  const observed = parsed.filter(r => r.observed).length;
-  const noted    = parsed.filter(r => r.notes).length;
-
-  let summaryHTML = `File contains <strong>${total}</strong> objects — `
-    + `<strong>${observed}</strong> marked observed`;
-  if (noted) summaryHTML += `, <strong>${noted}</strong> with field notes`;
-  summaryHTML += ".";
-
-  if (conflicts.length > 0) {
-    summaryHTML += `<br><br><strong>${conflicts.length}</strong> object`
-      + (conflicts.length > 1 ? "s have" : " has")
-      + " data on this page that may be overwritten.";
-    conflictSection.style.display = "block";
-    conflictList.textContent = conflicts.map(c => {
-      const parts = [];
-      if (c.existingObserved && !c.fileObserved) parts.push("observed → not observed");
-      if (!c.existingObserved && c.fileObserved) parts.push("not observed → observed");
-      if (c.existingNotes && c.fileNotes && c.existingNotes !== c.fileNotes)
-        parts.push(`notes differ`);
-      if (c.existingNotes && !c.fileNotes) parts.push("notes → blank");
-      return `${c.m}  ${parts.join(" · ")}`;
-    }).join("\n");
-  } else {
-    summaryHTML += "<br><br>No conflicts detected — existing data will not be altered by a merge.";
-    conflictSection.style.display = "none";
-  }
-
-  summary.innerHTML = summaryHTML;
-  _pendingImport = parsed;
-  overlay.classList.add("open");
-}
-
-function closeImportDialog() {
-  document.getElementById("importOverlay").classList.remove("open");
-  _pendingImport = null;
-}
-
-function applyImport(mode) {
-  // mode: "overwrite" | "merge"
-  if (!_pendingImport) return;
-  let imported = 0;
-
-  _pendingImport.forEach(({ m, observed, notes, obsTime }) => {
-    if (mode === "overwrite") {
-      SAVED_CHECKS[m] = observed;
-      SAVED_NOTES[m]  = notes;
-      if (obsTime) SAVED_TIMES[m] = obsTime; else delete SAVED_TIMES[m];
-      imported++;
-    } else {
-      // merge: only write if the file has something and the page has nothing
-      if (observed && !SAVED_CHECKS[m]) SAVED_CHECKS[m] = observed;
-      if (notes    && !SAVED_NOTES[m])  SAVED_NOTES[m]  = notes;
-      if (obsTime  && !SAVED_TIMES[m])  SAVED_TIMES[m]  = obsTime;
-      imported++;
-    }
-  });
-
-  try {
-    localStorage.setItem("mm_checks", JSON.stringify(SAVED_CHECKS));
-    localStorage.setItem("mm_notes",  JSON.stringify(SAVED_NOTES));
-  } catch(err) {}
-
-  renderTable();
-  updateProgress();
-  applyFilter();
-  closeImportDialog();
-
-  const modeLabel = mode === "overwrite" ? "Overwrite" : "Merge";
-  alert(`${modeLabel} complete — ${imported} objects applied.`);
-}
-
-document.getElementById("importCancelBtn").addEventListener("click", () => {
-  closeImportDialog();
-  document.getElementById("btnImportFile").value = "";
-});
-document.getElementById("importMergeBtn").addEventListener("click",     () => applyImport("merge"));
-document.getElementById("importOverwriteBtn").addEventListener("click", () => applyImport("overwrite"));
-
-document.getElementById("btnImportFile").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (evt) {
-    const lines = evt.target.result.split(/\r?\n/).filter(l => l.trim());
-    if (lines.length < 2) {
-      alert("That doesn't look like a valid observing log CSV.");
-      e.target.value = "";
-      return;
-    }
-
-    const headers   = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
-    const iObj      = headers.indexOf("object");
-    const iObserved = headers.indexOf("observed");
-    const iNotes    = headers.indexOf("field notes");
-    const iTime     = headers.indexOf("date observed");
-
-    if (iObj === -1 || iObserved === -1) {
-      alert("CSV header not recognised — make sure you're importing an observing log exported from this page.");
-      e.target.value = "";
-      return;
-    }
-
-    const parsed    = [];
-    const conflicts = [];
-    let skipped     = 0;
-
-    for (let i = 1; i < lines.length; i++) {
-      const cols     = parseCSVLine(lines[i]);
-      const m        = (cols[iObj]      || "").trim();
-      const observed = (cols[iObserved] || "").trim().toLowerCase() === "yes";
-      const notes    = iNotes >= 0 ? (cols[iNotes] || "").trim() : "";
-      const obsTime  = iTime  >= 0 ? (cols[iTime]  || "").trim() : "";
-
-      if (!m.match(/^M\d+$/i)) { skipped++; continue; }
-
-      parsed.push({ m, observed, notes, obsTime });
-
-      // Detect conflicts: existing page data vs incoming file data
-      const existingObserved = !!SAVED_CHECKS[m];
-      const existingNotes    = SAVED_NOTES[m] || "";
-      const hasConflict =
-        (existingObserved && !observed) ||          // would lose an observation
-        (existingNotes && !notes) ||                // would lose existing notes
-        (existingNotes && notes && existingNotes !== notes); // notes would change
-
-      if (hasConflict) {
-        conflicts.push({ m, existingObserved, fileObserved: observed,
-                             existingNotes,   fileNotes: notes });
-      }
-    }
-
-    e.target.value = "";  // reset so same file can be re-imported
-    openImportDialog(parsed, conflicts);
-  };
-  reader.readAsText(file);
-});
-
-/* ── AL RECORDS EXPORT (JSON) ───────────────────────────────────── */
-document.getElementById("menuExportAL").addEventListener("click", function () {
+/* ── EXPORT RECORDS (JSON) ──────────────────────────────────────── */
+document.getElementById("menuExportRecords").addEventListener("click", function () {
   logMenuDropdown.classList.remove("open");
   logMenuBtn.classList.remove("open");
 
@@ -3547,7 +3599,7 @@ document.getElementById("btnImportALFile").addEventListener("change", function (
     msg += "\n\nImport and merge all records?";
 
     showConfirm({
-      title: "Import AL Records",
+      title: "Import Records",
       body: msg,
       okLabel: "Import",
       cancelLabel: "Cancel"
@@ -3575,6 +3627,220 @@ document.getElementById("btnImportALFile").addEventListener("change", function (
 });
 
 /* ── SESSION SETUP ──────────────────────────────────────────────── */
+/* ── EQUIPMENT & LOCATIONS PRESETS ──────────────────────────────── */
+let EQUIPMENT  = [];   // [{type:"Telescope"|"Eyepiece", name, aperture, focalLength, notes}]
+let LOCATIONS  = [];   // [{name, lat, lon, tz, bortle, notes}]
+
+(function loadPresets() {
+  try { const e = localStorage.getItem("mm_equipment"); if (e) EQUIPMENT = JSON.parse(e); } catch(e){}
+  try { const l = localStorage.getItem("mm_locations"); if (l) LOCATIONS = JSON.parse(l); } catch(e){}
+})();
+
+function savePresets() {
+  try { localStorage.setItem("mm_equipment", JSON.stringify(EQUIPMENT)); } catch(e){}
+  try { localStorage.setItem("mm_locations", JSON.stringify(LOCATIONS)); } catch(e){}
+}
+
+// ── Populate the three preset selects in Session Setup ──────────
+function populatePresetSelects() {
+  const locSel   = document.getElementById("sessLocPreset");
+  const scopeSel = document.getElementById("sessScopePreset");
+  const epSel    = document.getElementById("sessEpPreset");
+
+  // Locations
+  locSel.innerHTML = "<option value=\"\">— select a saved location —</option>";
+  LOCATIONS.forEach(function(loc, i) {
+    const opt = document.createElement("option");
+    opt.value = i;
+    const label = loc.bortle ? loc.name + "  (Bortle " + loc.bortle + ")" : loc.name;
+    opt.textContent = label;
+    locSel.appendChild(opt);
+  });
+  locSel.parentElement.style.display = LOCATIONS.length ? "" : "none";
+
+  // Telescopes
+  const telescopes = EQUIPMENT.filter(e => e.type === "Telescope");
+  scopeSel.innerHTML = "<option value=\"\">— select a saved telescope —</option>";
+  telescopes.forEach(function(t, i) {
+    const opt = document.createElement("option");
+    opt.value = "T" + i;
+    opt.textContent = t.aperture ? t.name + "  (" + t.aperture + "mm)" : t.name;
+    scopeSel.appendChild(opt);
+  });
+  scopeSel.parentElement.style.display = telescopes.length ? "" : "none";
+
+  // Eyepieces
+  const eyepieces = EQUIPMENT.filter(e => e.type === "Eyepiece");
+  epSel.innerHTML = "<option value=\"\">— select a saved eyepiece —</option>";
+  eyepieces.forEach(function(ep, i) {
+    const opt = document.createElement("option");
+    opt.value = "E" + i;
+    opt.textContent = ep.name;
+    epSel.appendChild(opt);
+  });
+  epSel.parentElement.style.display = eyepieces.length ? "" : "none";
+}
+
+// ── Apply a selected location preset ───────────────────────────
+document.getElementById("sessLocPreset").addEventListener("change", function() {
+  const idx = parseInt(this.value);
+  if (isNaN(idx) || !LOCATIONS[idx]) return;
+  const loc = LOCATIONS[idx];
+  document.getElementById("sessSite").value = loc.name + (loc.bortle ? " — Bortle " + loc.bortle : "");
+  document.getElementById("sessLat").value  = loc.lat  != null ? loc.lat  : "";
+  document.getElementById("sessLon").value  = loc.lon  != null ? loc.lon  : "";
+  document.getElementById("sessTZ").value   = loc.tz   || "";
+  const statEl = document.getElementById("sessGeoStatus");
+  statEl.textContent = "Location loaded from saved preset.";
+  statEl.className   = "sess-geo-status ok";
+});
+
+// ── Apply a selected telescope preset ──────────────────────────
+document.getElementById("sessScopePreset").addEventListener("change", function() {
+  if (!this.value || !this.value.startsWith("T")) return;
+  const telescopes = EQUIPMENT.filter(e => e.type === "Telescope");
+  const t = telescopes[parseInt(this.value.slice(1))];
+  if (!t) return;
+  document.getElementById("sessScope").value   = t.name;
+  document.getElementById("sessAperture").value = t.aperture || "";
+});
+
+// ── Apply a selected eyepiece preset ───────────────────────────
+document.getElementById("sessEpPreset").addEventListener("change", function() {
+  if (!this.value || !this.value.startsWith("E")) return;
+  const eyepieces = EQUIPMENT.filter(e => e.type === "Eyepiece");
+  const ep = eyepieces[parseInt(this.value.slice(1))];
+  if (!ep) return;
+  document.getElementById("sessEyepiece").value = ep.name;
+});
+
+// ── Template downloads ──────────────────────────────────────────
+function downloadTemplate(filename, content) {
+  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+const EQ_TEMPLATE =
+`Type,Name,Aperture_mm,Focal_Length_mm,Notes
+Telescope,8" Dobsonian f/6,203,1200,
+Telescope,5" Refractor f/8,127,1016,
+Eyepiece,24mm Panoptic,,,
+Eyepiece,8mm Ethos,,,
+Eyepiece,35mm Panoptic,,,`;
+
+const LOC_TEMPLATE =
+`Name,Latitude,Longitude,Timezone,Bortle,Notes
+Jordan Lake SRA NC,35.87320,-79.07280,America/New_York,4,Good southern horizon
+Blue Ridge Parkway VA,37.32100,-79.87500,America/New_York,3,Excellent dark site`;
+
+function wireTemplateBtn(menuId, dotsId, filename, template) {
+  const handler = function() {
+    logMenuDropdown.classList.remove("open");
+    logMenuBtn.classList.remove("open");
+    dotsMenuDropdown.classList.remove("open");
+    dotsMenuBtn.classList.remove("open");
+    downloadTemplate(filename, template);
+  };
+  document.getElementById(menuId).addEventListener("click", handler);
+  document.getElementById(dotsId).addEventListener("click", handler);
+}
+wireTemplateBtn("menuEqTemplate",  "dotsMenuEqTemplate",  "equipment-template.csv",  EQ_TEMPLATE);
+wireTemplateBtn("menuLocTemplate", "dotsMenuLocTemplate", "locations-template.csv",  LOC_TEMPLATE);
+
+// ── Equipment CSV import ────────────────────────────────────────
+function parseEquipmentCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+  const header = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z_]/g,"_"));
+  const col = k => header.indexOf(k);
+  const items = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const f = parseCSVLine(lines[i]);
+    const type = (f[col("type")] || "").trim();
+    const name = (f[col("name")] || "").trim();
+    if (!name) continue;
+    const t = type.toLowerCase();
+    items.push({
+      type:        t.startsWith("eye") ? "Eyepiece" : "Telescope",
+      name:        name,
+      aperture:    (f[col("aperture_mm")] || "").trim(),
+      focalLength: (f[col("focal_length_mm")] || "").trim(),
+      notes:       (f[col("notes")] || "").trim(),
+    });
+  }
+  return items;
+}
+
+document.getElementById("btnImportEqFile").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
+  this.value = "";
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const items = parseEquipmentCSV(e.target.result);
+    if (!items.length) { alert("No valid equipment rows found in that file.\n\nCheck the format matches the template."); return; }
+    const tel = items.filter(i => i.type === "Telescope").length;
+    const ep  = items.filter(i => i.type === "Eyepiece").length;
+    EQUIPMENT = items;
+    savePresets();
+    alert("Equipment imported: " + tel + " telescope" + (tel !== 1 ? "s" : "") + ", " + ep + " eyepiece" + (ep !== 1 ? "s" : "") + ".\n\nThey will appear as presets next time you open Session Setup.");
+  };
+  reader.readAsText(file);
+});
+
+// ── Locations CSV import ────────────────────────────────────────
+function parseLocationsCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+  const header = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z]/g,"_"));
+  const col = k => header.indexOf(k);
+  const items = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const f = parseCSVLine(lines[i]);
+    const name = (f[col("name")] || "").trim();
+    if (!name) continue;
+    const lat = parseFloat(f[col("latitude")]  || "");
+    const lon = parseFloat(f[col("longitude")] || "");
+    items.push({
+      name:   name,
+      lat:    isNaN(lat) ? null : lat,
+      lon:    isNaN(lon) ? null : lon,
+      tz:     (f[col("timezone")] || "").trim(),
+      bortle: (f[col("bortle")]   || "").trim(),
+      notes:  (f[col("notes")]    || "").trim(),
+    });
+  }
+  return items;
+}
+
+document.getElementById("btnImportLocFile").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
+  this.value = "";
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const items = parseLocationsCSV(e.target.result);
+    if (!items.length) { alert("No valid location rows found in that file.\n\nCheck the format matches the template."); return; }
+    LOCATIONS = items;
+    savePresets();
+    alert("Locations imported: " + items.length + " site" + (items.length !== 1 ? "s" : "") + ".\n\nThey will appear as presets next time you open Session Setup.");
+  };
+  reader.readAsText(file);
+});
+
+// ── Wire dots-menu proxies ──────────────────────────────────────
+// (label[for] handles clicks automatically via the hidden file input —
+// these buttons just need to close the menu then trigger the label)
+document.getElementById("dotsMenuEqTemplate");  // handled via wireTemplateBtn above
+document.getElementById("dotsMenuLocTemplate"); // handled via wireTemplateBtn above
+
 const SESSION_FIELDS = ["site","seeing","transparency","limitMag","scope","aperture","eyepiece","mag"];
 let SESSION = {};
 
@@ -3599,6 +3865,11 @@ function updateSessionIndicator() {
 }
 
 function openSessionModal() {
+  populatePresetSelects();
+  document.getElementById("sessLocPreset").value   = "";
+  document.getElementById("sessScopePreset").value = "";
+  document.getElementById("sessEpPreset").value    = "";
+
   document.getElementById("sessSite").value         = SESSION.site         || "";
   document.getElementById("sessSeeing").value       = SESSION.seeing       || "";
   document.getElementById("sessTransparency").value = SESSION.transparency || "";
@@ -3771,12 +4042,15 @@ dotsMenuBtn.addEventListener("click", function(e) {
 dotsMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 
 // Wire dots menu items to existing Log menu handlers
-document.getElementById("dotsMenuPrint")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuPrint").click(); });
-document.getElementById("dotsMenuExport")  .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExport").click(); });
-document.getElementById("dotsMenuExportAL").addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExportAL").click(); });
-document.getElementById("dotsMenuReport")  .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateReport").click(); });
-document.getElementById("dotsMenuSession") .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuSession").click(); });
-document.getElementById("dotsMenuReset")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuReset").click(); });
+document.getElementById("dotsMenuPrint")          .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuPrint").click(); });
+document.getElementById("dotsMenuExportRecords")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExportRecords").click(); });
+document.getElementById("dotsMenuReport")          .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateReport").click(); });
+document.getElementById("dotsMenuCSV")             .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateCSV").click(); });
+document.getElementById("dotsMenuSession")         .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuSession").click(); });
+document.getElementById("dotsMenuReset")           .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuReset").click(); });
+// Equipment/Locations import labels — just close the menus; label[for] triggers the file input
+document.querySelector("label[for='btnImportEqFile']")  && document.querySelectorAll("label[for='btnImportEqFile']")  .forEach(l => l.addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); logMenuDropdown.classList.remove("open"); logMenuBtn.classList.remove("open"); }));
+document.querySelector("label[for='btnImportLocFile']") && document.querySelectorAll("label[for='btnImportLocFile']") .forEach(l => l.addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); logMenuDropdown.classList.remove("open"); logMenuBtn.classList.remove("open"); }));
 
 
 const navMenuBtn      = document.getElementById("navMenuBtn");
@@ -3855,24 +4129,87 @@ document.getElementById("menuReset").addEventListener("click", function() {
   }); // end showConfirm — reset
 });
 
-/* THEME */
-const html = document.documentElement;
+/* ── MODE + THEME ────────────────────────────────────────────────
+   mode:  'night' | 'day'    — controlled by the slider
+   theme: 'light' | 'dark'   — controlled by the kabob menu item
+   Night mode always applies the 'night' data-theme regardless of theme.
+   Day mode applies 'light' or 'dark' based on theme setting.
+   ──────────────────────────────────────────────────────────────── */
+const html     = document.documentElement;
 const toggleEl = document.getElementById("themeToggle");
 const labelEl  = document.getElementById("toggleLabel");
-function setTheme(t) {
-  html.setAttribute("data-theme", t);
-  labelEl.textContent = t === "dark" ? "Night" : "Day";
-  try { localStorage.setItem("mm_theme", t); } catch(e) {}
+
+let _mode  = "night";   // 'night' | 'day'
+let _theme = "light";   // 'light' | 'dark'
+
+function _applyTheme() {
+  const applied = _mode === "night" ? "night" : _theme;
+  html.setAttribute("data-theme", applied);
+
+  // Slider label + pill position
+  labelEl.textContent = _mode === "night" ? "Night" : "Day";
+  // mm-shared.css moves the pill right for [data-theme="light"];
+  // for day/dark we need to keep the pill right too — so add a class
+  html.classList.toggle("mode-day", _mode === "day");
+
+  // Kabob theme item — label reflects what clicking it will switch TO
+  const themeBtn   = document.getElementById("dotsMenuTheme");
+  const themeLabel = document.getElementById("dotsMenuThemeLabel");
+  const themeIcon  = document.getElementById("dotsMenuThemeIcon");
+  if (themeBtn) {
+    // In night mode, item is greyed out (night always wins)
+    themeBtn.disabled = (_mode === "night");
+    themeBtn.style.opacity = (_mode === "night") ? ".38" : "";
+    themeLabel.textContent = _theme === "light" ? "Dark Theme" : "Light Theme";
+    themeIcon.textContent  = _theme === "light" ? "◑" : "◐";
+  }
 }
-toggleEl.addEventListener("click", () =>
-  setTheme(html.getAttribute("data-theme") === "dark" ? "light" : "dark")
-);
-toggleEl.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") toggleEl.click(); });
+
+function setMode(m) {
+  _mode = m;
+  try { localStorage.setItem("mm_mode", m); } catch(e) {}
+  _applyTheme();
+}
+
+function setTheme(t) {
+  // legacy: 'dark' was the old night mode name; remap to 'night'
+  if (t === "dark" && !["light","dark","night"].includes(t)) t = "night";
+  if (t === "night") { _mode = "night"; }
+  else if (t === "light") { _theme = "light"; }
+  else if (t === "dark")  { _theme = "dark"; }
+  try { localStorage.setItem("mm_mode",  _mode);  } catch(e) {}
+  try { localStorage.setItem("mm_theme", _theme); } catch(e) {}
+  _applyTheme();
+}
+
+// Slider toggles Night ↔ Day
+toggleEl.addEventListener("click", () => setMode(_mode === "night" ? "day" : "night"));
+toggleEl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggleEl.click(); });
+
+// Kabob theme item toggles Light ↔ Dark (only in Day mode)
+document.getElementById("dotsMenuTheme").addEventListener("click", function() {
+  if (_mode === "night") return;
+  dotsMenuDropdown.classList.remove("open");
+  dotsMenuBtn.classList.remove("open");
+  _theme = _theme === "light" ? "dark" : "light";
+  try { localStorage.setItem("mm_theme", _theme); } catch(e) {}
+  _applyTheme();
+});
 
 /* INIT */
 loadState();
 loadSession();
-try { const t = localStorage.getItem("mm_theme"); if (t) setTheme(t); } catch(e) {}
+try {
+  const savedMode  = localStorage.getItem("mm_mode");
+  const savedTheme = localStorage.getItem("mm_theme");
+  // Legacy: old mm_theme = "dark" meant night mode
+  if (savedMode === "day" || savedMode === "night") _mode = savedMode;
+  else if (savedTheme === "dark")  _mode = "night";
+  else if (savedTheme === "light") _mode = "day";
+  if (savedTheme === "dark" && savedMode === "day") _theme = "dark";
+  else if (savedTheme === "light") _theme = "light";
+} catch(e) {}
+_applyTheme();
 renderTable();
 updateProgress();
 updateSessionIndicator();
@@ -3891,8 +4228,12 @@ updateSessionIndicator();
   let themeBeforeQS = null;
 
   function openQS() {
-    themeBeforeQS = document.documentElement.getAttribute("data-theme") || "dark";
-    setTheme("light");   // force readable day mode for the guide
+    themeBeforeQS = document.documentElement.getAttribute("data-theme") || "night";
+    // Force readable day/light mode for the guide
+    const prevMode = _mode;
+    html.setAttribute("data-theme", "light");
+    html.classList.add("mode-day");
+    openQS._prevMode = prevMode;
     overlay.classList.add("open");
     document.body.style.overflow = "hidden";
   }
@@ -3903,8 +4244,8 @@ updateSessionIndicator();
     }
     overlay.classList.remove("open");
     document.body.style.overflow = "";
-    // Restore the theme that was active before the guide opened
-    if (themeBeforeQS) setTheme(themeBeforeQS);
+    // Restore previous mode/theme
+    _applyTheme();
   }
 
   dismissBtn.addEventListener("click", closeQS);
@@ -3926,6 +4267,47 @@ updateSessionIndicator();
 
   if (isFirstVisit()) openQS();
 })();
+
+/* ── GENERATE CSV ───────────────────────────────────────────────── */
+document.getElementById("menuGenerateCSV").addEventListener("click", function() {
+  logMenuDropdown.classList.remove("open");
+  logMenuBtn.classList.remove("open");
+
+  const now = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`
+              + `-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+  const header = ["Marathon Order","Object","Type","Constellation","Magnitude",
+                  "RA (J2000)","Dec (J2000)","PSA Page","Observed","Date Observed",
+                  "Latitude","Longitude","Time Zone","Field Notes"]
+                  .map(csvField).join(",");
+  const rows = [header];
+
+  DATA.forEach(([mo, m, type, con, mag, ra, dec, psa]) => {
+    const observed  = SAVED_CHECKS[m] ? "Yes" : "No";
+    const notes     = SAVED_NOTES[m] || "";
+    const timestamp = SAVED_TIMES[m] ? new Date(SAVED_TIMES[m]).toLocaleString() : "";
+    const rec       = SAVED_FULLNOTES[m] || {};
+    const hasEntry  = SAVED_CHECKS[m] || notes || SAVED_FULLNOTES[m];
+    const lat = hasEntry ? (rec.lat != null ? rec.lat : (SESSION.lat != null ? SESSION.lat : "")) : "";
+    const lon = hasEntry ? (rec.lon != null ? rec.lon : (SESSION.lon != null ? SESSION.lon : "")) : "";
+    const tz  = hasEntry ? (rec.tz  || SESSION.tz || "") : "";
+    rows.push([mo, m, type, con, mag, ra, dec, psa, observed, timestamp,
+               lat, lon, tz, notes].map(csvField).join(","));
+  });
+
+  const csv  = rows.join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = `${stamp}-observing-log.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
 
 /* ══════════════════════════════════════════════════════════════════
    AL REPORT PDF GENERATOR  (jsPDF + autotable)

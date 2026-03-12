@@ -9,7 +9,7 @@
 /* ════════════════════════════════════════════
    DARK MODE  (night-vision red on deep black)
    ════════════════════════════════════════════ */
-:root, [data-theme="dark"] {
+:root, [data-theme="night"] {
   --bg:               #030305;
   --bg2:              #07070d;
   --bg3:              #0c0b14;
@@ -200,7 +200,7 @@ body::before {
   background: var(--red-bright);
   transition: transform .25s cubic-bezier(.4,0,.2,1), background .3s;
 }
-[data-theme="dark"]  .toggle-pill::after { box-shadow: 0 0 8px var(--red-bright); }
+[data-theme="night"]  .toggle-pill::after { box-shadow: 0 0 8px var(--red-bright); }
 [data-theme="light"] .toggle-pill::after { transform: translateX(20px); box-shadow: none; }
 .toggle-label {
   font-size: 9px;
@@ -280,7 +280,7 @@ h1 {
   margin-bottom: 8px;
   transition: color .3s, text-shadow .3s;
 }
-[data-theme="dark"] h1 {
+[data-theme="night"] h1 {
   text-shadow: 0 0 50px rgba(255,70,40,.35), 0 0 100px rgba(255,70,40,.12);
 }
 .subtitle {
@@ -408,3 +408,54 @@ h1 {
   .theme-toggle-wrap { position: static; margin-bottom: 14px; }
   .page-header { flex-direction: column; gap: 14px; }
 }
+
+/* ════════════════════════════════════════════
+   DAY / DARK THEME — space terminal
+   ════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --bg:               #000000;
+  --bg2:              #0d0d0d;
+  --bg3:              #111111;
+  --bg-row-alt:       #080808;
+  --dim:              #1a1a1a;
+  --red-bright:       #ffffff;
+  --red-mid:          #cccccc;
+  --red-dim:          #666666;
+  --red-faint:        #1a1a1a;
+  --amber:            #aaaaaa;
+  --text-data:        #ffffff;
+  --text-head:        #ffffff;
+  --text-sub:         #cccccc;
+  --text-meta:        #999999;
+  --text-dim:         #555555;
+  --con-color:        #dddddd;
+  --m-color:          #ffffff;
+  --border:           #202020;
+  --border2:          #2a2a2a;
+  --border3:          #383838;
+  --chk-border:       #888888;
+  --chk-tick:         #ffffff;
+  --note-border:      #2a2a2a;
+  --note-focus:       rgba(255,255,255,.04);
+  --progress-bg:      #111111;
+  --starfield:        rgba(255,255,255,.18);
+  --filter-text:      #aaaaaa;
+  --filter-active-bg: #181818;
+  --search-bg:        #0d0d0d;
+  --thead-bg:         #111111;
+  --header-line:      #333333;
+  --row-hover:        rgba(255,255,255,.04);
+  --modal-bg:         #0d0d0d;
+  --modal-border:     #333333;
+  --modal-overlay:    rgba(0,0,0,.92);
+  --modal-meta:       #888888;
+  --modal-close-hover:rgba(255,255,255,.08);
+}
+
+/* Day mode — move toggle pill right */
+[data-theme="dark"] .toggle-pill::after,
+.mode-day .toggle-pill::after { transform: translateX(20px); box-shadow: none; }
+
+/* Day mode — theme-icon opacity: sun bright, moon dim */
+[data-theme="dark"] .theme-icon.moon { opacity: .35; }
+[data-theme="dark"] .theme-icon.sun  { opacity: .9; }
