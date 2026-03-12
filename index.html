@@ -788,11 +788,16 @@ html.is-mobile .search-wrap input { width: 130px; }
 html.is-mobile .col-mobile-obj,
 html.is-mobile th.col-mobile-obj { display: table-cell; }
 
-/* Mobile: object column fills space, checkbox shrinks tight */
-html.is-mobile col.col-mobile-obj { width: auto; }
-html.is-mobile col.col-chk        { width: 32px; }
-html.is-mobile td.col-chk-val     { padding: 0 4px; }
-html.is-mobile th.col-chk         { padding: 0 4px; }
+/* Mobile: fixed layout so column widths are respected exactly */
+html.is-mobile table          { table-layout: fixed; width: 100%; }
+html.is-mobile col.col-thn    { width: 52px; }
+html.is-mobile col.col-mobile-obj { width: auto; }   /* fills all remaining space */
+html.is-mobile col.col-chk    { width: 34px; }
+html.is-mobile col.col-note   { width: 120px; }
+html.is-mobile td.col-chk-val { width: 34px; padding: 0 2px; }
+html.is-mobile th.col-chk     { width: 34px; padding: 0 2px; }
+html.is-mobile td.col-note-val { width: 120px; min-width: 0; overflow: hidden; }
+html.is-mobile .note-input    { width: 100%; }
 
 /* Mobile sort header inside combined object th */
 html.is-mobile th.col-obj-sort { display: none; }
