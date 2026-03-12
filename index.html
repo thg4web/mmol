@@ -787,6 +787,29 @@ html.is-mobile .search-wrap input { width: 130px; }
 .col-mobile-obj { display: none; padding: 5px 8px; vertical-align: middle; }
 html.is-mobile .col-mobile-obj,
 html.is-mobile th.col-mobile-obj { display: table-cell; }
+
+/* Mobile: object column fills space, checkbox shrinks tight */
+html.is-mobile col.col-mobile-obj { width: auto; }
+html.is-mobile col.col-chk        { width: 32px; }
+html.is-mobile td.col-chk-val     { padding: 0 4px; }
+html.is-mobile th.col-chk         { padding: 0 4px; }
+
+/* Mobile sort header inside combined object th */
+html.is-mobile th.col-obj-sort { display: none; }
+.mob-sort-btn {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: var(--text-meta);
+  border: 1px solid var(--border2);
+  padding: 1px 6px;
+  margin-top: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: color .15s, border-color .15s;
+}
+.mob-sort-btn:hover { color: var(--text-data); border-color: var(--border3); }
 html.is-mobile td.col-m-val,
 html.is-mobile td.col-type-val,
 html.is-mobile td.col-con-val,
@@ -1896,7 +1919,7 @@ tr.checked td.col-m-val a.m-link {
         <tr>
           <th class="col-thn"></th>
           <th class="center col-mo">#</th>
-          <th class="col-mobile-obj"></th>
+          <th class="col-mobile-obj"><span class="mob-sort-btn" id="mobSortBtn">Marathon ▲</span></th>
           <th id="objSortTh" class="col-obj-sort col-m" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
           <th class="col-type">Type</th>
           <th class="center col-con">Con</th>
@@ -3548,19 +3571,29 @@ document.getElementById("searchInput").addEventListener("input", function() {
 
 /* ── OBJECT COLUMN SORT ─────────────────────────────────────────── */
 function updateObjSortHeader() {
-  const th = document.getElementById("objSortTh");
-  if (!th) return;
-  if (sortMode === "numeric") {
-    th.innerHTML = 'Numeric <span class="sort-arrow">▲</span>';
-  } else {
-    th.innerHTML = 'Marathon <span class="sort-arrow">▲</span>';
+  const th    = document.getElementById("objSortTh");
+  const mobBtn = document.getElementById("mobSortBtn");
+  const label = sortMode === "numeric" ? "Numeric" : "Marathon";
+  if (th) {
+    th.innerHTML = label + ' <span class="sort-arrow">▲</span>';
+    th.title = sortMode === "numeric"
+      ? "Sorted by Messier Number — click for Marathon Order"
+      : "Sorted by Marathon Order — click for Numeric Order";
   }
-  th.title = sortMode === "numeric"
-    ? "Sorted by Messier Number — click for Marathon Order"
-    : "Sorted by Marathon Order — click for Numeric Order";
+  if (mobBtn) {
+    mobBtn.textContent = label + " ▲";
+    mobBtn.title = th ? th.title : "";
+  }
 }
 
 document.getElementById("objSortTh").addEventListener("click", function() {
+  sortMode = sortMode === "marathon" ? "numeric" : "marathon";
+  updateObjSortHeader();
+  renderTable();
+  applyFilter();
+});
+
+document.getElementById("mobSortBtn").addEventListener("click", function() {
   sortMode = sortMode === "marathon" ? "numeric" : "marathon";
   updateObjSortHeader();
   renderTable();
