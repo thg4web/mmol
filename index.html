@@ -275,7 +275,7 @@ td.col-thn-val { padding: 2px 4px 2px 6px; width: 54px; vertical-align: middle; 
 .row-thn { display: block; width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--border2); transition: border-color .2s, filter .3s; cursor: pointer; }
 tr:hover .row-thn { border-color: var(--border3); }
 colgroup col.col-mo   { width: 44px; }
-col.col-mo, th.col-mo, td.col-mo-val { display: none; }
+col.col-mo, th.col-mo, td.col-mo-val, col.col-mobile-obj, th.col-mobile-obj { display: none; }
 colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
@@ -763,7 +763,7 @@ td.col-thn-val { padding: 2px 4px 2px 6px; width: 54px; vertical-align: middle; 
 .row-thn { display: block; width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--border2); transition: border-color .2s, filter .3s; cursor: pointer; }
 tr:hover .row-thn { border-color: var(--border3); }
 colgroup col.col-mo   { width: 44px; }
-col.col-mo, th.col-mo, td.col-mo-val { display: none; }
+col.col-mo, th.col-mo, td.col-mo-val, col.col-mobile-obj, th.col-mobile-obj { display: none; }
 colgroup col.col-m    { width: 62px; }
 colgroup col.col-type { width: 120px; }
 colgroup col.col-con  { width: 46px; }
@@ -782,6 +782,24 @@ html.is-mobile col.col-psa,  html.is-mobile th.col-psa,  html.is-mobile td.col-p
 html.is-mobile th.col-mag    { text-align: right; padding-right: 12px; }
 html.is-mobile td.col-note-val { min-width: 80px; }
 html.is-mobile .search-wrap input { width: 130px; }
+
+/* Mobile combined object cell */
+.col-mobile-obj { display: none; padding: 5px 8px; vertical-align: middle; }
+html.is-mobile .col-mobile-obj,
+html.is-mobile th.col-mobile-obj { display: table-cell; }
+html.is-mobile td.col-m-val,
+html.is-mobile td.col-type-val,
+html.is-mobile td.col-con-val,
+html.is-mobile td.col-mag-val { display: none; }
+html.is-mobile th.col-type,
+html.is-mobile th.col-con,
+html.is-mobile th.col-mag { display: none; }
+/* Replace the object header with a blank on mobile (thumbnail + combined cell take that space) */
+html.is-mobile th.col-obj-sort { display: none; }
+
+.mob-m    { font-family: 'Cinzel', serif; font-size: 13px; color: var(--text-head); letter-spacing: .05em; line-height: 1.2; }
+.mob-name { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 12px; color: var(--text-sub); line-height: 1.3; }
+.mob-meta { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-meta); letter-spacing: .04em; margin-top: 2px; }
 
 /* THEAD */
 thead tr {
@@ -1870,7 +1888,7 @@ tr.checked td.col-m-val a.m-link {
   <div class="table-outer">
     <table id="mainTable">
       <colgroup>
-        <col class="col-thn"><col class="col-mo"><col class="col-m"><col class="col-type">
+        <col class="col-thn"><col class="col-mo"><col class="col-mobile-obj"><col class="col-m"><col class="col-type">
         <col class="col-con"><col class="col-mag"><col class="col-size"><col class="col-ra">
         <col class="col-dec"><col class="col-psa"><col class="col-chk"><col class="col-note">
       </colgroup>
@@ -1878,6 +1896,7 @@ tr.checked td.col-m-val a.m-link {
         <tr>
           <th class="col-thn"></th>
           <th class="center col-mo">#</th>
+          <th class="col-mobile-obj"></th>
           <th id="objSortTh" class="col-obj-sort col-m" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
           <th class="col-type">Type</th>
           <th class="center col-con">Con</th>
@@ -2917,6 +2936,46 @@ function showConfirm({ title = "Confirm", body = "", warning = "", okLabel = "Co
   cancelBtn.onclick = () => { cleanup(); close(); };
 }
 
+const COMMON_NAMES = {
+  M1:"Crab Nebula",        M2:"",                   M3:"",
+  M4:"",                   M5:"",                   M6:"Butterfly Cluster",
+  M7:"Ptolemy Cluster",    M8:"Lagoon Nebula",       M9:"",
+  M10:"",                  M11:"Wild Duck Cluster",  M12:"",
+  M13:"Hercules Cluster",  M14:"",                   M15:"",
+  M16:"Eagle Nebula",      M17:"Omega Nebula",       M18:"",
+  M19:"",                  M20:"Trifid Nebula",      M21:"",
+  M22:"",                  M23:"",                   M24:"Sagittarius Star Cloud",
+  M25:"",                  M26:"",                   M27:"Dumbbell Nebula",
+  M28:"",                  M29:"",                   M30:"",
+  M31:"Andromeda Galaxy",  M32:"Satellite of M31",   M33:"Triangulum Galaxy",
+  M34:"",                  M35:"",                   M36:"",
+  M37:"",                  M38:"",                   M39:"",
+  M40:"Winnecke 4",        M41:"",                   M42:"Orion Nebula",
+  M43:"De Mairan's Nebula",M44:"Beehive Cluster",    M45:"Pleiades",
+  M46:"",                  M47:"",                   M48:"",
+  M49:"",                  M50:"",                   M51:"Whirlpool Galaxy",
+  M52:"",                  M53:"",                   M54:"",
+  M55:"",                  M56:"",                   M57:"Ring Nebula",
+  M58:"",                  M59:"",                   M60:"",
+  M61:"",                  M62:"",                   M63:"Sunflower Galaxy",
+  M64:"Black Eye Galaxy",  M65:"",                   M66:"",
+  M67:"",                  M68:"",                   M69:"",
+  M70:"",                  M71:"",                   M72:"",
+  M73:"",                  M74:"Phantom Galaxy",     M75:"",
+  M76:"Little Dumbbell",   M77:"",                   M78:"",
+  M79:"",                  M80:"",                   M81:"Bode's Galaxy",
+  M82:"Cigar Galaxy",      M83:"Southern Pinwheel",  M84:"",
+  M85:"",                  M86:"",                   M87:"Virgo A",
+  M88:"",                  M89:"",                   M90:"",
+  M91:"",                  M92:"",                   M93:"",
+  M94:"",                  M95:"",                   M96:"",
+  M97:"Owl Nebula",        M98:"",                   M99:"",
+  M100:"",                 M101:"Pinwheel Galaxy",   M102:"",
+  M103:"",                 M104:"Sombrero Galaxy",   M105:"",
+  M106:"",                 M107:"",                  M108:"Surfboard Galaxy",
+  M109:"",                 M110:"Satellite of M31",
+};
+
 const DATA = [
   [1,"M77","Spiral Gal","Cet",8.9,"7×6","02 42.7","-00 01","4, 6"],
   [2,"M74","Spiral Gal","Psc",9.4,"10×9.5","01 36.7","+15 47","4, 5"],
@@ -3103,8 +3162,12 @@ function renderTable() {
     tr.className = "data-row";
     Object.assign(tr.dataset, { mo, m, type, con, id });
     if (SAVED_CHECKS[id]) tr.classList.add("checked");
+    const commonName = COMMON_NAMES[id] || "";
     tr.innerHTML = `
       <td class="col-thn-val"><img class="row-thn" src="images/${id.toLowerCase()}_thn.jpg" alt="${m}" loading="lazy" data-idx="${dataIdx}" title="View ${m}"></td>
+      <td class="col-mobile-obj">
+        <div class="mob-m">${m}</div>${commonName ? `<div class="mob-name">${commonName}</div>` : ""}<div class="mob-meta">${type} · ${con}</div>
+      </td>
       <td class="col-mo-val">${mo}</td>
       <td class="col-m-val"><a class="m-link" data-idx="${dataIdx}" href="#">${m}</a></td>
       <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}">${getTypeSymbol(type)}</span>${type}</td>
