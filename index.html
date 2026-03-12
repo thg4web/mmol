@@ -774,33 +774,36 @@ colgroup col.col-dec  { width: 72px; }
 colgroup col.col-psa  { width: 86px; }
 colgroup col.col-chk  { width: 40px; }
 
-/* ── Mobile: hide detail columns, keep Object / Type / Con / Mag / ✓ / Notes ── */
+/* ── Mobile layout ─────────────────────────────────────────────── */
+
+/* Hide unused columns on mobile */
 html.is-mobile col.col-size, html.is-mobile th.col-size, html.is-mobile td.col-size-val,
 html.is-mobile col.col-ra,   html.is-mobile th.col-ra,   html.is-mobile td.col-ra-val,
 html.is-mobile col.col-dec,  html.is-mobile th.col-dec,  html.is-mobile td.col-dec-val,
-html.is-mobile col.col-psa,  html.is-mobile th.col-psa,  html.is-mobile td.col-psa-val { display: none; }
-html.is-mobile th.col-mag    { text-align: right; padding-right: 12px; }
-html.is-mobile td.col-note-val { min-width: 80px; }
-html.is-mobile .search-wrap input { width: 130px; }
+html.is-mobile col.col-psa,  html.is-mobile th.col-psa,  html.is-mobile td.col-psa-val,
+html.is-mobile td.col-m-val, html.is-mobile td.col-type-val,
+html.is-mobile td.col-con-val, html.is-mobile td.col-mag-val,
+html.is-mobile th.col-type, html.is-mobile th.col-con, html.is-mobile th.col-mag,
+html.is-mobile th.col-obj-sort { display: none; }
 
-/* Mobile combined object cell */
+/* Combined object cell: hidden on desktop, shown on mobile */
 .col-mobile-obj { display: none; padding: 5px 8px; vertical-align: middle; }
 html.is-mobile .col-mobile-obj,
 html.is-mobile th.col-mobile-obj { display: table-cell; }
 
-/* Mobile: fixed layout so column widths are respected exactly */
-html.is-mobile table          { table-layout: fixed; width: 100%; }
-html.is-mobile col.col-thn    { width: 52px; }
-html.is-mobile col.col-mobile-obj { width: auto; }   /* fills all remaining space */
-html.is-mobile col.col-chk    { width: 34px; }
-html.is-mobile col.col-note   { width: 120px; }
-html.is-mobile td.col-chk-val { width: 34px; padding: 0 2px; }
-html.is-mobile th.col-chk     { width: 34px; padding: 0 2px; }
-html.is-mobile td.col-note-val { width: 120px; min-width: 0; overflow: hidden; }
-html.is-mobile .note-input    { width: 100%; }
+/* Shrink-to-fit: width:1px forces cell to minimum in auto table-layout */
+html.is-mobile td.col-thn-val,
+html.is-mobile th.col-thn      { width: 52px; white-space: nowrap; }
+html.is-mobile td.col-chk-val,
+html.is-mobile th.col-chk      { width: 1px; white-space: nowrap; padding: 0 10px; }
 
-/* Mobile sort header inside combined object th */
-html.is-mobile th.col-obj-sort { display: none; }
+/* Notes column */
+html.is-mobile td.col-note-val { width: 90px; min-width: 0; padding: 4px; }
+html.is-mobile .note-cell-wrap { gap: 3px; }
+html.is-mobile .note-input     { width: 50px; min-width: 0; font-size: 10px; }
+html.is-mobile .rec-btn        { flex-shrink: 0; }
+
+/* Sort button in mobile object header */
 .mob-sort-btn {
   display: inline-block;
   font-family: 'Share Tech Mono', monospace;
@@ -815,16 +818,8 @@ html.is-mobile th.col-obj-sort { display: none; }
   transition: color .15s, border-color .15s;
 }
 .mob-sort-btn:hover { color: var(--text-data); border-color: var(--border3); }
-html.is-mobile td.col-m-val,
-html.is-mobile td.col-type-val,
-html.is-mobile td.col-con-val,
-html.is-mobile td.col-mag-val { display: none; }
-html.is-mobile th.col-type,
-html.is-mobile th.col-con,
-html.is-mobile th.col-mag { display: none; }
-/* Replace the object header with a blank on mobile (thumbnail + combined cell take that space) */
-html.is-mobile th.col-obj-sort { display: none; }
 
+/* Object info stacked text */
 .mob-m    { font-family: 'Cinzel', serif; font-size: 13px; color: var(--text-head); letter-spacing: .05em; line-height: 1.2; }
 .mob-name { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 12px; color: var(--text-sub); line-height: 1.3; }
 .mob-meta { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-meta); letter-spacing: .04em; margin-top: 2px; }
