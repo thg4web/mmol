@@ -270,6 +270,10 @@
   transition: background .3s, border-color .3s;
 }
 table { width: 100%; border-collapse: collapse; }
+colgroup col.col-thn  { width: 54px; }
+td.col-thn-val { padding: 2px 4px 2px 6px; width: 54px; vertical-align: middle; }
+.row-thn { display: block; width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--border2); transition: border-color .2s, filter .3s; cursor: pointer; }
+tr:hover .row-thn { border-color: var(--border3); }
 colgroup col.col-mo   { width: 44px; }
 col.col-mo, th.col-mo, td.col-mo-val { display: none; }
 colgroup col.col-m    { width: 62px; }
@@ -441,6 +445,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
 }
 .lb-img-wrap img { max-width: 100%; max-height: 520px; object-fit: contain; display: block; }
 [data-theme="night"] .lb-img-wrap img { filter: sepia(100%) brightness(50%) hue-rotate(-50deg); }
+[data-theme="night"] .row-thn         { filter: sepia(100%) brightness(50%) hue-rotate(-50deg); }
 .lb-attribution {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 4px 8px; background: rgba(0,0,0,.62);
@@ -753,6 +758,10 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
 }
 table { width: 100%; border-collapse: collapse; }
 
+colgroup col.col-thn  { width: 54px; }
+td.col-thn-val { padding: 2px 4px 2px 6px; width: 54px; vertical-align: middle; }
+.row-thn { display: block; width: 44px; height: 44px; object-fit: cover; border: 1px solid var(--border2); transition: border-color .2s, filter .3s; cursor: pointer; }
+tr:hover .row-thn { border-color: var(--border3); }
 colgroup col.col-mo   { width: 44px; }
 col.col-mo, th.col-mo, td.col-mo-val { display: none; }
 colgroup col.col-m    { width: 62px; }
@@ -1197,6 +1206,7 @@ td.col-note-val { min-width: 150px; }
 [data-theme="dark"] .toggle-pill::after,
 .mode-day .toggle-pill::after { transform: translateX(20px); box-shadow: none; }
 [data-theme="dark"] .lb-img-wrap img         { filter: none; }
+[data-theme="dark"] .row-thn                 { filter: none; }
 [data-theme="dark"] .progress-fill           { box-shadow: none; }
 [data-theme="dark"] .filter-btn.active       { box-shadow: none; }
 [data-theme="dark"] td.col-chk-val input[type=checkbox]:hover   { box-shadow: none; }
@@ -1860,12 +1870,13 @@ tr.checked td.col-m-val a.m-link {
   <div class="table-outer">
     <table id="mainTable">
       <colgroup>
-        <col class="col-mo"><col class="col-m"><col class="col-type">
+        <col class="col-thn"><col class="col-mo"><col class="col-m"><col class="col-type">
         <col class="col-con"><col class="col-mag"><col class="col-size"><col class="col-ra">
         <col class="col-dec"><col class="col-psa"><col class="col-chk"><col class="col-note">
       </colgroup>
       <thead>
         <tr>
+          <th class="col-thn"></th>
           <th class="center col-mo">#</th>
           <th id="objSortTh" class="col-obj-sort col-m" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
           <th class="col-type">Type</th>
@@ -3093,6 +3104,7 @@ function renderTable() {
     Object.assign(tr.dataset, { mo, m, type, con, id });
     if (SAVED_CHECKS[id]) tr.classList.add("checked");
     tr.innerHTML = `
+      <td class="col-thn-val"><img class="row-thn" src="images/${id.toLowerCase()}_thn.jpg" alt="${m}" loading="lazy" data-idx="${dataIdx}" title="View ${m}"></td>
       <td class="col-mo-val">${mo}</td>
       <td class="col-m-val"><a class="m-link" data-idx="${dataIdx}" href="#">${m}</a></td>
       <td class="col-type-val"><span class="type-badge ${getTypeClass(type)}">${getTypeSymbol(type)}</span>${type}</td>
@@ -3110,6 +3122,9 @@ function renderTable() {
         </div>
       </td>
     `;
+    tr.querySelector(".row-thn").addEventListener("click", function() {
+      openLightbox(parseInt(this.dataset.idx));
+    });
     tr.querySelector(".m-link").addEventListener("click", function(e) {
       e.preventDefault();
       openLightbox(parseInt(this.dataset.idx));
