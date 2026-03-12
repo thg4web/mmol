@@ -2,6 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <script>
+// Apply saved theme immediately to prevent flash of wrong theme
 (function(){var t=localStorage.getItem('mm_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 </script>
 <meta charset="UTF-8">
@@ -21,20 +22,47 @@
 
 /* ════════ PAGE STRUCTURE ════════ */
 .guide-heading {
-  font-family: 'Cinzel', serif; font-size: 22px; letter-spacing: .14em;
-  color: var(--text-head); text-transform: uppercase; margin-bottom: 6px; transition: color .3s;
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: .14em;
+  color: var(--text-head);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color .3s;
 }
 .guide-intro {
-  font-family: 'Crimson Pro', serif; font-style: italic; font-size: 14.5px;
-  color: var(--text-meta); line-height: 1.7; margin-bottom: 40px; max-width: 640px; transition: color .3s;
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 14.5px;
+  color: var(--text-meta);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 640px;
+  transition: color .3s;
 }
-.guide-section { margin-top: 44px; margin-bottom: 20px; }
-.guide-section-rule { border: none; border-top: 1px solid var(--border); margin: 0 0 22px 0; transition: border-color .3s; }
+
+/* ════════ SECTION TITLES ════════ */
+/* Re-uses .faq-section-title from mm-shared.css — only custom overrides here */
+.guide-section {
+  margin-top: 44px;
+  margin-bottom: 20px;
+}
+.guide-section-rule {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 22px 0;
+  transition: border-color .3s;
+}
 
 /* ════════ BODY TEXT ════════ */
 .guide-body {
-  font-family: 'Crimson Pro', serif; font-size: 14.5px; line-height: 1.82;
-  color: var(--text-meta); max-width: 720px; margin-bottom: 14px; transition: color .3s;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14.5px;
+  line-height: 1.82;
+  color: var(--text-meta);
+  max-width: 720px;
+  margin-bottom: 14px;
+  transition: color .3s;
 }
 .guide-body p { margin-bottom: 10px; }
 .guide-body p:last-child { margin-bottom: 0; }
@@ -42,99 +70,254 @@
 .guide-body a:hover { color: var(--text-data); }
 .guide-body strong { color: var(--text-sub); font-weight: 600; }
 .guide-body em { font-style: italic; }
-.guide-body code { font-family: 'Share Tech Mono', monospace; font-size: 11.5px; color: var(--text-data); letter-spacing: .04em; }
+.guide-body code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11.5px;
+  color: var(--text-data);
+  letter-spacing: .04em;
+}
 
 /* ════════ USE CASE CARDS ════════ */
-.use-case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 20px 0 32px; max-width: 820px; }
+.use-case-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 20px 0 32px;
+  max-width: 820px;
+}
 @media (max-width: 620px) { .use-case-grid { grid-template-columns: 1fr; } }
-.use-case-card { border: 1px solid var(--border2); padding: 20px 20px 16px; background: var(--bg2); transition: background .3s, border-color .3s; }
-.use-case-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.use-case-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
-.use-case-title { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--text-sub); transition: color .3s; }
-.use-case-sub { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: .1em; color: var(--text-dim); margin-top: 2px; transition: color .3s; }
+.use-case-card {
+  border: 1px solid var(--border2);
+  padding: 20px 20px 16px;
+  background: var(--bg2);
+  transition: background .3s, border-color .3s;
+}
+.use-case-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.use-case-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.use-case-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  transition: color .3s;
+}
+.use-case-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  margin-top: 2px;
+  transition: color .3s;
+}
 .use-case-card .guide-body { margin-bottom: 0; }
 
 /* ════════ STEP LISTS ════════ */
-.guide-steps { list-style: none; padding: 0; margin: 0 0 18px 0; max-width: 700px; counter-reset: step-counter; }
+.guide-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px 0;
+  max-width: 700px;
+  counter-reset: step-counter;
+}
 .guide-steps li {
-  counter-increment: step-counter; display: flex; gap: 14px; align-items: flex-start;
-  padding: 9px 0; border-bottom: 1px solid var(--border); font-family: 'Crimson Pro', serif;
-  font-size: 14px; line-height: 1.7; color: var(--text-meta); transition: border-color .3s, color .3s;
+  counter-increment: step-counter;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-meta);
+  transition: border-color .3s, color .3s;
 }
 .guide-steps li:last-child { border-bottom: none; }
 .guide-steps li::before {
-  content: counter(step-counter); font-family: 'Share Tech Mono', monospace; font-size: 9px;
-  color: var(--text-dim); border: 1px solid var(--border2); width: 20px; height: 20px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: color .3s, border-color .3s;
+  content: counter(step-counter);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  border: 1px solid var(--border2);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: color .3s, border-color .3s;
 }
 .guide-steps li strong { color: var(--text-sub); font-weight: 600; }
 
 /* ════════ FEATURE CALLOUTS ════════ */
-.callout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin: 14px 0 24px; max-width: 760px; }
+.callout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+  margin: 14px 0 24px;
+  max-width: 760px;
+}
 @media (max-width: 540px) { .callout-grid { grid-template-columns: 1fr; } }
 .callout-item {
-  display: flex; gap: 10px; align-items: flex-start; font-family: 'Crimson Pro', serif;
-  font-size: 13.5px; line-height: 1.55; color: var(--text-meta); padding: 8px 0;
-  border-bottom: 1px solid var(--border); transition: color .3s, border-color .3s;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-meta);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color .3s, border-color .3s;
 }
-.callout-icon { font-size: 13px; color: var(--text-dim); flex-shrink: 0; margin-top: 1px; transition: color .3s; }
+.callout-icon {
+  font-size: 13px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: color .3s;
+}
 .callout-item strong { color: var(--text-sub); font-weight: 600; }
 
 /* ════════ DATA TABLES ════════ */
-.guide-table-wrap { overflow-x: auto; margin: 12px 0 24px; max-width: 760px; }
-.guide-table { width: 100%; border-collapse: collapse; font-family: 'Crimson Pro', serif; font-size: 13.5px; color: var(--text-meta); }
-.guide-table th {
-  font-family: 'Share Tech Mono', monospace; font-size: 8.5px; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--text-dim); padding: 7px 14px 7px 0;
-  border-bottom: 1px solid var(--border2); text-align: left; font-weight: 400; transition: color .3s, border-color .3s;
+.guide-table-wrap {
+  overflow-x: auto;
+  margin: 12px 0 24px;
+  max-width: 760px;
 }
-.guide-table td { padding: 8px 14px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; transition: color .3s, border-color .3s; }
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13.5px;
+  color: var(--text-meta);
+}
+.guide-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 7px 14px 7px 0;
+  border-bottom: 1px solid var(--border2);
+  text-align: left;
+  font-weight: 400;
+  transition: color .3s, border-color .3s;
+}
+.guide-table td {
+  padding: 8px 14px 8px 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.55;
+  transition: color .3s, border-color .3s;
+}
 .guide-table tr:last-child td { border-bottom: none; }
-.guide-table td:first-child { font-family: 'Share Tech Mono', monospace; font-size: 10.5px; color: var(--text-data); letter-spacing: .06em; white-space: nowrap; padding-right: 20px; }
+.guide-table td:first-child {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10.5px;
+  color: var(--text-data);
+  letter-spacing: .06em;
+  white-space: nowrap;
+  padding-right: 20px;
+}
 .guide-table strong { color: var(--text-sub); font-weight: 600; }
 
 /* ════════ INLINE KEY LABELS ════════ */
-.key { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-data); letter-spacing: .08em; border: 1px solid var(--border2); padding: 1px 6px; white-space: nowrap; }
+.key {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-data);
+  letter-spacing: .08em;
+  border: 1px solid var(--border2);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
 
 /* ════════ NOTE CALLOUT BOX ════════ */
 .guide-note {
-  border-left: 2px solid var(--red-dim); padding: 10px 16px; margin: 14px 0 22px;
-  max-width: 680px; background: var(--bg2); font-family: 'Crimson Pro', serif;
-  font-style: italic; font-size: 13.5px; line-height: 1.7; color: var(--text-dim); transition: all .3s;
+  border-left: 2px solid var(--red-dim);
+  padding: 10px 16px;
+  margin: 14px 0 22px;
+  max-width: 680px;
+  background: var(--bg2);
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text-dim);
+  transition: all .3s;
 }
 .guide-note strong { color: var(--text-meta); font-style: normal; font-weight: 600; }
 
-.page-footer {
-  margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border2);
-  display: flex; justify-content: space-between; align-items: flex-end;
-  flex-wrap: wrap; gap: 12px; transition: border-color .3s;
-}
-@media (max-width: 700px) { .page-footer { flex-direction: column; align-items: flex-start; } }
+
 
 /* ════════ HAMBURGER NAV MENU ════════ */
-.nav-menu-wrap { position: absolute; top: 0; left: 0; z-index: 500; }
-.nav-menu-btn {
-  background: none; border: none; cursor: pointer; padding: 6px 8px;
-  display: flex; flex-direction: column; gap: 5px; opacity: .6; transition: opacity .2s;
+.nav-menu-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
 }
-.nav-menu-btn:hover, .nav-menu-btn.open { opacity: 1; }
+.nav-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: .6;
+  transition: opacity .2s;
+}
+.nav-menu-btn:hover,
+.nav-menu-btn.open { opacity: 1; }
 .nav-menu-btn .bar {
-  display: block; width: 20px; height: 2px; background: var(--text-sub);
-  border-radius: 1px; transition: background .3s, transform .2s, opacity .2s;
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-sub);
+  border-radius: 1px;
+  transition: background .3s, transform .2s, opacity .2s;
 }
 .nav-menu-btn.open .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-menu-btn.open .bar:nth-child(2) { opacity: 0; }
 .nav-menu-btn.open .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 .nav-menu-dropdown {
-  display: none; position: absolute; top: calc(100% + 4px); left: 0;
-  min-width: 180px; background: var(--bg2); border: 1px solid var(--border2);
-  padding: 4px 0; z-index: 600;
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 180px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  padding: 4px 0;
+  z-index: 600;
 }
 .nav-menu-dropdown.open { display: block; }
 .nav-menu-link {
-  display: block; padding: 10px 18px; font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-dim);
-  text-decoration: none; border-bottom: 1px solid var(--border); transition: color .15s, background .15s;
+  display: block;
+  padding: 10px 18px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color .15s, background .15s;
 }
 .nav-menu-link:last-child { border-bottom: none; }
 .nav-menu-link:hover { color: var(--text-data); background: var(--bg2); }
@@ -144,16 +327,22 @@
 <body>
 <div class="wrapper">
 
+
+
+  <!-- HEADER -->
+
   <!-- HAMBURGER NAV MENU -->
   <div class="nav-menu-wrap">
     <button class="nav-menu-btn" id="navMenuBtn" aria-label="Site navigation">
-      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
       <a href="../index.html" class="nav-menu-link">Log</a>
-      <a href="faq.html" class="nav-menu-link">FAQ</a>
-      <a href="resources.html" class="nav-menu-link">Resources</a>
-      <a href="about.html" class="nav-menu-link">About</a>
+      <a href="../docs/faq.html" class="nav-menu-link">FAQ</a>
+      <a href="../docs/resources.html" class="nav-menu-link">Resources</a>
+      <a href="../docs/about.html" class="nav-menu-link">About</a>
     </div>
   </div>
 
@@ -169,17 +358,20 @@
     </div>
   </header>
 
+  <!-- INTRO -->
   <h1 class="guide-heading">User Guide</h1>
   <p class="guide-intro">Everything you need to know to use this log, whether you are ticking off objects for the fun of it or building a complete record for the Astronomical League Messier Club certificate.</p>
 
 
-  <!-- ══ TWO USE CASES ══ -->
+  <!-- ══════════════════════════════════════════
+       TWO USE CASES
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Two Use Cases</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">This log is designed to serve two kinds of observers. You can use it for one, the other, or both — many observers start with a casual checklist and add full records as their interest in the AL program grows.</p>
+  <p class="guide-body">This log is designed to serve two kinds of observers. You can use it for one, the other, or both — many observers start casual and add full records as their interest in the AL program grows.</p>
 
-  <p class="guide-body">When you open the site for the first time, a <strong>Quick Start Guide</strong> appears automatically, explaining both use cases and linking to this page. Tick <strong>"Don't show again"</strong> before dismissing it to suppress it on future visits. The guide also notes that the log is best experienced on a laptop or tablet given the number of columns in the table.</p>
+  <p class="guide-body">When you open the site for the first time, a <strong>Quick Start Guide</strong> appears automatically explaining both use cases and linking to this page. Tick <strong>"Don't show again"</strong> before dismissing it to suppress it on future visits, or leave it unticked to see it again on any browser where no data has been saved yet.</p>
 
   <div class="use-case-grid">
     <div class="use-case-card">
@@ -190,7 +382,7 @@
           <div class="use-case-sub">Just track what you've seen</div>
         </div>
       </div>
-      <p class="guide-body">Check off objects as you observe them, jot a brief note in the inline field, and watch the progress bar advance. Use <strong>Night Mode</strong> (🌙 toggle, top right) at the telescope. Export your log as a CSV any time from the <strong>☰ Log</strong> menu. That's all you need to do.</p>
+      <p class="guide-body">Check off objects as you observe them, jot a brief note in the inline field, and watch the progress bar advance. Use <strong>Night Mode</strong> (🌙 toggle, top right) at the telescope — red-on-black preserves your dark adaptation. Save a full backup any time from the <strong>⚙ Gear</strong> menu. That's all you need to do.</p>
     </div>
     <div class="use-case-card">
       <div class="use-case-card-header">
@@ -200,16 +392,18 @@
           <div class="use-case-sub">Full records for award submission</div>
         </div>
       </div>
-      <p class="guide-body">Click the <strong>✎</strong> button on any object to open the full observation record — date, time, site, seeing, transparency, limiting magnitude, telescope, eyepiece, and written description. Use <strong>☰ Log → Session Setup</strong> to set location and equipment once per night so every record auto-fills. Generate your submission PDF from <strong>☰ Log → Generate AL Report</strong>.</p>
+      <p class="guide-body">Click the <strong>✎</strong> button on any object to open the full observation record — date, time, site, seeing, transparency, limiting magnitude, telescope, eyepiece, and a written description. Use <strong>☰ → Session Setup</strong> to set location and equipment once per night so every record auto-fills. Generate your submission PDF from <strong>⚙ Gear → Generate PDF</strong>.</p>
     </div>
   </div>
 
 
-  <!-- ══ NIGHT / DAY MODES ══ -->
+  <!-- ══════════════════════════════════════════
+       NIGHT / DAY MODES
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Night Mode and Day Mode</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">The toggle in the top-right corner switches between two display themes. Your preference is saved automatically and restored every time you open the page.</p>
+  <p class="guide-body">The <strong>🌙 / ☀</strong> toggle in the top-right corner switches between two display themes. Your preference is saved automatically and restored every time you open the page.</p>
 
   <div class="guide-table-wrap">
     <table class="guide-table">
@@ -217,12 +411,12 @@
       <tbody>
         <tr>
           <td>🌙 Night</td>
-          <td>Near-black background, red-spectrum text and controls. All emoji icons replaced by short ASCII labels.</td>
+          <td>Near-black background, red-spectrum text and controls</td>
           <td>At the telescope. Red light does not constrict the pupil or bleach the rods, so your dark adaptation is fully preserved.</td>
         </tr>
         <tr>
           <td>☀ Day</td>
-          <td>Warm parchment background, dark ink, maroon accents. All emoji icons display normally.</td>
+          <td>Warm parchment background, dark ink, maroon accents</td>
           <td>Planning sessions indoors, filling in full AL records, generating reports.</td>
         </tr>
       </tbody>
@@ -231,27 +425,24 @@
 
   <div class="guide-note"><strong>Why red light?</strong> The human eye's rod cells — responsible for low-light vision — are insensitive to red wavelengths. White light bleaches rhodopsin in the rods and takes 20–30 minutes to recover. Red light lets you read the screen at the eyepiece without resetting your dark adaptation.</div>
 
-  <p class="guide-body"><strong>Night mode icon system:</strong> Every icon button in the interface is wrapped in a special span that hides the emoji in night mode and displays a short monospace ASCII label instead — so no bright or coloured symbol is ever shown at the eyepiece. For example, the 🌙 toggle shows <code>[N]</code>, the 📄 Report button shows <code>[RPT]</code>, and the 📍 GPS button shows <code>[GPS]</code>.</p>
 
-  <p class="guide-body"><strong>Night mode object photos:</strong> When you open the image lightbox in night mode, object photographs are automatically filtered to appear as dim red-tinted images. This means you can view the photo at the eyepiece without the bright white background of a full-colour image affecting your dark adaptation.</p>
-
-
-  <!-- ══ THE OBSERVATION TABLE ══ -->
+  <!-- ══════════════════════════════════════════
+       THE TABLE
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">The Observation Table</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">All 110 Messier objects are listed in <strong>marathon search order</strong> by default — the Don Machholz sequence (west to east) that gives the best statistical chance of seeing all 110 in a single night. This is different from Messier number order.</p>
+  <p class="guide-body">All 110 Messier objects are listed in <strong>marathon search order</strong> — the sequence that gives the best statistical chance of seeing all 110 in a single night, running west to east from objects visible just after dusk to objects rising just before dawn. This is different from Messier number order.</p>
 
   <div class="guide-table-wrap">
     <table class="guide-table">
       <thead><tr><th>Column</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td>#</td><td>Marathon sequence position (1–110)</td></tr>
-        <tr><td>Object</td><td>Messier designation — <strong>click to open the image lightbox</strong>. Click the column header to toggle between Marathon order and Numeric (M-number) order.</td></tr>
-        <tr><td>Type</td><td>Object type shown as a monospace ASCII symbol. See the Object Type Key legend below the toolbar and the <a href="../features.md">feature reference</a> for the full symbol map.</td></tr>
+        <tr><td>Object</td><td>Messier designation — <strong>click to open the image lightbox</strong></td></tr>
+        <tr><td>Type</td><td>Object type with a colour-coded dot. See the legend panel below the toolbar.</td></tr>
         <tr><td>Con</td><td>IAU constellation abbreviation</td></tr>
         <tr><td>Mag</td><td>Visual magnitude</td></tr>
-        <tr><td>Size</td><td>Angular dimensions in arcminutes (e.g. <code>178×63</code> or <code>110'</code>), sourced from the SEDS marathon data</td></tr>
         <tr><td>RA / Dec</td><td>J2000.0 equatorial coordinates</td></tr>
         <tr><td>PSA Pg</td><td><em>Pocket Sky Atlas</em> page reference (Roger Sinnott, Sky &amp; Telescope)</td></tr>
         <tr><td>✓</td><td>Observation checkbox — records a hidden timestamp when ticked</td></tr>
@@ -260,58 +451,62 @@
     </table>
   </div>
 
-  <p class="guide-body"><strong>Object sort toggle:</strong> clicking the Object column header switches between Marathon order (#1–110 by marathon position) and Numeric order (M1–M110 by Messier number). The header label updates to show the current mode. All filters, search, and the lightbox work correctly in both modes.</p>
+  <p class="guide-body">Checking an object dims its row, advances the progress bar, and silently records the exact timestamp of the observation. This timestamp flows into the full AL record and the CSV export as "Date Observed." Unchecking removes it.</p>
 
-  <p class="guide-body"><strong>Type symbols:</strong> the colored dot badges used in earlier versions have been replaced with monospace ASCII symbols — @, ●, ◑, *, +, ◎, ~, ○, ✕, ::, · — so each type is identifiable by glyph shape alone in red night mode where colour differentiation is not available. The Object Type Key legend below the toolbar shows the full map.</p>
-
-  <p class="guide-body">Checking an object dims its row, advances the progress bar, and silently records the exact timestamp. Unchecking removes the timestamp. The timestamp flows into the full AL record and CSV export as "Date Observed."</p>
-
-  <p class="guide-body"><strong>Field Notes ↔ AL Description sync:</strong> the inline Field Notes field and the Description field in the full AL record modal are kept in two-way sync. Any note typed at the telescope pre-fills the Description when you open the form; saving the form writes the Description back to the table. You can jot shorthand at the eyepiece and expand it in the form later — the table updates on save.</p>
+  <p class="guide-body"><strong>Field Notes ↔ AL Description sync:</strong> the inline Field Notes field and the Description field in the full AL record modal are kept in sync automatically. When you open the AL record, any text in Field Notes seeds the Description so you are never starting from scratch. When you save the AL record, the Description is written back to Field Notes so the table always shows your latest observation text. You can type a shorthand note at the telescope and expand it properly in the AL form later — the table cell updates when you save.</p>
 
 
-  <!-- ══ FILTERING AND SEARCH ══ -->
+  <!-- ══════════════════════════════════════════
+       FILTER AND SEARCH
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Filtering and Search</div>
   <hr class="guide-section-rule">
 
   <p class="guide-body"><strong>Filter buttons</strong> above the table narrow the display to one object type, or to unobserved objects only. Click <strong>All</strong> to reset. The <strong>Unobserved</strong> filter is especially useful during a session to see only what remains.</p>
 
-  <p class="guide-body"><strong>Search</strong> filters by any text matching the M-number, type name, or constellation abbreviation. For example: <code>Sgr</code> shows only Sagittarius objects; <code>glob</code> shows globulars; <code>M4</code> shows M4, M40, M41 and so on. The × button clears the field instantly. Filters and search combine — you can filter to Globular Cluster and then type <code>Her</code> to show only Hercules globulars.</p>
+  <p class="guide-body"><strong>Search</strong> filters by any text matching the M-number, type name, or constellation abbreviation. For example: <code>Sgr</code> shows only Sagittarius objects; <code>glob</code> shows globulars; <code>M4</code> shows M4, M40, M41 and so on. A <strong>×</strong> clear button appears inside the search box as soon as you start typing — click it to reset instantly. Filters and search combine — you can filter to Globular Cluster and then type <code>Her</code> to show only Hercules globulars.</p>
 
 
-  <!-- ══ IMAGE LIGHTBOX ══ -->
+  <!-- ══════════════════════════════════════════
+       IMAGE LIGHTBOX
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Image Lightbox</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">Click any <strong>M-number</strong> in the Object column to open the lightbox modal for that object. The correct object always loads regardless of whether the table is in Marathon or Numeric sort order.</p>
+  <p class="guide-body">Click any <strong>M-number</strong> in the Object column to open the lightbox modal for that object.</p>
 
   <div class="callout-grid">
-    <div class="callout-item"><span class="callout-icon">🖼</span><span><strong>Left panel</strong> — object photograph from <code>images/M[n].jpg</code>. In night mode photos are automatically red-filtered. A styled placeholder is shown if the image is absent.</span></div>
-    <div class="callout-item"><span class="callout-icon">📋</span><span><strong>Right sidebar</strong> — full catalog data: type, constellation, magnitude, angular size (arcmin), RA, Dec, PSA page.</span></div>
-    <div class="callout-item"><span class="callout-icon">🗺</span><span><strong>Finder Chart button</strong> — opens <code>charts/M[n].png</code> if present. A red-bordered warning above the button reminds you to enable your device's red filter before viewing — chart images have a white background.</span></div>
-    <div class="callout-item"><span class="callout-icon">🔭</span><span><strong>Stellarium Web button</strong> — opens the free online 3D sky simulator centred on this object (internet required).</span></div>
+    <div class="callout-item"><span class="callout-icon">🖼</span><span><strong>Left panel</strong> — object photograph from a local <code>images/</code> folder. A placeholder is shown if the image is absent.</span></div>
+    <div class="callout-item"><span class="callout-icon">📋</span><span><strong>Right sidebar</strong> — full catalog data: type, constellation, magnitude, RA, Dec, PSA page.</span></div>
+    <div class="callout-item"><span class="callout-icon">🗺</span><span><strong>Finder Chart button</strong> — opens a local chart image from <code>charts/M[n].png</code> if present.</span></div>
+    <div class="callout-item"><span class="callout-icon">🔭</span><span><strong>Stellarium Web button</strong> — opens the free online 3D sky simulator centred on this object (requires internet).</span></div>
     <div class="callout-item"><span class="callout-icon">◀▶</span><span><strong>Footer navigation</strong> — step through all 110 objects in order with the ← / → buttons.</span></div>
     <div class="callout-item"><span class="callout-icon">⌨</span><span><strong>Keyboard</strong> — ← → to navigate; <code>Escape</code> or click outside to close.</span></div>
   </div>
 
 
-  <!-- ══ SESSION SETUP ══ -->
+  <!-- ══════════════════════════════════════════
+       SESSION SETUP
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Session Setup</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">Open <strong>☰ Log → Session Setup</strong> at the start of each observing session to set defaults that auto-fill blank fields in every full observation record you open that night. Existing saved data is <em>never</em> overwritten — session values only fill gaps.</p>
+  <p class="guide-body">Open <strong>☰ → Session Setup</strong> at the start of each observing session to set defaults that auto-fill blank fields in every full observation record you open that night. Existing saved data is <em>never</em> overwritten — session values only fill gaps.</p>
 
   <p class="guide-body"><strong>Fields you can set as session defaults:</strong> observing site, seeing (Antoniadi scale), transparency, limiting magnitude, telescope / instrument, aperture, eyepiece, magnification.</p>
 
-  <p class="guide-body">The <strong>📍 Locate</strong> button requests your GPS coordinates from the device (browser permission required; works on HTTPS or localhost). Once obtained, the site calls OpenStreetMap Nominatim to reverse-geocode the coordinates into a place name and fills it into the Site field. Raw coordinates are also stored in the session for the AL record.</p>
+  <p class="guide-body">The <strong>📍 Locate</strong> button requests your GPS coordinates from the device (browser permission required; works on HTTPS or localhost). Once obtained, the site calls OpenStreetMap Nominatim to reverse-geocode the coordinates into a place name and fills it into the Site field automatically. Raw coordinates are also stored in the session.</p>
 
   <p class="guide-body">A pulsing <strong>Session active</strong> indicator appears in the toolbar while any session default is set. Use <strong>↺ Clear Session</strong> inside the modal to remove all defaults without affecting any saved records. Session data lives in <code>mm_session</code> localStorage and survives page refreshes.</p>
 
 
-  <!-- ══ FULL AL OBSERVATION RECORDS ══ -->
+  <!-- ══════════════════════════════════════════
+       FULL AL OBSERVATION RECORDS
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Full AL Observation Records</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">The <strong>✎</strong> button at the right edge of every object's notes cell opens the full observation record form. The button is outlined and dim when no record is saved; it fills with a <strong>solid red background</strong> when a record exists — giving an at-a-glance status indicator visible across the whole table, including in night mode.</p>
+  <p class="guide-body">The <strong>✎</strong> button at the right edge of every object's notes cell opens the full observation record form. The icon is outlined and dim when no record is saved; it fills with a solid red background when a record exists — giving an at-a-glance status across the whole table.</p>
 
   <p class="guide-body"><strong>Auto-fill priority when opening a blank record:</strong> existing saved data → session defaults → checkbox timestamp (for date/time) → current date and time. The description field pre-populates from any brief inline note already typed.</p>
 
@@ -329,8 +524,8 @@
         <tr><td></td><td>Aperture (mm)</td><td>e.g. <em>203</em></td></tr>
         <tr><td></td><td>Eyepiece</td><td>e.g. <em>24mm Panoptic</em></td></tr>
         <tr><td></td><td>Magnification</td><td>e.g. <em>50×</em></td></tr>
-        <tr><td>Observation</td><td>Description</td><td><strong>Required for AL certificate.</strong> Describe size, shape, brightness, structure, whether averted vision was needed, and any notable features.</td></tr>
-        <tr><td></td><td>Sketch notes</td><td>Orientation, field stars, anything relevant to a sketch made at the eyepiece</td></tr>
+        <tr><td>Observation</td><td>Description</td><td><strong>Required for AL certificate.</strong> Describe size, shape, brightness, structure, whether averted vision was needed, notable features.</td></tr>
+        <tr><td></td><td>Sketch notes</td><td>Orientation, field stars noted, anything relevant to a sketch made at the eyepiece</td></tr>
       </tbody>
     </table>
   </div>
@@ -338,36 +533,75 @@
   <p class="guide-body">Click <strong>Save Record</strong> to store. If all fields are blank when you save, the record is deleted. The ✎ button indicator updates immediately in the main table.</p>
 
 
-  <!-- ══ THE LOG MENU ══ -->
-  <div class="faq-section-title">The Log Menu</div>
+  <!-- ══════════════════════════════════════════
+       HAMBURGER MENU
+  ═══════════════════════════════════════════ -->
+  <div class="faq-section-title">The Navigation Menu (☰)</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">The <strong>☰ Log ▼</strong> button in the toolbar opens a dropdown with all data management functions.</p>
+  <p class="guide-body">The <strong>☰ hamburger button</strong> (top left) opens the navigation and settings menu.</p>
 
   <div class="guide-table-wrap">
     <table class="guide-table">
       <thead><tr><th>Item</th><th>What it does</th></tr></thead>
       <tbody>
-        <tr><td>⎙ Print</td><td>Applies a clean black-on-white print stylesheet and opens the browser print dialog. Use Print to PDF to save a snapshot of the current table.</td></tr>
-        <tr><td>⬇ Export CSV</td><td>Saves a timestamped CSV with marathon order, catalog data, observed status, date observed, and field notes for all 110 objects.</td></tr>
-        <tr><td>⬆ Import CSV</td><td>Reads a previously exported CSV back in. Shows a conflict summary and asks you to choose <strong>Merge</strong> (fill blanks only) or <strong>Overwrite</strong> (replace all).</td></tr>
-        <tr><td>⬇ Export AL Records</td><td>Saves a timestamped JSON file containing all full observation records plus observation timestamps. Export this after every session.</td></tr>
-        <tr><td>⬆ Import AL Records</td><td>Merges an exported JSON back in. Shows new-vs-conflict counts in a themed confirmation dialog before importing. Useful for moving data between devices.</td></tr>
-        <tr><td>📄 Generate AL Report</td><td>Opens a dialog to enter your name and club, then generates a multi-page PDF in the browser — cover page, index table, and one full page per record. No internet required.</td></tr>
-        <tr><td>⚙ Session Setup…</td><td>Opens the session defaults modal (see above).</td></tr>
-        <tr><td>↺ Reset All Data…</td><td>Shows counts of all saved data in a themed confirmation dialog. Clears all <code>mm_*</code> localStorage keys permanently. Export first.</td></tr>
+        <tr><td>About</td><td>Opens the About page</td></tr>
+        <tr><td>FAQ</td><td>Opens the Frequently Asked Questions page</td></tr>
+        <tr><td>Resources</td><td>Links to observing references and star atlases</td></tr>
+        <tr><td>User Guide</td><td>Opens this page</td></tr>
+        <tr><td colspan="2" style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-meta);padding-top:8px;">Settings</td></tr>
+        <tr><td>Session Setup…</td><td>Opens the session defaults modal — set site, scope, and conditions once per night to auto-fill all records.</td></tr>
+        <tr><td>Dark / Light Theme</td><td>Toggles between Night (red-on-black) and Day (parchment) display modes. Preference is saved automatically.</td></tr>
+        <tr><td>Reset All Data…</td><td>Shows a count of saved data, asks for confirmation, then permanently clears all <code>mm_*</code> localStorage keys. Save a backup first.</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="guide-note"><strong>Themed confirmation dialogs:</strong> the Reset, Clear Session, and Import actions all use a custom modal that inherits the current CSS theme rather than the browser's native dialog. This means no white dialog box ever appears at the telescope while you are in night mode.</div>
+
+  <!-- ══════════════════════════════════════════
+       GEAR MENU
+  ═══════════════════════════════════════════ -->
+  <div class="faq-section-title">The Gear Menu (⚙)</div>
+  <hr class="guide-section-rule">
+
+  <p class="guide-body">The <strong>⚙ gear button</strong> (top right) opens the data and reports menu.</p>
+
+  <div class="guide-table-wrap">
+    <table class="guide-table">
+      <thead><tr><th colspan="2">Data Sync</th></tr></thead>
+      <tbody>
+        <tr><td>⬇ Save…</td><td>Saves a complete backup of <em>all</em> your data — observations, notes, timestamps, full AL records, equipment presets, location presets, session settings, and theme preference — as a single JSON file. Use this as your primary backup after every session.</td></tr>
+        <tr><td>⬆ Restore…</td><td>Restores from a previously saved backup file. <strong>Replaces all current data.</strong> Shows a confirmation warning before proceeding. Also accepts older records-only JSON exports.</td></tr>
+        <tr><td>Import…</td><td>Selectively import records (JSON), equipment (CSV), or locations (CSV) without replacing your other data.</td></tr>
+        <tr><td>Export…</td><td>Selectively export records, equipment, or locations as separate files — useful for sharing or manual editing.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="guide-table-wrap" style="margin-top:12px;">
+    <table class="guide-table">
+      <thead><tr><th colspan="2">Reports</th></tr></thead>
+      <tbody>
+        <tr><td>⎙ Print…</td><td>Opens a print dialog with two options:
+          <ul style="margin-top:6px;padding-left:18px;line-height:1.8;">
+            <li><strong>Observation Checklist</strong> — generates a clean compact page (M#, type, constellation, magnitude, checkbox, notes) in a new window and opens the print dialog. Scope-ready. Respects the current table filter — if you have filtered to Unobserved, only those rows print.</li>
+            <li><strong>Full AL Report</strong> — routes to the Generate PDF flow for a complete submission-quality document.</li>
+          </ul>
+        </td></tr>
+        <tr><td>📄 Generate PDF…</td><td>Opens a dialog to enter your name and club, then generates a multi-page PDF — cover page, observation index, and one full page per record. No internet connection required.</td></tr>
+        <tr><td>Generate CSV…</td><td>Saves a timestamped CSV with marathon order, catalog data, observed status, date observed, and field notes for all 110 objects. Good for archival or spreadsheet analysis.</td></tr>
+      </tbody>
+    </table>
+  </div>
 
 
-  <!-- ══ AL REPORT PDF ══ -->
+  <!-- ══════════════════════════════════════════
+       AL REPORT PDF
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Generating the AL Submission Report</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">When you are ready to submit for the AL Messier Club certificate, go to <strong>☰ Log → Generate AL Report</strong>. Enter your name and an optional club or location subtitle, then click <strong>Generate PDF</strong>. The PDF is built entirely in the browser — no internet connection needed — and saved to your Downloads folder.</p>
+  <p class="guide-body">When you are ready to submit for the AL Messier Club certificate, go to <strong>⚙ Gear → Generate PDF…</strong>. Enter your name and an optional club or location subtitle, then click <strong>Generate PDF</strong>. The PDF is built entirely in the browser — no internet connection needed — and saved to your Downloads folder.</p>
 
   <p class="guide-body">The report contains three sections:</p>
 
@@ -377,10 +611,12 @@
     <li><strong>Individual record pages</strong> — one full page per object containing all four sections of the observation record in a formatted layout suitable for submission.</li>
   </ol>
 
-  <div class="guide-note"><strong>Tip:</strong> A standalone Python version (<code>al_report.py</code>) is also available in the repository for observers who prefer to generate the PDF from the command line or who want to customise the layout.</div>
+  <div class="guide-note"><strong>Tip:</strong> A standalone Python version (<code>al_report.py</code>) is also available in the repository for observers who prefer to generate the PDF from the command line, or who want to customise the layout further.</div>
 
 
-  <!-- ══ DATA STORAGE AND BACKUP ══ -->
+  <!-- ══════════════════════════════════════════
+       DATA STORAGE AND BACKUP
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Data Storage and Backup</div>
   <hr class="guide-section-rule">
 
@@ -394,17 +630,22 @@
         <tr><td>mm_notes</td><td>Brief inline notes per object</td></tr>
         <tr><td>mm_times</td><td>Observation timestamps per object (ISO string)</td></tr>
         <tr><td>mm_fullnotes</td><td>Full AL record data per object (structured JSON)</td></tr>
+        <tr><td>mm_equipment</td><td>Saved telescope and eyepiece presets</td></tr>
+        <tr><td>mm_locations</td><td>Saved observing site presets including coordinates</td></tr>
         <tr><td>mm_session</td><td>Current session defaults including GPS coordinates</td></tr>
         <tr><td>mm_theme</td><td>Night or day mode preference</td></tr>
+        <tr><td>mm_mode</td><td>Light or dark display theme preference</td></tr>
         <tr><td>mm_visited</td><td>Set to "1" when "Don't show again" is ticked in the Quick Start guide</td></tr>
       </tbody>
     </table>
   </div>
 
-  <div class="guide-note"><strong>Important:</strong> localStorage is tied to one browser on one device. It is deleted if you clear your browser's site data or use private / incognito mode. To move data to another device, export on the old device and import on the new one. Recommended backup routine: <strong>Export AL Records</strong> (JSON) after every observing session, and <strong>Export CSV</strong> periodically for a human-readable archive.</div>
+  <div class="guide-note"><strong>Important:</strong> localStorage is tied to one browser on one device. It is deleted if you clear your browser's site data or use private / incognito mode. To move data to another device, or protect against data loss, use <strong>⚙ Gear → Save…</strong> to download a complete backup JSON after every observing session. This single file captures <em>all</em> of the above keys. To restore on any device, use <strong>⚙ Gear → Restore…</strong> and select that file.</div>
 
 
-  <!-- ══ LOCAL FILES SETUP ══ -->
+  <!-- ══════════════════════════════════════════
+       LOCAL FILES SETUP
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Setting Up Local Images and Charts</div>
   <hr class="guide-section-rule">
 
@@ -414,24 +655,28 @@
     <table class="guide-table">
       <thead><tr><th>Folder</th><th>Contents</th><th>Naming</th></tr></thead>
       <tbody>
-        <tr><td>images/</td><td>Object photographs (JPEG)</td><td><code>M1.jpg</code> … <code>M110.jpg</code>. A batch download script for SEDS Messier Catalog photos is in the repository.</td></tr>
+        <tr><td>images/</td><td>Object photographs (JPEG)</td><td><code>M1.jpg</code> … <code>M110.jpg</code>. A batch download script for SEDS Messier Catalog photos is in the README.</td></tr>
         <tr><td>charts/</td><td>Finder chart images (PNG)</td><td><code>M1.png</code> … <code>M110.png</code>. The <code>generate_charts.py</code> script produces red-on-black night-vision charts for all 110 objects.</td></tr>
-        <tr><td>fonts/</td><td>Self-hosted typefaces (TTF)</td><td>Seven files — see the README for the full list and Google Fonts download links. The site falls back to system fonts if the folder is absent.</td></tr>
+        <tr><td>fonts/</td><td>Self-hosted typefaces (TTF)</td><td>Seven files — see README for the full list and Google Fonts download links. The site falls back to system fonts if the folder is absent.</td></tr>
       </tbody>
     </table>
   </div>
 
 
-  <!-- ══ OFFLINE USE ══ -->
+  <!-- ══════════════════════════════════════════
+       OFFLINE USE
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Offline Use</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">After the page has loaded once, the following all work without internet: the full table, filtering, search, progress bar, checkboxes, notes, full AL record forms, image lightbox (with local images and charts), CSV and JSON export/import, AL Report PDF generation, and printing.</p>
+  <p class="guide-body">After the page has loaded once, the following all work without internet: the full table, filtering, search, progress bar, checkboxes, notes, full AL record forms, image lightbox (with local images and charts), CSV and JSON export / import, AL Report PDF generation, and printing.</p>
 
   <p class="guide-body">The only features that require internet: <strong>📍 Locate</strong> (reverse geocoding via OpenStreetMap) and <strong>🔭 Stellarium Web</strong> (external site). Both degrade gracefully — Locate shows an error message; Stellarium simply doesn't open.</p>
 
 
-  <!-- ══ SITE PAGES ══ -->
+  <!-- ══════════════════════════════════════════
+       SITE PAGES
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Site Pages</div>
   <hr class="guide-section-rule">
 
@@ -442,22 +687,23 @@
       <thead><tr><th>Page</th><th>Purpose</th></tr></thead>
       <tbody>
         <tr><td>index.html</td><td>Main observation log — the tool itself</td></tr>
-        <tr><td>docs/faq.html</td><td>Common questions about the Messier Marathon, AL program, and how the log works</td></tr>
+        <tr><td>faq.html</td><td>Common questions about the Messier Marathon, AL program, and how the log works</td></tr>
         <tr><td>docs/user-guide.html</td><td>This page</td></tr>
-        <tr><td>docs/resources.html</td><td>Curated external links — databases, observing guides, marathon planners, and printable logbooks</td></tr>
-        <tr><td>docs/about.html</td><td>Project information, credits, and acknowledgements</td></tr>
+        <tr><td>resources.html</td><td>Curated external links — databases, observing guides, marathon planners, and printable logbooks</td></tr>
       </tbody>
     </table>
   </div>
 
-  <p class="guide-body">All pages carry a hamburger nav menu (top left) and a footer nav. The hamburger dropdown always includes a link back to the Log as the first item, followed by links to all other doc pages.</p>
+  <p class="guide-body">All pages carry a footer nav: <strong>← Back to Log · FAQ · User Guide · Resources</strong>.</p>
 
 
-  <!-- ══ AL PROGRAM REFERENCE ══ -->
+  <!-- ══════════════════════════════════════════
+       AL PROGRAM REFERENCE
+  ═══════════════════════════════════════════ -->
   <div class="faq-section-title">Astronomical League Messier Club Program</div>
   <hr class="guide-section-rule">
 
-  <p class="guide-body">The <a href="https://www.astroleague.org/messier-observing-program/" target="_blank" rel="noopener">Astronomical League Messier Observing Program</a> is one of the most popular observing certificates in amateur astronomy. To earn it, observe all 110 Messier objects and submit a structured log to an AL member club coordinator.</p>
+  <p class="guide-body">The <a href="https://www.astronomicalleague.net/messier-observing-program.html" target="_blank" rel="noopener">Astronomical League Messier Observing Program</a> is one of the most popular observing certificates in amateur astronomy. To earn it, observe all 110 Messier objects and submit a structured log to an AL member club coordinator.</p>
 
   <p class="guide-body">Required data per object: date and time, observing site, seeing and transparency, telescope aperture, magnification used, and a written description of what you saw through the eyepiece. This log captures all of these fields. The generated PDF report is designed to serve as your submission document.</p>
 
@@ -473,16 +719,15 @@
     </div>
     <div class="footer-sig">
       <a href="../index.html" class="nav-link">← Back to Log</a> &nbsp;·&nbsp;
-      <a href="faq.html" class="nav-link">FAQ</a> &nbsp;·&nbsp;
-      <a href="resources.html" class="nav-link">Resources</a> &nbsp;·&nbsp;
-      <a href="about.html" class="nav-link">About</a>
+      <a href="../faq.html" class="nav-link">FAQ</a> &nbsp;·&nbsp;
+      <a href="../resources.html" class="nav-link">Resources</a>
     </div>
   </footer>
 
 </div><!-- /wrapper -->
 
 <script>
-// ── Theme persistence ─────────────────────────────────────────
+// ── Theme persistence ──────────────────────────────────────────
 const root   = document.documentElement;
 const toggle = document.getElementById('themeToggle');
 const saved  = localStorage.getItem('mm_theme');
@@ -493,19 +738,23 @@ toggle.addEventListener('click', () => {
   localStorage.setItem('mm_theme', next);
 });
 
-// ── Hamburger nav menu ────────────────────────────────────────
-const navMenuBtn      = document.getElementById('navMenuBtn');
-const navMenuDropdown = document.getElementById('navMenuDropdown');
-navMenuBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  const isOpen = navMenuDropdown.classList.toggle('open');
-  navMenuBtn.classList.toggle('open', isOpen);
-});
-navMenuDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
-document.addEventListener('click', function() {
-  navMenuDropdown.classList.remove('open');
-  navMenuBtn.classList.remove('open');
-});
+// ── Hamburger nav menu ────────────────────────────────────────────────────────
+(function() {
+  var btn = document.getElementById('navMenuBtn');
+  var dd  = document.getElementById('navMenuDropdown');
+  if (!btn || !dd) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var open = dd.classList.toggle('open');
+    btn.classList.toggle('open', open);
+  });
+  dd.addEventListener('click', function(e) { e.stopPropagation(); });
+  document.addEventListener('click', function() {
+    dd.classList.remove('open');
+    btn.classList.remove('open');
+  });
+})();
+
 </script>
 </body>
 </html>
