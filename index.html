@@ -259,7 +259,7 @@
   color: var(--text-data);
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
-  padding: 5px 12px 5px 30px;
+  padding: 5px 26px 5px 30px;
   width: 185px;
   outline: none;
   letter-spacing: .04em;
@@ -272,6 +272,17 @@
   transform: translateY(-50%);
   color: var(--text-dim); font-size: 12px; pointer-events: none;
 }
+.search-clear {
+  position: absolute; right: 6px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--text-dim); font-size: 11px; line-height: 1;
+  padding: 2px 3px;
+  display: none;
+  transition: color .15s;
+}
+.search-clear:hover { color: var(--red-bright); }
+.search-clear.visible { display: block; }
 /* ════════ TABLE ════════ */
 .table-outer {
   border: 1px solid var(--border2);
@@ -645,7 +656,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   color: var(--text-data);
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
-  padding: 5px 12px 5px 30px;
+  padding: 5px 26px 5px 30px;
   width: 185px;
   outline: none;
   letter-spacing: .04em;
@@ -1753,6 +1764,157 @@ tr.checked td.col-m-val a.m-link {
   color: var(--text-data);
   background: var(--bg3, var(--bg2));
 }
+
+/* ── Hamburger: section header + divider + button items ── */
+.nav-menu-section {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  padding: 8px 18px 4px;
+  opacity: .6;
+}
+.nav-menu-divider {
+  border: none;
+  border-top: 1px solid var(--border2);
+  margin: 3px 0;
+}
+button.nav-menu-link {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+button.nav-menu-link.danger { color: var(--text-dim); }
+button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--bg3, var(--bg2)); }
+
+/* ── Gear menu section header ── */
+.log-menu-section {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  padding: 8px 16px 4px;
+  opacity: .6;
+}
+
+/* ── Gear icon button ── */
+.dots-menu-btn { font-size: 16px; letter-spacing: 0; }
+
+/* ── Sync modals (Save / Import / Export) ── */
+.sync-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 1100;
+  align-items: center;
+  justify-content: center;
+}
+.sync-overlay.open { display: flex; }
+.sync-box {
+  background: var(--modal-bg);
+  border: 1px solid var(--border3);
+  padding: 28px 32px 24px;
+  min-width: 300px;
+  max-width: 420px;
+  width: 90vw;
+  position: relative;
+  transition: background .3s, border-color .3s;
+}
+.sync-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: .12em;
+  color: var(--text-head);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.sync-close {
+  position: absolute;
+  top: 10px; right: 14px;
+  background: none; border: none;
+  font-size: 14px; cursor: pointer;
+  color: var(--text-dim);
+  transition: color .15s;
+}
+.sync-close:hover { color: var(--red-bright); }
+.sync-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.sync-file-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sync-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+.sync-input {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  background: var(--bg);
+  border: 1px solid var(--border3);
+  color: var(--text-data);
+  padding: 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color .2s, background .3s;
+}
+.sync-input:focus { outline: none; border-color: var(--red-bright); }
+.sync-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  cursor: pointer;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sync-check-item:last-child { border-bottom: none; }
+.sync-check-item input[type=checkbox] { accent-color: var(--red-bright); width: 14px; height: 14px; cursor: pointer; }
+.sync-check-desc {
+  font-size: 9px;
+  color: var(--text-meta);
+  letter-spacing: .06em;
+  text-transform: none;
+  margin-top: 1px;
+}
+.sync-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+.sync-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  cursor: pointer;
+  border: 1px solid var(--border3);
+  background: transparent;
+  color: var(--text-sub);
+  transition: all .2s;
+}
+.sync-btn:hover { background: var(--filter-active-bg); color: var(--red-bright); }
+.sync-btn.primary { background: var(--filter-active-bg); color: var(--red-bright); border-color: var(--red-bright); }
+.sync-btn.primary:hover { opacity: .8; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -1768,9 +1930,16 @@ tr.checked td.col-m-val a.m-link {
       <span class="bar"></span>
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
-      <a href="docs/faq.html"            class="nav-menu-link">FAQ</a>
-      <a href="docs/resources.html"      class="nav-menu-link">Resources</a>
+      <a href="docs/about.html"      class="nav-menu-link">About</a>
+      <a href="docs/faq.html"        class="nav-menu-link">FAQ</a>
+      <a href="docs/resources.html"  class="nav-menu-link">Resources</a>
       <a href="docs/user-guide.html" class="nav-menu-link">User Guide</a>
+      <hr class="nav-menu-divider">
+      <div class="nav-menu-section">Settings</div>
+      <hr class="nav-menu-divider">
+      <button class="nav-menu-link" id="navMenuSession">Session Setup…</button>
+      <button class="nav-menu-link" id="navMenuTheme"><span id="navMenuThemeLabel">Dark Theme</span></button>
+      <button class="nav-menu-link danger" id="navMenuReset">Reset All Data…</button>
     </div>
   </div>
 
@@ -1787,50 +1956,30 @@ tr.checked td.col-m-val a.m-link {
 
     <!-- THREE-DOT MENU -->
     <div class="dots-menu-wrap">
-      <button class="dots-menu-btn" id="dotsMenuBtn" aria-label="More options">&#8942;</button>
+      <button class="dots-menu-btn" id="dotsMenuBtn" aria-label="Data and reports">⚙</button>
       <div class="dots-menu-dropdown log-menu-dropdown" id="dotsMenuDropdown">
-        <button class="log-menu-item" id="dotsMenuPrint">
-          <span class="log-menu-icon">⎙</span> Print
+        <div class="log-menu-section">Data Sync</div>
+        <hr class="log-menu-divider">
+        <button class="log-menu-item" id="gearSave">
+          <span class="log-menu-icon">⬇</span> Save…
         </button>
-        <button class="log-menu-item" id="dotsMenuExportRecords">
-          <span class="log-menu-icon">⬇</span> Export Records
+        <button class="log-menu-item" id="gearImport">
+          <span class="log-menu-icon">⬆</span> Import…
         </button>
-        <label class="log-menu-item" for="btnImportALFile">
-          <span class="log-menu-icon">⬆</span> Import Records
-        </label>
-        <button class="log-menu-item" id="dotsMenuReport">
+        <button class="log-menu-item" id="gearExport">
+          <span class="log-menu-icon">⤓</span> Export…
+        </button>
+        <hr class="log-menu-divider">
+        <div class="log-menu-section">Reports</div>
+        <hr class="log-menu-divider">
+        <button class="log-menu-item" id="gearReport">
           <span class="log-menu-icon"><span class="ui-icon" data-night="[PDF]">📄</span></span> Generate PDF…
         </button>
-        <button class="log-menu-item" id="dotsMenuCSV">
+        <button class="log-menu-item" id="gearCSV">
           <span class="log-menu-icon"><span class="ui-icon" data-night="[CSV]">📊</span></span> Generate CSV…
         </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="dotsMenuSession">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
-        </button>
-        <button class="log-menu-item" id="dotsMenuTheme">
-          <span class="log-menu-icon" id="dotsMenuThemeIcon">◑</span> <span id="dotsMenuThemeLabel">Dark Theme</span>
-        </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="dotsMenuEqTemplate">
-          <span class="log-menu-icon">⬇</span> Export Equipment
-        </button>
-        <label class="log-menu-item" for="btnImportEqFile">
-          <span class="log-menu-icon">⬆</span> Import Equipment CSV
-        </label>
-        <button class="log-menu-item" id="dotsMenuLocTemplate">
-          <span class="log-menu-icon">⬇</span> Export Locations
-        </button>
-        <label class="log-menu-item" for="btnImportLocFile">
-          <span class="log-menu-icon">⬆</span> Import Locations CSV
-        </label>
-        <hr class="log-menu-divider">
-        <a href="docs/about.html" class="log-menu-item">
-          <span class="log-menu-icon">◎</span> About
-        </a>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item danger" id="dotsMenuReset">
-          <span class="log-menu-icon">↺</span> Reset All Data…
+        <button class="log-menu-item" id="gearPrint">
+          <span class="log-menu-icon">⎙</span> Print…
         </button>
       </div>
     </div>
@@ -1851,6 +2000,8 @@ tr.checked td.col-m-val a.m-link {
   </header>
 
   <!-- CONTROLS -->
+<p class="dev-notice"><b>⚠ Notice</b>: This project is under active development and testing and may change at any time. Enjoy trying it out, but use caution when entering real session data.</p>
+<br>
   <div class="controls">
     <button class="filter-btn active" data-filter="all" id="filterAll">All</button>
     <div class="filter-type-wrap">
@@ -1866,50 +2017,17 @@ tr.checked td.col-m-val a.m-link {
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
       <input type="text" id="searchInput" placeholder="Search M#, type, con…">
+      <button class="search-clear" id="searchClear" aria-label="Clear search" title="Clear search">✕</button>
     </div>
-    <div class="log-menu-wrap">
-      <button class="btn-log-menu" id="btnLogMenu">
-        ☰ Log <span class="btn-log-menu-caret">▼</span>
-      </button>
-      <div class="log-menu-dropdown" id="logMenuDropdown">
-        <button class="log-menu-item" id="menuPrint">
-          <span class="log-menu-icon">⎙</span> Print
-        </button>
-        <button class="log-menu-item" id="menuExportRecords">
-          <span class="log-menu-icon">⬇</span> Export Records
-        </button>
-        <label class="log-menu-item" for="btnImportALFile">
-          <span class="log-menu-icon">⬆</span> Import Records
-        </label>
-        <button class="log-menu-item" id="menuGenerateReport">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[PDF]">📄</span></span> Generate PDF…
-        </button>
-        <button class="log-menu-item" id="menuGenerateCSV">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[CSV]">📊</span></span> Generate CSV…
-        </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="menuSession">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[CFG]">⚙</span></span> Session Setup…
-        </button>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="menuEqTemplate">
-          <span class="log-menu-icon">⬇</span> Export Equipment
-        </button>
-        <label class="log-menu-item" for="btnImportEqFile">
-          <span class="log-menu-icon">⬆</span> Import Equipment CSV
-        </label>
-        <button class="log-menu-item" id="menuLocTemplate">
-          <span class="log-menu-icon">⬇</span> Export Locations
-        </button>
-        <label class="log-menu-item" for="btnImportLocFile">
-          <span class="log-menu-icon">⬆</span> Import Locations CSV
-        </label>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item danger" id="menuReset">
-          <span class="log-menu-icon">↺</span> Reset All Data…
-        </button>
-      </div>
-    </div>
+    <!-- Hidden functional action buttons (wired by JS, triggered from gear/hamburger menus) -->
+    <button id="menuPrint"         style="display:none"></button>
+    <button id="menuExportRecords" style="display:none"></button>
+    <button id="menuGenerateReport" style="display:none"></button>
+    <button id="menuGenerateCSV"   style="display:none"></button>
+    <button id="menuSession"       style="display:none"></button>
+    <button id="menuReset"         style="display:none"></button>
+    <button id="menuEqTemplate"    style="display:none"></button>
+    <button id="menuLocTemplate"   style="display:none"></button>
     <input type="file" id="btnImportALFile" class="btn-import-input" accept=".json">
     <input type="file" id="btnImportEqFile" class="btn-import-input" accept=".csv">
     <input type="file" id="btnImportLocFile" class="btn-import-input" accept=".csv">
@@ -1919,7 +2037,6 @@ tr.checked td.col-m-val a.m-link {
   </div>
 
   <!-- TABLE -->
-  <p class="dev-notice">⚠ Notice: This project is under active development and testing and may change at any time. Enjoy trying it out, but use caution when entering real session data.</p>
   <div class="table-outer">
     <table id="mainTable">
       <colgroup>
@@ -2934,6 +3051,96 @@ tr.checked td.col-m-val a.m-link {
   </div>
 </div>
 
+
+<!-- ── SAVE MODAL ──────────────────────────────────────────────── -->
+<div class="sync-overlay" id="saveOverlay" role="dialog" aria-modal="true" aria-label="Save data">
+  <div class="sync-box">
+    <div class="sync-title">⬇ Save Records</div>
+    <button class="sync-close" id="saveClose" aria-label="Close">✕</button>
+    <div class="sync-row">
+      <div class="sync-file-row">
+        <label class="sync-label" for="saveFilename">File name</label>
+        <input class="sync-input" type="text" id="saveFilename" placeholder="al-records">
+        <span class="sync-label" style="opacity:.6; margin-top:2px;">.json will be appended</span>
+      </div>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="saveCancelBtn">Cancel</button>
+      <button class="sync-btn primary" id="saveConfirmBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── IMPORT MODAL ────────────────────────────────────────────── -->
+<div class="sync-overlay" id="importOverlay" role="dialog" aria-modal="true" aria-label="Import data">
+  <div class="sync-box">
+    <div class="sync-title">⬆ Import</div>
+    <button class="sync-close" id="importClose" aria-label="Close">✕</button>
+    <div class="sync-row">
+      <label class="sync-check-item">
+        <input type="checkbox" id="importChkRecords" checked>
+        <div>
+          <div>Records</div>
+          <div class="sync-check-desc">Observation records JSON (.json)</div>
+        </div>
+      </label>
+      <label class="sync-check-item">
+        <input type="checkbox" id="importChkEquipment">
+        <div>
+          <div>Equipment</div>
+          <div class="sync-check-desc">Telescope &amp; eyepiece presets CSV (.csv)</div>
+        </div>
+      </label>
+      <label class="sync-check-item">
+        <input type="checkbox" id="importChkLocations">
+        <div>
+          <div>Locations</div>
+          <div class="sync-check-desc">Observing site presets CSV (.csv)</div>
+        </div>
+      </label>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="importCancelBtn">Cancel</button>
+      <button class="sync-btn primary" id="importConfirmBtn">Choose File…</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EXPORT MODAL ────────────────────────────────────────────── -->
+<div class="sync-overlay" id="exportOverlay" role="dialog" aria-modal="true" aria-label="Export data">
+  <div class="sync-box">
+    <div class="sync-title">⤓ Export</div>
+    <button class="sync-close" id="exportClose" aria-label="Close">✕</button>
+    <div class="sync-row">
+      <label class="sync-check-item">
+        <input type="checkbox" id="exportChkRecords" checked>
+        <div>
+          <div>Records</div>
+          <div class="sync-check-desc">All observation records as JSON</div>
+        </div>
+      </label>
+      <label class="sync-check-item">
+        <input type="checkbox" id="exportChkEquipment">
+        <div>
+          <div>Equipment</div>
+          <div class="sync-check-desc">Telescope &amp; eyepiece presets as CSV</div>
+        </div>
+      </label>
+      <label class="sync-check-item">
+        <input type="checkbox" id="exportChkLocations">
+        <div>
+          <div>Locations</div>
+          <div class="sync-check-desc">Observing site presets as CSV</div>
+        </div>
+      </label>
+    </div>
+    <div class="sync-btns">
+      <button class="sync-btn" id="exportCancelBtn">Cancel</button>
+      <button class="sync-btn primary" id="exportConfirmBtn">Export</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ── Mobile detection ──────────────────────────────────────────── */
 (function detectMobile() {
@@ -3578,7 +3785,17 @@ document.getElementById("filterTypeSelect").addEventListener("change", function(
   applyFilter();
 });
 document.getElementById("searchInput").addEventListener("input", function() {
-  searchTerm = this.value.trim().toLowerCase(); applyFilter();
+  searchTerm = this.value.trim().toLowerCase();
+  document.getElementById("searchClear").classList.toggle("visible", this.value.length > 0);
+  applyFilter();
+});
+document.getElementById("searchClear").addEventListener("click", function() {
+  const input = document.getElementById("searchInput");
+  input.value = "";
+  searchTerm = "";
+  this.classList.remove("visible");
+  applyFilter();
+  input.focus();
 });
 
 /* ── OBJECT COLUMN SORT ─────────────────────────────────────────── */
@@ -3644,8 +3861,6 @@ function parseCSVLine(line) {
 
 /* ── EXPORT RECORDS (JSON) ──────────────────────────────────────── */
 document.getElementById("menuExportRecords").addEventListener("click", function () {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
 
   const recordCount = Object.keys(SAVED_FULLNOTES).length;
   if (recordCount === 0) {
@@ -3862,19 +4077,15 @@ const LOC_TEMPLATE =
 Jordan Lake SRA NC,35.87320,-79.07280,America/New_York,4,Good southern horizon
 Blue Ridge Parkway VA,37.32100,-79.87500,America/New_York,3,Excellent dark site`;
 
-function wireTemplateBtn(menuId, dotsId, filename, template) {
+function wireTemplateBtn(menuId, _unused, filename, template) {
   const handler = function() {
-    logMenuDropdown.classList.remove("open");
-    logMenuBtn.classList.remove("open");
-    dotsMenuDropdown.classList.remove("open");
-    dotsMenuBtn.classList.remove("open");
+    closeAllMenus();
     downloadTemplate(filename, template);
   };
   document.getElementById(menuId).addEventListener("click", handler);
-  document.getElementById(dotsId).addEventListener("click", handler);
 }
-wireTemplateBtn("menuEqTemplate",  "dotsMenuEqTemplate",  "equipment-template.csv",  EQ_TEMPLATE);
-wireTemplateBtn("menuLocTemplate", "dotsMenuLocTemplate", "locations-template.csv",  LOC_TEMPLATE);
+wireTemplateBtn("menuEqTemplate",  null, "equipment-template.csv",  EQ_TEMPLATE);
+wireTemplateBtn("menuLocTemplate", null, "locations-template.csv",  LOC_TEMPLATE);
 
 // ── Equipment CSV import ────────────────────────────────────────
 function parseEquipmentCSV(text) {
@@ -3959,11 +4170,6 @@ document.getElementById("btnImportLocFile").addEventListener("change", function(
   reader.readAsText(file);
 });
 
-// ── Wire dots-menu proxies ──────────────────────────────────────
-// (label[for] handles clicks automatically via the hidden file input —
-// these buttons just need to close the menu then trigger the label)
-document.getElementById("dotsMenuEqTemplate");  // handled via wireTemplateBtn above
-document.getElementById("dotsMenuLocTemplate"); // handled via wireTemplateBtn above
 
 const SESSION_FIELDS = ["site","seeing","transparency","limitMag","scope","aperture","eyepiece","mag"];
 let SESSION = {};
@@ -4122,8 +4328,6 @@ document.getElementById("sessGeoBtn").addEventListener("click", function () {
 });
 
 document.getElementById("menuSession").addEventListener("click", function () {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
   openSessionModal();
 });
 document.getElementById("sessClose").addEventListener("click",     closeSessionModal);
@@ -4147,80 +4351,65 @@ document.getElementById("sessClearBtn").addEventListener("click", function () {
   });
 });
 
-const logMenuBtn      = document.getElementById("btnLogMenu");
-const logMenuDropdown = document.getElementById("logMenuDropdown");
+// ── Menu helpers ─────────────────────────────────────────────────────────────
+const gearMenuBtn      = document.getElementById("dotsMenuBtn");
+const gearMenuDropdown = document.getElementById("dotsMenuDropdown");
+const navMenuBtn       = document.getElementById("navMenuBtn");
+const navMenuDropdown  = document.getElementById("navMenuDropdown");
 
-// ── Three-dot menu ────────────────────────────────────────────────────────────
-const dotsMenuBtn      = document.getElementById("dotsMenuBtn");
-const dotsMenuDropdown = document.getElementById("dotsMenuDropdown");
+function closeAllMenus() {
+  gearMenuDropdown.classList.remove("open");
+  gearMenuBtn.classList.remove("open");
+  navMenuDropdown.classList.remove("open");
+  navMenuBtn.classList.remove("open");
+}
 
-dotsMenuBtn.addEventListener("click", function(e) {
+gearMenuBtn.addEventListener("click", function(e) {
   e.stopPropagation();
-  const isOpen = dotsMenuDropdown.classList.toggle("open");
-  dotsMenuBtn.classList.toggle("open", isOpen);
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
+  const isOpen = gearMenuDropdown.classList.toggle("open");
+  gearMenuBtn.classList.toggle("open", isOpen);
   navMenuDropdown.classList.remove("open");
   navMenuBtn.classList.remove("open");
 });
-dotsMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
-
-// Wire dots menu items to existing Log menu handlers
-document.getElementById("dotsMenuPrint")          .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuPrint").click(); });
-document.getElementById("dotsMenuExportRecords")   .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuExportRecords").click(); });
-document.getElementById("dotsMenuReport")          .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateReport").click(); });
-document.getElementById("dotsMenuCSV")             .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuGenerateCSV").click(); });
-document.getElementById("dotsMenuSession")         .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuSession").click(); });
-document.getElementById("dotsMenuReset")           .addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); document.getElementById("menuReset").click(); });
-// Equipment/Locations import labels — just close the menus; label[for] triggers the file input
-document.querySelector("label[for='btnImportEqFile']")  && document.querySelectorAll("label[for='btnImportEqFile']")  .forEach(l => l.addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); logMenuDropdown.classList.remove("open"); logMenuBtn.classList.remove("open"); }));
-document.querySelector("label[for='btnImportLocFile']") && document.querySelectorAll("label[for='btnImportLocFile']") .forEach(l => l.addEventListener("click", () => { dotsMenuDropdown.classList.remove("open"); dotsMenuBtn.classList.remove("open"); logMenuDropdown.classList.remove("open"); logMenuBtn.classList.remove("open"); }));
-
-
-const navMenuBtn      = document.getElementById("navMenuBtn");
-const navMenuDropdown = document.getElementById("navMenuDropdown");
+gearMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 
 navMenuBtn.addEventListener("click", function(e) {
   e.stopPropagation();
   const isOpen = navMenuDropdown.classList.toggle("open");
   navMenuBtn.classList.toggle("open", isOpen);
-  // close log menu if open
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
+  gearMenuDropdown.classList.remove("open");
+  gearMenuBtn.classList.remove("open");
 });
 navMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 
-logMenuBtn.addEventListener("click", function(e) {
-  e.stopPropagation();
-  const isOpen = logMenuDropdown.classList.toggle("open");
-  logMenuBtn.classList.toggle("open", isOpen);
-  // close nav menu if open
-  navMenuDropdown.classList.remove("open");
-  navMenuBtn.classList.remove("open");
+document.addEventListener("click", closeAllMenus);
+
+// ── Hamburger: Settings ───────────────────────────────────────────────────────
+document.getElementById("navMenuSession").addEventListener("click", function() {
+  closeAllMenus();
+  document.getElementById("menuSession").click();
+});
+document.getElementById("navMenuReset").addEventListener("click", function() {
+  closeAllMenus();
+  document.getElementById("menuReset").click();
 });
 
-// Close all menus when clicking anywhere outside
-document.addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-  navMenuDropdown.classList.remove("open");
-  navMenuBtn.classList.remove("open");
-  dotsMenuDropdown.classList.remove("open");
-  dotsMenuBtn.classList.remove("open");
-});
-logMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
+// ── Gear menu: Data Sync ─────────────────────────────────────────────────────
+document.getElementById("gearSave").addEventListener("click",   function() { closeAllMenus(); openSaveModal(); });
+document.getElementById("gearImport").addEventListener("click", function() { closeAllMenus(); openImportModal(); });
+document.getElementById("gearExport").addEventListener("click", function() { closeAllMenus(); openExportModal(); });
+
+// ── Gear menu: Reports ───────────────────────────────────────────────────────
+document.getElementById("gearReport").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuGenerateReport").click(); });
+document.getElementById("gearCSV").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuGenerateCSV").click(); });
+document.getElementById("gearPrint").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuPrint").click(); });
 
 document.getElementById("menuPrint").addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
   window.print();
 });
 
 /* ── RESET ──────────────────────────────────────────────────────── */
 document.getElementById("menuReset").addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
-
   const done = Object.values(SAVED_CHECKS).filter(Boolean).length;
   const noted = Object.values(SAVED_NOTES).filter(v => v && v.trim()).length;
 
@@ -4276,16 +4465,16 @@ function _applyTheme() {
   // for day/dark we need to keep the pill right too — so add a class
   html.classList.toggle("mode-day", _mode === "day");
 
-  // Kabob theme item — label reflects what clicking it will switch TO
-  const themeBtn   = document.getElementById("dotsMenuTheme");
-  const themeLabel = document.getElementById("dotsMenuThemeLabel");
-  const themeIcon  = document.getElementById("dotsMenuThemeIcon");
-  if (themeBtn) {
+  // Hamburger theme item — label reflects what clicking it will switch TO
+  const themeLabel = document.getElementById("navMenuThemeLabel");
+  if (themeLabel) {
     // In night mode, item is greyed out (night always wins)
-    themeBtn.disabled = (_mode === "night");
-    themeBtn.style.opacity = (_mode === "night") ? ".38" : "";
+    const themeBtn = document.getElementById("navMenuTheme");
+    if (themeBtn) {
+      themeBtn.disabled = (_mode === "night");
+      themeBtn.style.opacity = (_mode === "night") ? ".38" : "";
+    }
     themeLabel.textContent = _theme === "light" ? "Dark Theme" : "Light Theme";
-    themeIcon.textContent  = _theme === "light" ? "◑" : "◐";
   }
 }
 
@@ -4310,14 +4499,88 @@ function setTheme(t) {
 toggleEl.addEventListener("click", () => setMode(_mode === "night" ? "day" : "night"));
 toggleEl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggleEl.click(); });
 
-// Kabob theme item toggles Light ↔ Dark (only in Day mode)
-document.getElementById("dotsMenuTheme").addEventListener("click", function() {
+// Hamburger theme item toggles Light ↔ Dark (only in Day mode)
+document.getElementById("navMenuTheme").addEventListener("click", function() {
   if (_mode === "night") return;
-  dotsMenuDropdown.classList.remove("open");
-  dotsMenuBtn.classList.remove("open");
+  closeAllMenus();
   _theme = _theme === "light" ? "dark" : "light";
   try { localStorage.setItem("mm_theme", _theme); } catch(e) {}
   _applyTheme();
+});
+
+/* ── SAVE MODAL ──────────────────────────────────────────────────── */
+function openSaveModal() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  document.getElementById("saveFilename").value = `${stamp}-al-records`;
+  document.getElementById("saveOverlay").classList.add("open");
+}
+function closeSaveModal() { document.getElementById("saveOverlay").classList.remove("open"); }
+
+document.getElementById("saveClose").addEventListener("click", closeSaveModal);
+document.getElementById("saveCancelBtn").addEventListener("click", closeSaveModal);
+document.getElementById("saveOverlay").addEventListener("click", function(e) { if (e.target === this) closeSaveModal(); });
+document.getElementById("saveConfirmBtn").addEventListener("click", function() {
+  let filename = (document.getElementById("saveFilename").value || "al-records").trim();
+  if (!filename.endsWith(".json")) filename += ".json";
+
+  const now = new Date();
+  const sessionMeta = {};
+  if (SESSION.lat != null) sessionMeta.lat = SESSION.lat;
+  if (SESSION.lon != null) sessionMeta.lon = SESSION.lon;
+  if (SESSION.tz)          sessionMeta.tz  = SESSION.tz;
+  if (SESSION.site)        sessionMeta.site = SESSION.site;
+
+  const payload = {
+    exported:   now.toISOString(),
+    version:    1,
+    session:    Object.keys(sessionMeta).length ? sessionMeta : undefined,
+    records:    SAVED_FULLNOTES,
+    timestamps: SAVED_TIMES
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  closeSaveModal();
+});
+
+/* ── IMPORT MODAL ────────────────────────────────────────────────── */
+function openImportModal() { document.getElementById("importOverlay").classList.add("open"); }
+function closeImportModal() { document.getElementById("importOverlay").classList.remove("open"); }
+
+document.getElementById("importClose").addEventListener("click", closeImportModal);
+document.getElementById("importCancelBtn").addEventListener("click", closeImportModal);
+document.getElementById("importOverlay").addEventListener("click", function(e) { if (e.target === this) closeImportModal(); });
+document.getElementById("importConfirmBtn").addEventListener("click", function() {
+  const doRecords   = document.getElementById("importChkRecords").checked;
+  const doEquipment = document.getElementById("importChkEquipment").checked;
+  const doLocations = document.getElementById("importChkLocations").checked;
+  closeImportModal();
+  if (doRecords)   document.getElementById("btnImportALFile").click();
+  if (doEquipment) document.getElementById("btnImportEqFile").click();
+  if (doLocations) document.getElementById("btnImportLocFile").click();
+});
+
+/* ── EXPORT MODAL ────────────────────────────────────────────────── */
+function openExportModal() { document.getElementById("exportOverlay").classList.add("open"); }
+function closeExportModal() { document.getElementById("exportOverlay").classList.remove("open"); }
+
+document.getElementById("exportClose").addEventListener("click", closeExportModal);
+document.getElementById("exportCancelBtn").addEventListener("click", closeExportModal);
+document.getElementById("exportOverlay").addEventListener("click", function(e) { if (e.target === this) closeExportModal(); });
+document.getElementById("exportConfirmBtn").addEventListener("click", function() {
+  const doRecords   = document.getElementById("exportChkRecords").checked;
+  const doEquipment = document.getElementById("exportChkEquipment").checked;
+  const doLocations = document.getElementById("exportChkLocations").checked;
+  closeExportModal();
+  if (doRecords)   document.getElementById("menuExportRecords").click();
+  if (doEquipment) document.getElementById("menuEqTemplate").click();
+  if (doLocations) document.getElementById("menuLocTemplate").click();
 });
 
 /* INIT */
@@ -4394,8 +4657,6 @@ updateSessionIndicator();
 
 /* ── GENERATE CSV ───────────────────────────────────────────────── */
 document.getElementById("menuGenerateCSV").addEventListener("click", function() {
-  logMenuDropdown.classList.remove("open");
-  logMenuBtn.classList.remove("open");
 
   const now = new Date();
   const pad = n => String(n).padStart(2, "0");
@@ -4921,8 +5182,6 @@ document.getElementById("menuGenerateCSV").addEventListener("click", function() 
   }
 
   document.getElementById("menuGenerateReport").addEventListener("click", function() {
-    logMenuDropdown.classList.remove("open");
-    logMenuBtn.classList.remove("open");
     openReportModal();
   });
   document.getElementById("rptClose").addEventListener("click", closeReportModal);
