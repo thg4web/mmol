@@ -770,6 +770,7 @@ html.is-mobile col.col-size, html.is-mobile th.col-size, html.is-mobile td.col-s
 html.is-mobile col.col-ra,   html.is-mobile th.col-ra,   html.is-mobile td.col-ra-val,
 html.is-mobile col.col-dec,  html.is-mobile th.col-dec,  html.is-mobile td.col-dec-val,
 html.is-mobile col.col-psa,  html.is-mobile th.col-psa,  html.is-mobile td.col-psa-val { display: none; }
+html.is-mobile th.col-mag    { text-align: right; padding-right: 12px; }
 html.is-mobile td.col-note-val { min-width: 80px; }
 html.is-mobile .search-wrap input { width: 130px; }
 
@@ -1866,16 +1867,16 @@ tr.checked td.col-m-val a.m-link {
       <thead>
         <tr>
           <th class="center col-mo">#</th>
-          <th id="objSortTh" class="col-obj-sort" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
-          <th>Type</th>
-          <th class="center">Con</th>
-          <th class="center">Mag</th>
-          <th>Size</th>
-          <th>RA</th>
-          <th>Dec</th>
-          <th>PSA Pg</th>
-          <th class="center">✓</th>
-          <th>Field Notes</th>
+          <th id="objSortTh" class="col-obj-sort col-m" title="Click to toggle sort order">Marathon <span class="sort-arrow">▲</span></th>
+          <th class="col-type">Type</th>
+          <th class="center col-con">Con</th>
+          <th class="center col-mag">Mag</th>
+          <th class="col-size">Size</th>
+          <th class="col-ra">RA</th>
+          <th class="col-dec">Dec</th>
+          <th class="col-psa">PSA Pg</th>
+          <th class="center col-chk">✓</th>
+          <th class="col-note">Field Notes</th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
