@@ -543,7 +543,7 @@ tr.checked td.col-m-val a.m-link { text-decoration: line-through; text-decoratio
   body { background: #fff !important; color: #000 !important; }
   body::before { display: none; }
   .controls, .btn-print, .theme-toggle-wrap, .nav-menu-wrap,
-  .top-right-controls, .dev-notice, .session-indicator,
+  .top-bar, .top-right-controls, .dev-notice, .session-indicator,
   .rec-btn, .search-clear, .sync-overlay, .conf-overlay,
   .sess-overlay, .rpt-overlay, .qs-overlay { display: none !important; }
   /* Full-width page layout for print */
@@ -1698,7 +1698,7 @@ tr.checked td.col-m-val a.m-link {
   body { background: #fff !important; color: #000 !important; }
   body::before { display: none; }
   .controls, .log-menu-wrap, .btn-import-input, .theme-toggle-wrap,
-  .nav-menu-wrap, .top-right-controls, .dev-notice, .session-indicator,
+  .top-bar, .nav-menu-wrap, .top-right-controls, .dev-notice, .session-indicator,
   .rec-btn, .search-clear, .sync-overlay, .conf-overlay,
   .sess-overlay, .rpt-overlay, .qs-overlay { display: none !important; }
   .wrapper, .wrapper-prose { max-width: none !important; padding: 8px 12px 20px !important; margin: 0 !important; }
@@ -1789,6 +1789,12 @@ tr.checked td.col-m-val a.m-link {
 @media (max-width: 700px) {
   .top-right-controls { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; }
   .footer { flex-direction: column; align-items: flex-start; }
+  .top-bar { display: none; }
+}
+@media (min-width: 701px) {
+  .nav-menu-wrap  { display: none; }
+  .dots-menu-wrap { display: none; }
+  .wrapper { padding-top: 42px; }
 }
 
 /* ════════ TOP NAV MENU ════════ */
@@ -1890,6 +1896,103 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
 
 /* ── Gear icon button ── */
 .dots-menu-btn { font-size: 26px; letter-spacing: 0; }
+
+/* ════════ TOP MENU BAR (desktop) ════════ */
+.top-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  z-index: 200;
+  padding: 0 4px;
+  transition: background .3s, border-color .3s;
+}
+.top-bar-menus {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  flex: 1;
+}
+.top-bar-menu {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.top-bar-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+.top-bar-item:hover,
+.top-bar-item.open { color: var(--text-data); background: var(--bg3); }
+.tb-caret { font-size: 7px; opacity: .6; transition: transform .2s; }
+.top-bar-item.open .tb-caret { transform: rotate(180deg); }
+.top-bar-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%; left: 0;
+  min-width: 210px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-top: none;
+  padding: 4px 0;
+  z-index: 400;
+  transition: background .3s, border-color .3s;
+}
+.top-bar-dropdown.open { display: block; }
+.top-bar-dd-item {
+  display: block;
+  width: 100%;
+  padding: 9px 18px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+.top-bar-dd-item:last-child { border-bottom: none; }
+.top-bar-dd-item:hover { color: var(--text-data); background: var(--bg3); }
+.top-bar-dd-item.danger { color: var(--text-dim); }
+.top-bar-dd-item.danger:hover { color: var(--red-bright); background: var(--bg3); }
+.top-bar-dd-section {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  padding: 8px 18px 3px;
+  opacity: .6;
+}
+.top-bar-dd-divider { border: none; border-top: 1px solid var(--border2); margin: 3px 0; }
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+}
 
 /* ── Sync modals (Save / Import / Export) ── */
 .sync-overlay {
@@ -2009,7 +2112,63 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
 <body>
 <div class="wrapper">
 
-  <!-- NAV MENU -->
+  <!-- TOP MENU BAR (desktop only) -->
+  <nav class="top-bar" id="topBar">
+    <div class="top-bar-menus">
+
+      <!-- Data -->
+      <div class="top-bar-menu">
+        <button class="top-bar-item" id="tbDataBtn">Data <span class="tb-caret">▾</span></button>
+        <div class="top-bar-dropdown" id="tbDataDrop">
+          <div class="top-bar-dd-section">Data Sync</div>
+          <hr class="top-bar-dd-divider">
+          <button class="top-bar-dd-item" id="tbSave">⬇ Save…</button>
+          <button class="top-bar-dd-item" id="tbRestore">⬆ Restore…</button>
+          <button class="top-bar-dd-item" id="tbImport">⬆ Import…</button>
+          <button class="top-bar-dd-item" id="tbExport">⤓ Export…</button>
+        </div>
+      </div>
+
+      <!-- Reports -->
+      <div class="top-bar-menu">
+        <button class="top-bar-item" id="tbReportsBtn">Reports <span class="tb-caret">▾</span></button>
+        <div class="top-bar-dropdown" id="tbReportsDrop">
+          <div class="top-bar-dd-section">Reports</div>
+          <hr class="top-bar-dd-divider">
+          <button class="top-bar-dd-item" id="tbReport"><span class="ui-icon" data-night="[PDF]">📄</span> Generate PDF…</button>
+          <button class="top-bar-dd-item" id="tbCSV"><span class="ui-icon" data-night="[CSV]">📊</span> Generate CSV…</button>
+          <button class="top-bar-dd-item" id="tbPrint">⎙ Print…</button>
+        </div>
+      </div>
+
+      <!-- Docs -->
+      <div class="top-bar-menu">
+        <button class="top-bar-item" id="tbDocsBtn">Docs <span class="tb-caret">▾</span></button>
+        <div class="top-bar-dropdown" id="tbDocsDrop">
+          <a href="docs/about.html"      class="top-bar-dd-item">About</a>
+          <a href="docs/faq.html"        class="top-bar-dd-item">FAQ</a>
+          <a href="docs/resources.html"  class="top-bar-dd-item">Resources</a>
+          <a href="docs/user-guide.html" class="top-bar-dd-item">User Guide</a>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="top-bar-menu">
+        <button class="top-bar-item" id="tbSettingsBtn">Settings <span class="tb-caret">▾</span></button>
+        <div class="top-bar-dropdown" id="tbSettingsDrop">
+          <button class="top-bar-dd-item" id="tbSession">Session Setup…</button>
+          <button class="top-bar-dd-item" id="tbTheme"><span id="tbThemeLabel">Dark Theme</span></button>
+          <button class="top-bar-dd-item danger" id="tbReset">Reset All Data…</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="top-bar-right">
+      <!-- Night/Day toggle lives here on desktop -->
+    </div>
+  </nav>
+
+  <!-- NAV MENU (hamburger — mobile only) -->
   <div class="nav-menu-wrap">
     <button class="nav-menu-btn" id="navMenuBtn" aria-label="Site navigation">
       <span class="bar"></span>
@@ -2017,6 +2176,21 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
       <span class="bar"></span>
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
+      <div class="nav-menu-section">Data Sync</div>
+      <hr class="nav-menu-divider">
+      <button class="nav-menu-link" id="hamSave">⬇ Save…</button>
+      <button class="nav-menu-link" id="hamRestore">⬆ Restore…</button>
+      <button class="nav-menu-link" id="hamImport">⬆ Import…</button>
+      <button class="nav-menu-link" id="hamExport">⤓ Export…</button>
+      <hr class="nav-menu-divider">
+      <div class="nav-menu-section">Reports</div>
+      <hr class="nav-menu-divider">
+      <button class="nav-menu-link" id="hamReport"><span class="ui-icon" data-night="[PDF]">📄</span> Generate PDF…</button>
+      <button class="nav-menu-link" id="hamCSV"><span class="ui-icon" data-night="[CSV]">📊</span> Generate CSV…</button>
+      <button class="nav-menu-link" id="hamPrint">⎙ Print…</button>
+      <hr class="nav-menu-divider">
+      <div class="nav-menu-section">Docs</div>
+      <hr class="nav-menu-divider">
       <a href="docs/about.html"      class="nav-menu-link">About</a>
       <a href="docs/faq.html"        class="nav-menu-link">FAQ</a>
       <a href="docs/resources.html"  class="nav-menu-link">Resources</a>
@@ -2030,50 +2204,14 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
     </div>
   </div>
 
-  <!-- TOP RIGHT CONTROLS (theme toggle + three-dot menu) -->
+  <!-- TOP RIGHT CONTROLS (theme toggle) -->
   <div class="top-right-controls">
-
-    <!-- MODE TOGGLE (Night / Day) -->
     <div class="theme-toggle-wrap">
       <span class="theme-icon moon"><span class="ui-icon" data-night="[N]">🌙</span></span>
       <div class="toggle-pill" id="themeToggle" role="button" aria-label="Toggle Night/Day mode" tabindex="0"></div>
       <span class="theme-icon sun"><span class="ui-icon" data-night="[D]">☀</span></span>
       <span class="toggle-label" id="toggleLabel">Night</span>
     </div>
-
-    <!-- THREE-DOT MENU -->
-    <div class="dots-menu-wrap">
-      <button class="dots-menu-btn" id="dotsMenuBtn" aria-label="Data and reports">⚙</button>
-      <div class="dots-menu-dropdown log-menu-dropdown" id="dotsMenuDropdown">
-        <div class="log-menu-section">Data Sync</div>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="gearSave">
-          <span class="log-menu-icon">⬇</span> Save…
-        </button>
-        <button class="log-menu-item" id="gearRestore">
-          <span class="log-menu-icon">⬆</span> Restore…
-        </button>
-        <button class="log-menu-item" id="gearImport">
-          <span class="log-menu-icon">⬆</span> Import…
-        </button>
-        <button class="log-menu-item" id="gearExport">
-          <span class="log-menu-icon">⤓</span> Export…
-        </button>
-        <hr class="log-menu-divider">
-        <div class="log-menu-section">Reports</div>
-        <hr class="log-menu-divider">
-        <button class="log-menu-item" id="gearReport">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[PDF]">📄</span></span> Generate PDF…
-        </button>
-        <button class="log-menu-item" id="gearCSV">
-          <span class="log-menu-icon"><span class="ui-icon" data-night="[CSV]">📊</span></span> Generate CSV…
-        </button>
-        <button class="log-menu-item" id="gearPrint">
-          <span class="log-menu-icon">⎙</span> Print…
-        </button>
-      </div>
-    </div>
-
   </div>
 
   <!-- HEADER -->
@@ -4490,58 +4628,81 @@ document.getElementById("sessClearBtn").addEventListener("click", function () {
 });
 
 // ── Menu helpers ─────────────────────────────────────────────────────────────
-const gearMenuBtn      = document.getElementById("dotsMenuBtn");
-const gearMenuDropdown = document.getElementById("dotsMenuDropdown");
-const navMenuBtn       = document.getElementById("navMenuBtn");
-const navMenuDropdown  = document.getElementById("navMenuDropdown");
+// ── Menu helpers ─────────────────────────────────────────────────────────────
+
+// Top-bar dropdowns
+const tbDropdowns = Array.from(document.querySelectorAll(".top-bar-dropdown"));
+const tbBtns      = Array.from(document.querySelectorAll(".top-bar-item"));
 
 function closeAllMenus() {
-  gearMenuDropdown.classList.remove("open");
-  gearMenuBtn.classList.remove("open");
-  navMenuDropdown.classList.remove("open");
-  navMenuBtn.classList.remove("open");
+  tbDropdowns.forEach(d => d.classList.remove("open"));
+  tbBtns.forEach(b => b.classList.remove("open"));
+  const _navDrop = document.getElementById("navMenuDropdown");
+  const _navBtn  = document.getElementById("navMenuBtn");
+  if (_navDrop) _navDrop.classList.remove("open");
+  if (_navBtn)  _navBtn.classList.remove("open");
 }
 
-gearMenuBtn.addEventListener("click", function(e) {
-  e.stopPropagation();
-  const isOpen = gearMenuDropdown.classList.toggle("open");
-  gearMenuBtn.classList.toggle("open", isOpen);
-  navMenuDropdown.classList.remove("open");
-  navMenuBtn.classList.remove("open");
+// Wire each top-bar button to toggle its sibling dropdown
+tbBtns.forEach(function(btn) {
+  const dropId = btn.id.replace("Btn", "Drop");
+  const drop   = document.getElementById(dropId);
+  if (!drop) return;
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    const isOpen = drop.classList.toggle("open");
+    btn.classList.toggle("open", isOpen);
+    tbDropdowns.forEach(function(d) { if (d !== drop) d.classList.remove("open"); });
+    tbBtns.forEach(function(b)      { if (b !== btn)  b.classList.remove("open"); });
+  });
+  drop.addEventListener("click", function(e) { e.stopPropagation(); });
 });
-gearMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 
+// Hamburger (mobile)
+const navMenuBtn      = document.getElementById("navMenuBtn");
+const navMenuDropdown = document.getElementById("navMenuDropdown");
 navMenuBtn.addEventListener("click", function(e) {
   e.stopPropagation();
-  const isOpen = navMenuDropdown.classList.toggle("open");
-  navMenuBtn.classList.toggle("open", isOpen);
-  gearMenuDropdown.classList.remove("open");
-  gearMenuBtn.classList.remove("open");
+  const willOpen = !navMenuDropdown.classList.contains("open");
+  closeAllMenus();
+  if (willOpen) {
+    navMenuDropdown.classList.add("open");
+    navMenuBtn.classList.add("open");
+  }
 });
 navMenuDropdown.addEventListener("click", function(e) { e.stopPropagation(); });
 
 document.addEventListener("click", closeAllMenus);
 
+// ── Top-bar: Data ─────────────────────────────────────────────────────────────
+document.getElementById("tbSave").addEventListener("click",    function() { closeAllMenus(); openSaveModal(); });
+document.getElementById("tbRestore").addEventListener("click", function() { closeAllMenus(); openRestoreModal(); });
+document.getElementById("tbImport").addEventListener("click",  function() { closeAllMenus(); openImportModal(); });
+document.getElementById("tbExport").addEventListener("click",  function() { closeAllMenus(); openExportModal(); });
+
+// ── Top-bar: Reports ──────────────────────────────────────────────────────────
+document.getElementById("tbReport").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuGenerateReport").click(); });
+document.getElementById("tbCSV").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuGenerateCSV").click(); });
+document.getElementById("tbPrint").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuPrint").click(); });
+
+// ── Top-bar: Settings ─────────────────────────────────────────────────────────
+document.getElementById("tbSession").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuSession").click(); });
+document.getElementById("tbReset").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuReset").click(); });
+
+// ── Hamburger: Data Sync ──────────────────────────────────────────────────────
+document.getElementById("hamSave").addEventListener("click",    function() { closeAllMenus(); openSaveModal(); });
+document.getElementById("hamRestore").addEventListener("click", function() { closeAllMenus(); openRestoreModal(); });
+document.getElementById("hamImport").addEventListener("click",  function() { closeAllMenus(); openImportModal(); });
+document.getElementById("hamExport").addEventListener("click",  function() { closeAllMenus(); openExportModal(); });
+
+// ── Hamburger: Reports ────────────────────────────────────────────────────────
+document.getElementById("hamReport").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuGenerateReport").click(); });
+document.getElementById("hamCSV").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuGenerateCSV").click(); });
+document.getElementById("hamPrint").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuPrint").click(); });
+
 // ── Hamburger: Settings ───────────────────────────────────────────────────────
-document.getElementById("navMenuSession").addEventListener("click", function() {
-  closeAllMenus();
-  document.getElementById("menuSession").click();
-});
-document.getElementById("navMenuReset").addEventListener("click", function() {
-  closeAllMenus();
-  document.getElementById("menuReset").click();
-});
-
-// ── Gear menu: Data Sync ─────────────────────────────────────────────────────
-document.getElementById("gearSave").addEventListener("click",    function() { closeAllMenus(); openSaveModal(); });
-document.getElementById("gearRestore").addEventListener("click", function() { closeAllMenus(); openRestoreModal(); });
-document.getElementById("gearImport").addEventListener("click",  function() { closeAllMenus(); openImportModal(); });
-document.getElementById("gearExport").addEventListener("click", function() { closeAllMenus(); openExportModal(); });
-
-// ── Gear menu: Reports ───────────────────────────────────────────────────────
-document.getElementById("gearReport").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuGenerateReport").click(); });
-document.getElementById("gearCSV").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuGenerateCSV").click(); });
-document.getElementById("gearPrint").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuPrint").click(); });
+document.getElementById("navMenuSession").addEventListener("click", function() { closeAllMenus(); document.getElementById("menuSession").click(); });
+document.getElementById("navMenuReset").addEventListener("click",   function() { closeAllMenus(); document.getElementById("menuReset").click(); });
 
 document.getElementById("menuPrint").addEventListener("click", function() {
   openPrintModal();
@@ -4725,17 +4886,19 @@ function _applyTheme() {
   // for day/dark we need to keep the pill right too — so add a class
   html.classList.toggle("mode-day", _mode === "day");
 
-  // Hamburger theme item — label reflects what clicking it will switch TO
-  const themeLabel = document.getElementById("navMenuThemeLabel");
-  if (themeLabel) {
-    // In night mode, item is greyed out (night always wins)
-    const themeBtn = document.getElementById("navMenuTheme");
-    if (themeBtn) {
-      themeBtn.disabled = (_mode === "night");
-      themeBtn.style.opacity = (_mode === "night") ? ".38" : "";
-    }
-    themeLabel.textContent = _theme === "light" ? "Dark Theme" : "Light Theme";
-  }
+  // Sync theme-toggle labels in both hamburger and top-bar Settings menu
+  const labelText = _theme === "light" ? "Dark Theme" : "Light Theme";
+  const inNight   = (_mode === "night");
+
+  const navThemeLabel = document.getElementById("navMenuThemeLabel");
+  const navThemeBtn   = document.getElementById("navMenuTheme");
+  if (navThemeLabel) navThemeLabel.textContent = labelText;
+  if (navThemeBtn)   { navThemeBtn.disabled = inNight; navThemeBtn.style.opacity = inNight ? ".38" : ""; }
+
+  const tbThemeLabel = document.getElementById("tbThemeLabel");
+  const tbThemeBtn   = document.getElementById("tbTheme");
+  if (tbThemeLabel) tbThemeLabel.textContent = labelText;
+  if (tbThemeBtn)   { tbThemeBtn.disabled = inNight; tbThemeBtn.style.opacity = inNight ? ".38" : ""; }
 }
 
 function setMode(m) {
@@ -4745,9 +4908,8 @@ function setMode(m) {
 }
 
 function setTheme(t) {
-  // legacy: 'dark' was the old night mode name; remap to 'night'
   if (t === "dark" && !["light","dark","night"].includes(t)) t = "night";
-  if (t === "night") { _mode = "night"; }
+  if (t === "night")      { _mode = "night"; }
   else if (t === "light") { _theme = "light"; }
   else if (t === "dark")  { _theme = "dark"; }
   try { localStorage.setItem("mm_mode",  _mode);  } catch(e) {}
@@ -4759,14 +4921,17 @@ function setTheme(t) {
 toggleEl.addEventListener("click", () => setMode(_mode === "night" ? "day" : "night"));
 toggleEl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggleEl.click(); });
 
-// Hamburger theme item toggles Light ↔ Dark (only in Day mode)
-document.getElementById("navMenuTheme").addEventListener("click", function() {
+// Theme button in hamburger + top-bar Settings — toggle Light ↔ Dark (Day mode only)
+function _toggleTheme() {
   if (_mode === "night") return;
   closeAllMenus();
   _theme = _theme === "light" ? "dark" : "light";
   try { localStorage.setItem("mm_theme", _theme); } catch(e) {}
   _applyTheme();
-});
+}
+document.getElementById("navMenuTheme").addEventListener("click", _toggleTheme);
+document.getElementById("tbTheme").addEventListener("click", _toggleTheme);
+
 
 /* ── SAVE MODAL (full backup) ────────────────────────────────────── */
 function openSaveModal() {
