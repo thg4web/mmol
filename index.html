@@ -1899,8 +1899,23 @@ button.nav-menu-link {
   text-align: left;
   cursor: pointer;
 }
+button.nav-menu-link { background: transparent; border: none; width: 100%; text-align: left; cursor: pointer; }
 button.nav-menu-link.danger { color: var(--text-dim); }
 button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--bg3, var(--bg2)); }
+
+/* ── Menu label brightness in night mode ── */
+[data-theme="night"] .nav-menu-link,
+[data-theme="night"] .top-bar-item,
+[data-theme="night"] .top-bar-dd-item { color: var(--text-sub); }
+[data-theme="night"] .nav-menu-link:hover,
+[data-theme="night"] .top-bar-item:hover,
+[data-theme="night"] .top-bar-item.open,
+[data-theme="night"] .top-bar-dd-item:hover { color: var(--text-data); }
+[data-theme="night"] .nav-menu-link.danger,
+[data-theme="night"] .top-bar-dd-item.danger { color: var(--red-bright); }
+
+/* ── Notes underline: half-brightness red in night mode ── */
+[data-theme="night"] .note-input { border-bottom-color: var(--red-dim); }
 
 /* ── Gear menu section header ── */
 .log-menu-section {
@@ -1912,6 +1927,9 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
   padding: 8px 16px 4px;
   opacity: .6;
 }
+
+[data-theme="night"] .nav-menu-section,
+[data-theme="night"] .log-menu-section { color: var(--red-bright); opacity: 1; }
 
 /* ── Gear icon button ── */
 .dots-menu-btn { font-size: 26px; letter-spacing: 0; }
@@ -2141,10 +2159,10 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
         <div class="top-bar-dropdown" id="tbDataDrop">
           <div class="top-bar-dd-section">Data Sync</div>
           <hr class="top-bar-dd-divider">
-          <button class="top-bar-dd-item" id="tbSave">⬇ Save…</button>
-          <button class="top-bar-dd-item" id="tbRestore">⬆ Restore…</button>
-          <button class="top-bar-dd-item" id="tbImport">⬆ Import…</button>
-          <button class="top-bar-dd-item" id="tbExport">⤓ Export…</button>
+          <button class="top-bar-dd-item" id="tbSave"><span class="ui-icon" data-night="[↓]">⬇</span> Save…</button>
+          <button class="top-bar-dd-item" id="tbRestore"><span class="ui-icon" data-night="[↑]">⬆</span> Restore…</button>
+          <button class="top-bar-dd-item" id="tbImport"><span class="ui-icon" data-night="[↑]">⬆</span> Import…</button>
+          <button class="top-bar-dd-item" id="tbExport"><span class="ui-icon" data-night="[↓↓]">⤓</span> Export…</button>
         </div>
       </div>
 
@@ -2156,7 +2174,7 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
           <hr class="top-bar-dd-divider">
           <button class="top-bar-dd-item" id="tbReport"><span class="ui-icon" data-night="[PDF]">📄</span> Generate PDF…</button>
           <button class="top-bar-dd-item" id="tbCSV"><span class="ui-icon" data-night="[CSV]">📊</span> Generate CSV…</button>
-          <button class="top-bar-dd-item" id="tbPrint">⎙ Print…</button>
+          <button class="top-bar-dd-item" id="tbPrint"><span class="ui-icon" data-night="[⎙]">⎙</span> Print…</button>
         </div>
       </div>
 
@@ -2197,16 +2215,16 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
     <div class="nav-menu-dropdown" id="navMenuDropdown">
       <div class="nav-menu-section">Data Sync</div>
       <hr class="nav-menu-divider">
-      <button class="nav-menu-link" id="hamSave">⬇ Save…</button>
-      <button class="nav-menu-link" id="hamRestore">⬆ Restore…</button>
-      <button class="nav-menu-link" id="hamImport">⬆ Import…</button>
-      <button class="nav-menu-link" id="hamExport">⤓ Export…</button>
+      <button class="nav-menu-link" id="hamSave"><span class="ui-icon" data-night="[↓]">⬇</span> Save…</button>
+      <button class="nav-menu-link" id="hamRestore"><span class="ui-icon" data-night="[↑]">⬆</span> Restore…</button>
+      <button class="nav-menu-link" id="hamImport"><span class="ui-icon" data-night="[↑]">⬆</span> Import…</button>
+      <button class="nav-menu-link" id="hamExport"><span class="ui-icon" data-night="[↓↓]">⤓</span> Export…</button>
       <hr class="nav-menu-divider">
       <div class="nav-menu-section">Reports</div>
       <hr class="nav-menu-divider">
       <button class="nav-menu-link" id="hamReport"><span class="ui-icon" data-night="[PDF]">📄</span> Generate PDF…</button>
       <button class="nav-menu-link" id="hamCSV"><span class="ui-icon" data-night="[CSV]">📊</span> Generate CSV…</button>
-      <button class="nav-menu-link" id="hamPrint">⎙ Print…</button>
+      <button class="nav-menu-link" id="hamPrint"><span class="ui-icon" data-night="[⎙]">⎙</span> Print…</button>
       <hr class="nav-menu-divider">
       <div class="nav-menu-section">Docs</div>
       <hr class="nav-menu-divider">
@@ -2348,7 +2366,7 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
         <a href="docs/resources.html" class="nav-link">Resources</a>
       </span>
       <!-- APP VERSION — update this string to change the displayed version -->
-      <span class="app-version">Beta v2.5.3</span>
+      <span class="app-version">Beta v2.5.2</span>
     </div>
   </footer>
 
