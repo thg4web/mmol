@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="night">
+<html lang="en" data-theme="dark">
 <head>
 <script>
 // Apply saved theme immediately to prevent flash of wrong theme
-(function(){var m=localStorage.getItem('mm_mode'),t=localStorage.getItem('mm_theme');document.documentElement.setAttribute('data-theme',m==='night'?'night':(t==='dark'?'dark':'light'));})();
+(function(){var t=localStorage.getItem('mm_theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -340,10 +340,9 @@
     </button>
     <div class="nav-menu-dropdown" id="navMenuDropdown">
       <a href="../index.html" class="nav-menu-link">Log</a>
-      <a href="../docs/about.html" class="nav-menu-link">About</a>
       <a href="../docs/faq.html" class="nav-menu-link">FAQ</a>
       <a href="../docs/resources.html" class="nav-menu-link">Resources</a>
-      <a href="../docs/user-guide.html" class="nav-menu-link disabled">User Guide</a>
+      <a href="../docs/about.html" class="nav-menu-link">About</a>
     </div>
   </div>
 
@@ -731,17 +730,14 @@
 // ── Theme persistence ──────────────────────────────────────────
 const root   = document.documentElement;
 const toggle = document.getElementById('themeToggle');
+const saved  = localStorage.getItem('mm_theme');
+if (saved) root.setAttribute('data-theme', saved);
 toggle.addEventListener('click', () => {
-  const cur = root.getAttribute('data-theme');
-  if (cur === 'night') {
-    const dayTheme = localStorage.getItem('mm_theme') === 'dark' ? 'dark' : 'light';
-    root.setAttribute('data-theme', dayTheme);
-    localStorage.setItem('mm_mode', 'day');
-  } else {
-    root.setAttribute('data-theme', 'night');
-    localStorage.setItem('mm_mode', 'night');
-  }
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('mm_theme', next);
 });
+
 // ── Hamburger nav menu ────────────────────────────────────────────────────────
 (function() {
   var btn = document.getElementById('navMenuBtn');
