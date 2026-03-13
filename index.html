@@ -854,16 +854,20 @@ html.is-mobile th.col-obj-sort { display: none; }
 html.is-mobile .col-mobile-obj,
 html.is-mobile th.col-mobile-obj { display: table-cell; }
 
-/* Shrink-to-fit: width:1px forces cell to minimum in auto table-layout */
+/* Shrink-to-fit: thumbnail and checkbox are narrow, fixed */
 html.is-mobile td.col-thn-val,
 html.is-mobile th.col-thn      { width: 52px; white-space: nowrap; }
 html.is-mobile td.col-chk-val,
 html.is-mobile th.col-chk      { width: 1px; white-space: nowrap; padding: 0 10px; }
 
-/* Notes column */
-html.is-mobile td.col-note-val { width: 90px; min-width: 0; padding: 4px; }
+/* Description column — takes ~40% of total width */
+html.is-mobile td.col-mobile-obj,
+html.is-mobile th.col-mobile-obj { width: 40%; }
+
+/* Notes column — takes ~40% of total width, matches description */
+html.is-mobile td.col-note-val { width: 40%; min-width: 0; padding: 4px; }
 html.is-mobile .note-cell-wrap { gap: 3px; }
-html.is-mobile .note-input     { width: 50px; min-width: 0; font-size: 10px; }
+html.is-mobile .note-input     { flex: 1; min-width: 0; font-size: 10px; box-sizing: border-box; width: auto; }
 html.is-mobile .rec-btn        { flex-shrink: 0; }
 
 /* Sort button in mobile object header */
@@ -1789,13 +1793,28 @@ tr.checked td.col-m-val a.m-link {
 @media (max-width: 700px) {
   .top-right-controls { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; }
   .footer { flex-direction: column; align-items: flex-start; }
-  .top-bar { display: none; }
 }
 @media (min-width: 701px) {
-  .nav-menu-wrap  { display: none; }
   .dots-menu-wrap { display: none; }
-  .wrapper { padding-top: 42px; }
 }
+
+/* Top bar / hamburger visibility driven by JS is-mobile class (threshold: 768px) */
+html.is-mobile .top-bar        { display: none; }
+html.is-mobile .wrapper        { padding-top: 20px; }
+html.is-mobile .nav-menu-wrap  { top: 20px; }
+html.is-mobile .top-right-controls { display: none; }
+html.is-mobile .mobile-toggle-wrap { display: flex; }
+
+/* Mobile toggle slot — hidden on desktop, centered under progress bar */
+.mobile-toggle-wrap {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+html:not(.is-mobile) .nav-menu-wrap { display: none; }
+html:not(.is-mobile) .wrapper       { padding-top: 42px; }
 
 /* ════════ TOP NAV MENU ════════ */
 .nav-menu-wrap {
@@ -2224,6 +2243,12 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
       <span class="progress-count" id="progressCount">0 / 110</span>
     </div>
+    <div class="mobile-toggle-wrap">
+      <span class="theme-icon moon"><span class="ui-icon" data-night="[N]">🌙</span></span>
+      <div class="toggle-pill" id="themeToggleMobile" role="button" aria-label="Toggle Night/Day mode" tabindex="0"></div>
+      <span class="theme-icon sun"><span class="ui-icon" data-night="[D]">☀</span></span>
+      <span class="toggle-label" id="toggleLabelMobile">Night</span>
+    </div>
     <span class="header-rule"></span>
   </header>
 
@@ -2323,7 +2348,7 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
         <a href="docs/resources.html" class="nav-link">Resources</a>
       </span>
       <!-- APP VERSION — update this string to change the displayed version -->
-      <span class="app-version">Beta v2.5.2</span>
+      <span class="app-version">Beta v2.5.3</span>
     </div>
   </footer>
 
@@ -3420,13 +3445,15 @@ button.nav-menu-link.danger:hover { color: var(--red-bright); background: var(--
 <script>
 /* ── Mobile detection ──────────────────────────────────────────── */
 (function detectMobile() {
-  // True phone: narrow viewport AND touch AND mobile UA
-  const isMobile = (
-    window.innerWidth <= 768 &&
-    navigator.maxTouchPoints > 0 &&
-    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-  );
-  if (isMobile) document.documentElement.classList.add("is-mobile");
+  function applyMobile() {
+    if (window.innerWidth <= 768) {
+      document.documentElement.classList.add("is-mobile");
+    } else {
+      document.documentElement.classList.remove("is-mobile");
+    }
+  }
+  applyMobile();
+  window.addEventListener("resize", applyMobile);
 })();
 
 /* ── Custom themed confirm dialog ─────────────────────────────── */
@@ -4870,8 +4897,10 @@ document.getElementById("menuReset").addEventListener("click", function() {
    Day mode applies 'light' or 'dark' based on theme setting.
    ──────────────────────────────────────────────────────────────── */
 const html     = document.documentElement;
-const toggleEl = document.getElementById("themeToggle");
-const labelEl  = document.getElementById("toggleLabel");
+const toggleEl       = document.getElementById("themeToggle");
+const toggleElMobile = document.getElementById("themeToggleMobile");
+const labelEl        = document.getElementById("toggleLabel");
+const labelElMobile  = document.getElementById("toggleLabelMobile");
 
 let _mode  = "night";   // 'night' | 'day'
 let _theme = "light";   // 'light' | 'dark'
@@ -4882,6 +4911,7 @@ function _applyTheme() {
 
   // Slider label + pill position
   labelEl.textContent = _mode === "night" ? "Night" : "Day";
+  if (labelElMobile) labelElMobile.textContent = _mode === "night" ? "Night" : "Day";
   // mm-shared.css moves the pill right for [data-theme="light"];
   // for day/dark we need to keep the pill right too — so add a class
   html.classList.toggle("mode-day", _mode === "day");
@@ -4920,6 +4950,8 @@ function setTheme(t) {
 // Slider toggles Night ↔ Day
 toggleEl.addEventListener("click", () => setMode(_mode === "night" ? "day" : "night"));
 toggleEl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggleEl.click(); });
+toggleElMobile.addEventListener("click", () => setMode(_mode === "night" ? "day" : "night"));
+toggleElMobile.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") toggleElMobile.click(); });
 
 // Theme button in hamburger + top-bar Settings — toggle Light ↔ Dark (Day mode only)
 function _toggleTheme() {
