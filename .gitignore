@@ -1,3 +1,7 @@
 .DS_Store
 start_webserver.sh
-project-design-summary.md
+CLAUDE.md
+/memory/
+project/
+.archived/
+.claude/

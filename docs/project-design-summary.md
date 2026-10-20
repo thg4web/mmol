@@ -4,9 +4,11 @@
 
 The Messier Marathon Observer's Log (MMOL) is a single-file browser application for logging observations of Charles Messier's 110 deep-sky objects. It requires no server, no framework, and no build step. The entire tool is delivered as one `index.html` with embedded CSS, JavaScript, and a static DATA array.
 
-**Version:** Beta v2.5.4  
+**Version:** Beta v3.0.0  
 **Live site:** [mmol.thgnetworks.com](https://mmol.thgnetworks.com)  
 **Repository:** [github.com/thg4web/mmol](https://github.com/thg4web/mmol)
+**Messier Data file:** [SEDS Messier Marathon Search Order with Object Data](http://www.messier.seds.org/xtra/marathon/marath.html) 
+**Messier Names file:** [SEDS Common Names of Messier Objects](http://www.messier.seds.org/m-names.html)
 
 ---
 
@@ -102,12 +104,13 @@ The `docs/` pages (about, faq, resources, user-guide) read both keys on load and
 Emoji icons in the UI are wrapped in `<span class="ui-icon" data-night="[LABEL]">emoji</span>`. The CSS:
 
 ```css
-[data-theme="night"] .ui-icon { font-size: 0; }
+[data-theme="night"] .ui-icon { font-size: 0; line-height: 1; vertical-align: middle; }
 [data-theme="night"] .ui-icon::after {
   content: attr(data-night);
   font-size: 11px;
   font-family: 'Share Tech Mono', monospace;
   color: var(--red-bright);
+  letter-spacing: .05em;
 }
 ```
 
@@ -126,7 +129,10 @@ All menu text is explicitly brightened in night mode via `[data-theme="night"]` 
 
 ### Type badge system
 
-Object type symbols are rendered as plain text characters inside `<span class="type-badge badge-[type]">`. In day mode, all badge classes set `color: #000; background: transparent`. In night mode, a single override rule sets all badges to `var(--red-bright)`.
+Object type symbols are rendered as plain text characters inside `<span class="type-badge badge-[type]">`. Base badge classes set `color: #000; background: transparent`. Theme overrides apply on top:
+
+- Night mode — all badges `var(--red-bright)`, background transparent
+- Dark (space terminal) mode — all badges `var(--text-data)` with `var(--filter-active-bg)` background
 
 The symbol characters (`@`, `●`, `◑`, `*`, `+`, `◎`, `~`, `○`, `✕`, `::`, `·`) are drawn from Unicode Basic Latin and Geometric Shapes to guarantee font coverage on all systems. `font-family: 'Courier New', monospace` is forced on the badge span to prevent OS-level emoji substitution.
 
@@ -217,7 +223,7 @@ All other columns (Marathon #, Type, Constellation, Magnitude, Size, RA, Dec, PS
 
 ## Modals
 
-All modals are static HTML present in the DOM at all times, toggled via `.open` class. There are seven modals:
+All modals are static HTML present in the DOM at all times, toggled via `.open` class. There are eleven modals:
 
 | ID | Purpose |
 |----|---------|
@@ -225,13 +231,17 @@ All modals are static HTML present in the DOM at all times, toggled via `.open` 
 | `recOverlay` | Full AL observation record form |
 | `sessOverlay` | Session setup |
 | `rptOverlay` | AL report generation |
+| `saveOverlay` | Full backup save |
+| `restoreOverlay` | Full backup restore |
 | `importOverlay` | CSV/JSON import conflict resolution |
+| `exportOverlay` | CSV/JSON export |
+| `printOverlay` | Print options |
 | `confOverlay` | Custom themed confirm dialog |
 | `qsOverlay` | Quick Start guide (shown on first visit) |
 
 ### Custom confirm dialog
 
-The `confOverlay` modal replaces all three `window.confirm()` calls with a reusable themed confirmation modal driven by:
+The `confOverlay` modal replaces all four `window.confirm()` calls with a reusable themed confirmation modal driven by:
 
 ```js
 showConfirm({ title, body, warning, okLabel, cancelLabel }, onOkCallback)
@@ -248,8 +258,6 @@ The AL submission report is built entirely in the browser using jsPDF and jspdf-
 1. **Cover page** — title, observer name, club/subtitle, summary statistics (total records, objects with descriptions, date range)
 2. **Observation index** — compact table, one row per completed record
 3. **Individual record pages** — one full page per object with all four sections of the observation record
-
-A standalone Python equivalent (`al_report.py`) is also in the repository for command-line PDF generation.
 
 ---
 
@@ -269,12 +277,13 @@ mmol/
 │   ├── CrimsonPro-Light.ttf
 │   ├── CrimsonPro-Regular.ttf
 │   └── CrimsonPro-LightItalic.ttf
-├── images/                 Object photos (not in repo)
-│   └── M1.jpg … M110.jpg
-├── charts/                 Finder charts (not in repo)
-│   └── M1.png … M110.png
+├── images/                 
+│   └── M1.jpg … M110.jpg # Object Photos
+│   └── M1_thn.jpg … M110_thn.jpg # Object Thumbnails
+├── charts/                 
+│   └── M1.png … M110.png # Finder Charts
 └── docs/
-    ├── faq.html
+    ├── faq.html 
     ├── resources.html
     ├── about.html
     └── user-guide.html

@@ -22,7 +22,7 @@ Both use cases share the same interface.
 - **Night vision mode** — deep black background, red-spectrum text. All emoji icons automatically swap to short ASCII labels in night mode so no bright or coloured symbols appear at the eyepiece. Object photos in the lightbox are automatically red-filtered.
 - **110 objects in marathon order** — with a clickable toggle to numeric (M-number) order for cross-reference
 - **Angular size column** — apparent dimensions in arcminutes for every object
-- **Monospace type symbols** — each object type has a distinct ASCII symbol that reads clearly in red-only night mode (see [features.md](features.md) for the full symbol map)
+- **Monospace type symbols** — each object type has a distinct ASCII symbol that reads clearly in red-only night mode (see [features.md](docs/features.md) for the full symbol map)
 - **Image lightbox** — click any M-number for the object photo, full catalog data, finder chart link, and Stellarium Web link; images are red-filtered in night mode
 - **Session Setup** — set location (with optional GPS), sky conditions, and equipment once per night; values auto-fill every record opened during the session
 - **Full AL observation records** — date, time, site, seeing (Antoniadi scale), transparency, limiting magnitude, scope, eyepiece, description, and sketch notes
@@ -43,12 +43,11 @@ We recommend a minimum of **6–8 inch (152–203 mm)** aperture for a comfortab
 ## Quick Start
 
 1. Clone or download the repository and open `index.html` in a browser — no build step, no server, no installation required.
-2. Add media files to `images/` and `charts/` for the lightbox (optional but recommended — see below).
-3. Place font TTF files in `fonts/` (optional — the site falls back to system fonts).
+2. The `images/`, `charts/` and `fonts/` folders ship with the repo (see below); the site falls back to system fonts if fonts are missing.
 4. At the telescope, switch to **Night Mode** using the toggle in the top-right corner.
-5. Use **☰ Log → Session Setup** to set your location and equipment once for the night.
+5. Use **Settings → Session Setup…** to set your location and equipment once for the night.
 6. Check off objects as you observe them. Click the **✎** button for a full AL record.
-7. Export your data from **☰ Log → Export AL Records** (JSON) after every session.
+7. Back up your data after every session with **Data → Save…** (full backup) or **Data → Export…** (records JSON).
 
 ---
 
@@ -60,14 +59,18 @@ mmol/
 ├── CNAME                   mmol.thgnetworks.com
 ├── css/
 │   └── mm-shared.css       Shared design tokens and layout
-├── fonts/                  Self-hosted TTF files (not in repo — see below)
-├── images/                 Object photos (not in repo — download separately)
-├── charts/                 Finder charts (not in repo — generate with script)
+├── fonts/                  Self-hosted TTF files
+├── images/                 Object photos, thumbnails and attribution files
+├── charts/                 Finder charts
+├── data/                   Source tables (Messier list, marathon order)
 └── docs/
     ├── faq.html
     ├── resources.html
     ├── about.html
-    └── user-guide.html
+    ├── user-guide.html
+    ├── features.md
+    ├── project-design-summary.md
+    └── javascript-design.md
 ```
 
 ---
@@ -76,17 +79,17 @@ mmol/
 
 ### Object photos (optional)
 
-Place JPEG images in an `images/` folder named `M1.jpg` through `M110.jpg`. The SEDS Messier Catalog at [messier.seds.org](http://www.messier.seds.org/) is the recommended source. The `scripts/download_images.sh` script automates the batch download.
+Images live in `images/`, named in lowercase: `m1.jpg` through `m110.jpg`, with thumbnails `m1_thn.jpg` … and an attribution file `m1-attrib.txt` for each. File names are case-sensitive on the live site. Photos are the author's own or used with attribution; the SEDS Messier Catalog at [messier.seds.org](http://www.messier.seds.org/) is a good source for your own copy.
 
 In night mode, all lightbox photos are automatically red-filtered via CSS — no separate night-mode image set is needed.
 
 ### Finder charts (optional)
 
-Place PNG charts in a `charts/` folder named `M1.png` through `M110.png`. The `scripts/generate_charts.py` script produces red-on-black night-vision charts for all 110 objects using matplotlib and astropy.
+PNG charts live in `charts/`, named `M1.png` through `M110.png` (capital M). They are red-on-black night-vision charts.
 
 ### Fonts
 
-Place the following seven TTF files in a `fonts/` folder. All are available from Google Fonts.
+The seven self-hosted TTF files in `fonts/` are listed below. All are available from Google Fonts.
 
 | File | Font | Weight |
 |------|------|--------|
@@ -111,16 +114,19 @@ All observation data is stored in your browser's `localStorage` — a private, l
 | `mm_times` | Observation timestamps (ISO string) |
 | `mm_fullnotes` | Full AL record data (JSON) |
 | `mm_session` | Session defaults and GPS coordinates |
-| `mm_theme` | Night or day mode preference |
+| `mm_mode` | Night or day mode |
+| `mm_theme` | Light or dark theme used in Day mode |
+| `mm_equipment` | Imported equipment presets |
+| `mm_locations` | Imported observing-location presets |
 | `mm_visited` | Quick Start "don't show again" flag |
 
-**Important:** localStorage is tied to one browser on one device and is cleared by browser data resets or private/incognito mode. Use **☰ Log → Export AL Records** (JSON) after every observing session. Use **Import AL Records** to restore on a new device or browser.
+**Important:** localStorage is tied to one browser on one device and is cleared by browser data resets or private/incognito mode. Use **Data → Save…** (or **Export…**) after every observing session. Use **Data → Restore…** or **Import…** to move your data to a new device or browser.
 
 ---
 
 ## Deployment (GitHub Pages)
 
-See [Github_Subdomain_Configuration.md](Github_Subdomain_Configuration.md) for the full guide. Summary:
+Summary:
 
 1. Push the repo to `github.com/thg4web/mmol` (must be public)
 2. Settings → Pages → Branch: `main` / `(root)` → Custom domain: `mmol.thgnetworks.com`
@@ -136,8 +142,9 @@ The `CNAME` file must be present on every push, or the custom domain will need t
 | File | Purpose |
 |------|---------|
 | `README.md` | This file — setup and overview |
-| `features.md` | Complete feature reference |
-| `project-design-summary.md` | Architecture and technical design notes |
+| `docs/features.md` | Complete feature reference |
+| `docs/project-design-summary.md` | Architecture and technical design notes |
+| `docs/javascript-design.md` | Section-by-section JavaScript walkthrough |
 | `docs/user-guide.html` | End-user documentation |
 | `docs/faq.html` | Common questions |
 | `docs/resources.html` | Curated external links |

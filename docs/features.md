@@ -10,7 +10,7 @@ A complete listing of all features implemented in the log. Intended as a quick r
 
 **Object sort toggle** — The Object column header is clickable. It toggles between Marathon order (the default, numbered 1–110 by marathon position) and Numeric order (M1–M110 by Messier number). The header label updates to reflect the active mode (`Marathon ▲` / `Numeric ▲`). Filters, search, and the lightbox all work correctly in both modes.
 
-**Column layout** — Each row shows: marathon position (#), Messier designation (Object), type symbol (Type), constellation (Con), visual magnitude (Mag), angular size (Size), right ascension (RA), declination (Dec), Pocket Sky Atlas page reference (PSA Pg), observation checkbox (✓), and a combined field notes / AL record cell.
+**Column layout** — Each row shows: a thumbnail (click to open the lightbox), marathon position (#), Messier designation (Object), type symbol (Type), constellation (Con), visual magnitude (Mag), angular size (Size), right ascension (RA), declination (Dec), Pocket Sky Atlas page reference (PSA Pg), observation checkbox (✓), and a combined field notes / AL record cell.
 
 **Angular Size column** — Apparent dimensions in arcminutes sourced from the SEDS marathon data (Hartmut Frommert). Two-axis objects show width × height (e.g. `178×63`); circular objects show a single value (e.g. `110'`).
 
@@ -48,7 +48,7 @@ In day mode the symbols are rendered in black on a transparent background. In ni
 
 Click any Messier number in the Object column to open the lightbox for that object.
 
-**Left panel** — Loads `images/M[n].jpg` from the local `images/` folder. Shows a styled placeholder if the file is absent.
+**Left panel** — Loads `images/m[n].jpg` from the local `images/` folder. Shows a styled placeholder if the file is absent.
 
 **Right sidebar** — Full catalog data: object name, type, constellation, magnitude, angular size (arcmin), right ascension, declination, PSA page reference.
 
@@ -66,13 +66,17 @@ Click any Messier number in the Object column to open the lightbox for that obje
 
 ---
 
-## Night / Day Mode
+## Themes: Night, Day Light, Day Dark
 
-The toggle in the top-right corner switches between two display themes. The preference is saved in `mm_theme` localStorage and restored on every page load.
+The Night/Day toggle (top-right on desktop and tablet; centred under the progress bar on phones) switches between night and day. In Day mode, **Settings → Light/Dark Theme** chooses between two day themes. Two keys remember the choice: `mm_mode` (night/day) and `mm_theme` (light/dark). Both are restored on every page load, and the `docs/` pages follow the same settings.
 
-**Night mode** — Near-black background, red-spectrum text and controls throughout.
+**Night mode** — Near-black background, red-spectrum text and controls throughout. For use at the telescope.
 
-**Day mode** — Warm parchment background, dark ink, maroon accents.
+**Day / Light** — Warm parchment atlas look, dark ink, maroon accents. For planning in normal light.
+
+**Day / Dark** — Pure black with white and grey text and no red effects (a "space terminal" look) for indoor use in low light.
+
+The Light/Dark option is disabled while Night mode is active.
 
 **UI icon system** — All icon buttons are wrapped in `<span class="ui-icon" data-night="[LABEL]">`. In night mode the emoji is hidden (`font-size: 0`) and a short ASCII label is shown via `::after { content: attr(data-night) }` in `var(--red-bright)` — so no bright or coloured emoji are ever displayed at the eyepiece:
 
@@ -101,7 +105,7 @@ All three destructive-action confirmations use a custom `showConfirm()` modal ra
 
 | Action | Title |
 |--------|-------|
-| ☰ Log → Reset All Data | Reset Observation Data |
+| Settings → Reset All Data | Reset Observation Data |
 | Session Setup → Clear Session | Clear Session Defaults |
 | Import AL Records (conflict) | Import AL Records |
 
@@ -111,7 +115,7 @@ Each dialog shows a title, a summary of what data will be affected, an optional 
 
 ## Session Setup
 
-Open via **☰ Log → Session Setup**. Sets defaults that auto-fill blank fields in every full observation record opened during the session. Existing saved data is never overwritten.
+Open via **Settings → Session Setup…**. Sets defaults that auto-fill blank fields in every full observation record opened during the session. Existing saved data is never overwritten.
 
 **Fields:** observing site, seeing (Antoniadi scale I–V), transparency (1–5), limiting magnitude, telescope/instrument, aperture (mm), eyepiece, magnification.
 
@@ -133,20 +137,25 @@ Click the **✎** button on any row to open the full record form. The button is 
 
 ---
 
-## Log Menu (☰ Log ▼)
+## Menus and Navigation
 
-| Item | Function |
-|------|----------|
-| ⎙ Print | Clean black-on-white print stylesheet + browser print dialog |
-| ⬇ Export CSV | Timestamped CSV of all 110 rows — marathon order, catalog data, observed status, date, notes |
-| ⬆ Import CSV | Reads a previously exported CSV; offers Merge (fill blanks) or Overwrite (replace all) |
-| ⬇ Export AL Records | Timestamped JSON of all full records + observation timestamps |
-| ⬆ Import AL Records | Merges exported JSON back in; shows new-vs-conflict counts in a themed confirmation dialog |
-| 📄 Generate AL Report | Enter name/club, generate a multi-page PDF in the browser — cover, index, one page per record |
-| ⚙ Session Setup… | Opens the session defaults modal |
-| ↺ Reset All Data… | Shows counts of all saved data, then a themed confirmation before permanently clearing everything |
+**Tablet and desktop (wider than 768 px)** — A top menu bar with four dropdowns. The Night/Day toggle stays top-right.
 
----
+**Phone (768 px or narrower)** — One hamburger menu (top-left) holding the same four sections. The table switches to four columns: thumbnail, a combined description (M number, name, type, constellation), the observed checkbox, and notes with the ✎ record button.
+
+| Menu | Items |
+|------|-------|
+| **Data** | Save… (full backup), Restore…, Import… (records, equipment, locations), Export… (records, equipment, locations) |
+| **Reports** | Generate PDF report…, Generate CSV…, Print… |
+| **Docs** | About, FAQ, Resources, User Guide |
+| **Settings** | Session Setup…, Light/Dark Theme, Reset All Data… |
+
+- **Save / Restore** — Full backup (v2) of checks, notes, times, records, equipment, locations, session, mode and theme in one JSON file. Restore also accepts older records-only (v1) files.
+- **Import / Export** — Choose which kinds of data to move: observation records, equipment presets, location presets. Importing merges; it only replaces values that conflict.
+- **Equipment and location presets** — Prepare lists in a spreadsheet, import as CSV (templates provided in the Data menu), then pick them from drop-downs in Session Setup.
+- **Generate PDF report** — Enter name/club; builds a multi-page AL report in the browser (cover, index, one page per record). Needs the PDF library from the CDN, so the first use needs internet.
+- **Generate CSV / Print** — Timestamped CSV of all 110 rows; clean black-on-white print stylesheet.
+- **Reset All Data…** — Shows counts of all saved data, then a themed confirmation before clearing.
 
 ## Data Storage
 
@@ -159,7 +168,10 @@ All data is stored in `localStorage` — never transmitted to any server.
 | `mm_times` | Observation timestamps per object (ISO string) |
 | `mm_fullnotes` | Full AL record data per object (structured JSON) |
 | `mm_session` | Session defaults including GPS coordinates |
-| `mm_theme` | Night or day mode preference |
+| `mm_mode` | Night or day mode |
+| `mm_theme` | Light or dark theme used in Day mode |
+| `mm_equipment` | Imported equipment presets |
+| `mm_locations` | Imported observing-location presets |
 | `mm_visited` | Set to `"1"` when "Don't show again" is ticked in the Quick Start |
 
 ---
@@ -187,8 +199,8 @@ mmol/
 ├── css/
 │   └── mm-shared.css       Shared design tokens and layout
 ├── fonts/                  Self-hosted TTF files (7 faces)
-├── images/                 Object photos — M1.jpg … M110.jpg
-├── charts/                 Finder charts — M1.png … M110.png
+├── images/                 Object photos m1.jpg … m110.jpg, thumbnails m1_thn.jpg …, attribution m1-attrib.txt …
+├── charts/                 Finder charts M1.png … M110.png (note the capital M)
 └── docs/
     ├── faq.html
     ├── resources.html
